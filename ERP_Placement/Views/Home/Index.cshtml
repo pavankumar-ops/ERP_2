@@ -1,0 +1,441 @@
+﻿<!-- HERO SECTION -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+<style>
+     .hero-image {
+        object-fit: cover;
+        height: 380px;
+    }
+
+     .course-card:hover {
+        transform: translateY(-5px);
+    }
+
+
+    .placement-section .card-img-top {
+        width: 100%;
+        height: 200px; /* FIXED HEIGHT for all images */
+        object-fit: contain; /* Show FULL IMAGE without cutting */
+        background: #f0f0f0; /* Light background for empty space */
+        padding: 5px; /* Gives clean border spacing */
+    }
+
+    .placement-section .card {
+        height: 100%; /* All cards equal height */
+        border-radius: 10px;
+    }
+
+
+
+
+
+    .comapny.slider {
+        overflow: hidden;
+        position: relative;
+        width: 100%;
+    }
+
+    .comapny .slide-track {
+        display: flex;
+        animation: scroll 25s linear infinite;
+        width: calc(200px * 12); /* MUST MATCH TOTAL LOGOS */
+    }
+
+    .comapny .slide {
+        height: 100px;
+        width: 200px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+        .comapny .slide img {
+            width: 140px;
+            height: auto;
+            object-fit: contain;
+        }
+
+    /* Slider Animation */
+    @@keyframes scroll {
+        0% {
+            transform: translateX(0);
+        }
+
+        100% {
+            transform: translateX(-50%);
+        }
+    }
+
+</style>
+<div class="accent-background mt-4">
+    <div class="row g-4">
+
+        <div class="col-lg-7">
+            <img src="https://images.pexels.com/photos/3182763/pexels-photo-3182763.jpeg"
+                 class="w-100 rounded hero-image" />
+        </div>
+
+        <div class="col-lg-5 d-flex flex-column justify-content-between">
+
+            <div class="p-4 bg-primary text-white rounded mb-3">
+                <h3 class="fw-bold">1000+ Placements in 150+ Companies</h3>
+                <p class="mb-2">op Placement record in core companies with highest packages.</p>
+                <a class="btn btn-light btn-sm fw-semibold">LEARN MORE</a>
+            </div>
+
+            <div class="p-4 bg-light rounded">
+                <h4 class="fw-bold">7.5+ LPA Highest Packages</h4>
+                <p class="text-muted mb-2">Our students annually avail the most lucrative jobs which offer lucrative packages in the most distinguished industries.</p>
+                <a class="btn btn-outline-secondary btn-sm fw-semibold">KNOW MORE</a>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<!-- SEARCH SECTION -->
+<div class=" my-5">
+    <div class="row g-4">
+
+        <div class="col-lg-4">
+            <div class="p-4 bg-light rounded shadow-sm">
+
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-book-half text-primary me-2"></i> Our Courses
+                </h5>
+
+                <div class="list-group">
+
+                    <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                        <i class="bi bi-gear-fill text-danger fs-4 me-3"></i>
+                        <span class="fw-semibold">Mechanical Engineering</span>
+                    </a>
+
+                    <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                        <i class="bi bi-laptop-fill text-primary fs-4 me-3"></i>
+                        <span class="fw-semibold">Computer Science Engineering</span>
+                    </a>
+
+                    <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                        <i class="bi bi-cpu-fill text-success fs-4 me-3"></i>
+                        <span class="fw-semibold">Electronics Engineering</span>
+                    </a>
+
+                    <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                        <i class="bi bi-lightning-fill text-warning fs-4 me-3"></i>
+                        <span class="fw-semibold">Electrical Engineering</span>
+                    </a>
+
+                    <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                        <i class="bi bi-building text-secondary fs-4 me-3"></i>
+                        <span class="fw-semibold">Civil Engineering</span>
+                    </a>
+
+                </div>
+
+            </div>
+        </div>
+
+
+
+        <!-- CATEGORY GRID -->
+        <!-- TRAINING & PLACEMENT STATS -->
+        <div class="col-lg-8">
+            <div class="row g-4">
+
+                <!-- Total Registered Students -->
+                <div class="col-6 col-md-3">
+                    <div class="text-center p-4 bg-primary text-white rounded shadow-sm course-card">
+                        <i class="bi bi-people-fill fs-1"></i>
+                        <p class="fw-bold mt-2 mb-1">Registered</p>
+                        <h4 class="fw-bold mb-0 counter" data-target="1200">0</h4>
+                    </div>
+                </div>
+
+                <!-- Total Placed Students -->
+                <div class="col-6 col-md-3">
+                    <div class="text-center p-4 bg-primary text-white rounded shadow-sm course-card">
+                        <i class="bi bi-award fs-1"></i>
+                        <p class="fw-bold mt-2 mb-1">Placed</p>
+                        <h4 class="fw-bold mb-0 counter" data-target="950">0</h4>
+                    </div>
+                </div>
+
+                <!-- Total Recruiters -->
+                <div class="col-6 col-md-3">
+                    <div class="text-center p-4 bg-primary text-white rounded shadow-sm course-card">
+                        <i class="bi bi-building-check fs-1"></i>
+                        <p class="fw-bold mt-2 mb-1">Recruiters</p>
+                        <h4 class="fw-bold mb-0 counter" data-target="65">0</h4>
+                    </div>
+                </div>
+
+                <!-- Total Drives Conducted (extra card) -->
+                <div class="col-6 col-md-3">
+                    <div class="text-center p-4 bg-primary text-white rounded shadow-sm course-card">
+                        <i class="bi bi-calendar-event-fill fs-1"></i>
+                        <p class="fw-bold mt-2 mb-1">Drives</p>
+                        <h4 class="fw-bold mb-0 counter" data-target="40">0</h4>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+
+
+<main class="main">
+
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <section class=" placement-section py-5 bg-light">
+        <div class="">
+
+            <h3 class="fw-bold text-center mb-4">
+                <i class="bi bi-trophy-fill text-warning"></i> Top Placement Students
+            </h3>
+
+            <div id="placementCarousel" class="carousel slide" data-bs-ride="carousel">
+
+                <div class="carousel-inner">
+
+                    <!-- SLIDE 1 -->
+                    <div class="carousel-item active">
+                        <div class="row g-3">
+
+                            <div class="col-md-3">
+                                <div class="card text-center shadow-sm">
+                                    <img src="~/img/studentphotos/oip (2).webp" class="card-img-top">
+                                    <div class="card-body">
+                                        <h6 class="fw-bold">Omkar Shinde</h6>
+                                        <p class="small mb-1">CSE</p>
+                                        <p class="text-success fw-bold mb-0">₹12 LPA</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="card text-center shadow-sm">
+                                    <img src="~/img/studentphotos/oip (6).webp" class="card-img-top">
+                                    <div class="card-body">
+                                        <h6 class="fw-bold">Aarav Patil</h6>
+                                        <p class="small mb-1">ME</p>
+                                        <p class="text-success fw-bold mb-0">₹8.5 LPA</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="card text-center shadow-sm">
+                                    <img src="~/img/studentphotos/oip (5).webp" class="card-img-top">
+                                    <div class="card-body">
+                                        <h6 class="fw-bold">Pranita Kulkarni</h6>
+                                        <p class="small mb-1">ECE</p>
+                                        <p class="text-success fw-bold mb-0">₹10.2 LPA</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="card text-center shadow-sm">
+                                    <img src="~/img/studentphotos/passport-photo-portrait-young-man-white-background_1028938-330516.avif" class="card-img-top">
+                                    <div class="card-body">
+                                        <h6 class="fw-bold">Sneha More</h6>
+                                        <p class="small mb-1">Civil</p>
+                                        <p class="text-success fw-bold mb-0">₹7.4 LPA</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 2 -->
+                    <div class="carousel-item">
+                        <div class="row g-3">
+
+                            <div class="col-md-3">
+                                <div class="card text-center shadow-sm">
+                                    <img src="~/img/studentphotos/oip (2).webp" class="card-img-top">
+                                    <div class="card-body">
+                                        <h6 class="fw-bold">Rahul Deshmukh</h6>
+                                        <p class="small mb-1">EE</p>
+                                        <p class="text-success fw-bold mb-0">₹9 LPA</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="card text-center shadow-sm">
+                                    <img src="~/img/studentphotos/oip (3).webp" class="card-img-top">
+                                    <div class="card-body">
+                                        <h6 class="fw-bold">Ananya Patil</h6>
+                                        <p class="small mb-1">CSE</p>
+                                        <p class="text-success fw-bold mb-0">₹13.5 LPA</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="card text-center shadow-sm">
+                                    <img src="~/img/studentphotos/oip (1).webp" class="card-img-top">
+                                    <div class="card-body">
+                                        <h6 class="fw-bold">Vikas Gawade</h6>
+                                        <p class="small mb-1">Mechanical</p>
+                                        <p class="text-success fw-bold mb-0">₹6.7 LPA</p>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                            <div class="col-md-3">
+                                <div class="card text-center shadow-sm">
+                                    <img src="~/img/studentphotos/oip (7).webp" class="card-img-top">
+                                    <div class="card-body">
+                                        <h6 class="fw-bold">Rutuja Shinde</h6>
+                                        <p class="small mb-1">ECE</p>
+                                        <p class="text-success fw-bold mb-0">₹11.2 LPA</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- CONTROLS -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#placementCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+
+                <button class="carousel-control-next" type="button" data-bs-target="#placementCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="py-4 comapny">
+        <div class="container">
+            <h4 class="text-center fw-bold mb-4">Top Recruiters</h4>
+
+
+            <div class="slider">
+                <div class="slide-track">
+
+                    <!-- LOGO 1 -->
+                    <div class="slide">
+                        <img src="~/img/comapny/tcs.jpg" />
+                    </div>
+
+                    <!-- LOGO 2 -->
+                    <div class="slide">
+                        <img src="~/img/comapny/cap.jpg" />
+                    </div>
+
+                    <!-- LOGO 3 -->
+                    <div class="slide">
+                        <img src="~/img/comapny/copper.jpg" />
+                    </div>
+
+                    <!-- LOGO 4 -->
+                    <div class="slide">
+                        <img src="~/img/comapny/froce motor.jpg" />
+                    </div>
+
+                    <!-- LOGO 5 -->
+                    <div class="slide">
+                        <img src="~/img/comapny/codidas.jpg" />
+                    </div>
+
+                    <!-- LOGO 6 -->
+                    <div class="slide">
+                        <img src="~/img/comapny/info.jpg" />
+                    </div>
+
+
+                    <div class="slide">
+                        <img src="~/img/comapny/hcl.jpg" />
+                    </div>
+                    <!-- LOGO 1 -->
+                    <div class="slide">
+                        <img src="~/img/comapny/tcs.jpg" />
+                    </div>
+
+                    <!-- LOGO 2 -->
+                    <div class="slide">
+                        <img src="~/img/comapny/cap.jpg" />
+                    </div>
+
+                    <!-- LOGO 3 -->
+                    <div class="slide">
+                        <img src="~/img/comapny/copper.jpg" />
+                    </div>
+
+                    <!-- LOGO 4 -->
+                    <div class="slide">
+                        <img src="~/img/comapny/froce motor.jpg" />
+                    </div>
+
+                    <!-- LOGO 5 -->
+                    <div class="slide">
+                        <img src="~/img/comapny/codidas.jpg" />
+                    </div>
+
+                    <!-- LOGO 6 -->
+                    <div class="slide">
+                        <img src="~/img/comapny/info.jpg" />
+                    </div>
+
+
+                    <div class="slide">
+                        <img src="~/img/comapny/hcl.jpg" />
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+
+</main>
+
+<script>
+    const counters = document.querySelectorAll('.counter');
+    const speed = 50; // smaller = faster
+
+    counters.forEach(counter => {
+        const updateCount = () => {
+            const target = +counter.getAttribute('data-target');
+            const count = +counter.innerText;
+
+            const increment = Math.ceil(target / speed);
+
+            if (count < target) {
+                counter.innerText = count + increment;
+                setTimeout(updateCount, 50);
+            } else {
+                counter.innerText = target;
+            }
+        };
+
+        updateCount();
+    });
+</script>

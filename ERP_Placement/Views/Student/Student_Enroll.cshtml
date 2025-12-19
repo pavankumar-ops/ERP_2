@@ -1,0 +1,374 @@
+﻿@model ERP_Placement.Models.StudentRegistration
+
+@{
+    ViewData["Title"] = "Student Enrollment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container my-4">
+
+    <!-- =================== PROFILE PHOTO HEADER =================== -->
+ 
+
+    <div class="position-relative d-inline-block pb-3">
+
+        <!-- Profile Image -->
+        <img id="profilePreview"
+             src="https://via.placeholder.com/150?text=User"
+             class="rounded-circle border border-primary"
+             width="130" height="130"
+             style="object-fit: cover;">
+
+        <!-- Camera Icon -->
+        <label for="profilePhotoInput"
+               class="btn btn-primary rounded-circle p-2
+                  position-absolute bottom-0 end-0 translate-middle
+                  d-flex align-items-center justify-content-center"
+               style="width: 28px; height: 28px;">
+            <i class="bi bi-camera-fill fs-5"></i>
+        </label>
+
+        <!-- Hidden Input -->
+        <input type="file" id="profilePhotoInput" accept="image/*"
+               class="d-none" asp-for="Personal_Photo" onchange="previewProfilePhoto(event)">
+    </div>
+
+    <form asp-action="StudSave" method="post" enctype="multipart/form-data">
+
+        <!-- ========================================================= -->
+        <!-- ===================== STEP 1 CARD ======================== -->
+        <!-- ========================================================= -->
+
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-primary text-white fw-bold">
+                STEP 1 — Personal Details
+            </div>
+
+            <div class="card-body">
+
+                <div class=" row mb-3 d-flex">
+                    <div class="col col-md-4">
+                    <label asp-for="FirstName" class="form-label">First Name</label>
+                    <input asp-for="FirstName" class="form-control border-dark"  id="firstname" required/>
+                    </div>
+                    <div class="col col-md-4">
+                    <label asp-for="MiddleName" class="form-label">Middle Name</label>
+                    <input asp-for="MiddleName" class="form-control border-dark" id="middlename" />
+                    </div>
+                    <div class="col col-md-4">
+                    <label asp-for="LastName" class="form-label">Last Name</label>
+                    <input asp-for="LastName" class="form-control border-dark" id="lastname" required/>
+                    </div>
+                </div>
+
+
+                <div class=" row mb-3 d-flex">
+                    <div class="col col-md-4">
+                        <label asp-for="Gender" class="form-label">Gender</label>
+                        <select asp-for="Gender" class="form-select border-dark" id="gender" required>
+                            <option value="">Select Gender</option>
+                            <option>Male</option>
+                            <option>Female</option>
+                            
+                            
+                        </select>
+                    </div>
+                    <div class="col col-md-4">
+                        <label asp-for="DOB" class="form-label"></label>
+                        <input asp-for="DOB" type="date" class="form-control border-dark" id="dob" required />
+                    </div>
+                  
+                </div>
+                
+                <div class=" row mb-3 d-flex">
+                    <div class="col col-md-4">
+                        <label asp-for="MobileNo" class="form-label">Mobile Number</label>
+                        <input asp-for="MobileNo" class="form-control border-dark" id="mobno" required/>
+                    </div>
+                    <div class="col col-md-4">
+                        <label asp-for="AlternateMobile" class="form-label">Alternative Mobile Number</label>
+                        <input asp-for="AlternateMobile" class="form-control border-dark" id="alternativemobno" required/>
+                    </div>
+                    
+                </div>
+                
+                <div class=" row mb-3 d-flex">
+                    <div class="col col-md-4">
+                        <label asp-for="Email" class="form-label">Email Id</label>
+                        <input asp-for="Email" class="form-control border-dark" id="email" required/>
+                    </div>
+                    <div class="col col-md-4">
+                        <label asp-for="Email" class="form-label">Confirm Email Id</label>
+                        <input asp-for="Email" class="form-control border-dark" id="emailconfirm" required/>
+                    </div>
+                </div>
+
+               
+                
+
+               
+            </div>
+        </div>
+
+
+        <!-- ========================================================= -->
+        <!-- ===================== STEP 2 CARD ======================== -->
+        <!-- ========================================================= -->
+
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-primary text-white fw-bold">
+                STEP 2 — Acadamic Details
+            </div>
+
+            <div class="card-body">
+
+                <div class=" row mb-3 d-flex">
+                    <div class="col col-md-4">
+                        <label asp-for="Roll_No" class="form-label">Roll Number</label>
+                        <input asp-for="Roll_No" class="form-control border-dark" id="rollno" />
+                    </div>
+                    <div class="col col-md-4">
+                        <label  class="form-label">Confirm Roll No</label>
+                        <input  class="form-control border-dark" id="confirmrollno"/>
+                    </div>
+                    
+                </div>
+
+
+                <div class=" row mb-3 d-flex">
+                    <div class="col col-md-4">
+                        <label asp-for="Branch" class="form-label">Select Branch</label>
+                        <select asp-for="Branch" class="form-select border-dark" id="branch" required>
+                            <option value="">Select Brach</option>
+                            <option>Computer Science</option>
+                            <option>Mechanical Engineering</option>
+                            <option>Electrical Engineering</option>
+                            <option>Civil Engineering</option>
+                            <option>Electronic Engineering</option>
+                        </select>
+                    </div>
+                    <div class="col col-md-4">
+                        <label asp-for="Divison" class="form-label">Divison</label>
+                        <select asp-for="Divison" class="form-select border-dark" id="divsion" required>
+                            <option value="">Select Brach</option>
+                            <option>A</option>
+                            
+                        </select>
+                    </div>
+
+                </div>
+
+                
+               
+
+                <div class=" row mb-3 d-flex">
+                    <div class="col col-md-4">
+                        <label asp-for="Acadamic_Year" class="form-label">Acadamic Year</label>
+                        <select asp-for="Acadamic_Year" class="form-select border-dark" id="acadamicyear" required>
+                            <option value="">Select Academic Year</option>
+                            <option>2022-2023</option>
+                            <option>2023-2024</option>
+                            <option>2024-2025</option>
+                        </select>
+                    </div>
+                    
+                </div>
+
+
+
+
+               
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- ===================== STEP 2 CARD ======================== -->
+        <!-- ========================================================= -->
+
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-primary text-white fw-bold">
+                STEP 3 — Educational Details
+            </div>
+
+            <div class="card-body">
+
+                <h5 class="fw-bold mb-3">SSC Details</h5>
+
+                <div class=" row mb-3 d-flex">
+                    <div class="col col-md-6">
+                        <label asp-for="SSC" class="form-label" >SSC Percentages</label>
+                        <input asp-for="SSC" class="form-control border-dark" required id="sscpercentage"/>
+                    </div>
+                    <div class="col col-md-6">
+                        <label asp-for="SSC_Passing_Year" class="form-label">SSC Passing Year</label>
+                        <input asp-for="SSC_Passing_Year" class="form-control border-dark" id="sscpassingyear" required />
+                    </div>
+                </div>
+
+
+                
+
+
+               
+
+                <div class="mb-3 ">
+                    <<div class="col col-md-6">
+                        <label asp-for="SSC_Document_Path" class="form-label">SSC Marksheet</label>
+                        <input asp-for="SSC_Document_Path" type="file" class="form-control border-dark" id="sscmarksheet" required />
+                    </div>
+                </div>
+
+                <h5 class="fw-bold mt-4 mb-3">HSC Details</h5>
+
+                <div class=" row mb-3 d-flex">
+                    <div class="col col-md-6">
+                        <label asp-for="HSC" class="form-label">HSC Percentages</label>
+                        <input asp-for="HSC" class="form-control border-dark" id="hscpercentage" required/>
+                    </div>
+                    <div class="col col-md-6">
+                        <label asp-for="HSC_Passing_Year" class="form-label">HSC Passing Year</label>
+                        <input asp-for="HSC_Passing_Year" class="form-control border-dark" id="hscpassingyear" required />
+                    </div>
+                </div>
+
+
+
+
+                <div class="mb-3 ">
+                    <<div class="col col-md-6">
+                    <label asp-for="HSC_Document_Path" class="form-label">HSC Marksheet</label>
+                        <input asp-for="HSC_Document_Path" type="file" class="form-control border-dark" id="hscmarksheet" /required>
+                    </div>
+                </div>
+
+
+
+               
+
+                <h5 class="fw-bold mt-4 mb-3">Diploma Details</h5>
+
+
+                <div class=" row mb-3 d-flex">
+                    <div class="col col-md-6">
+                        <label asp-for="Diploma_Percentages" class="form-label">Diploma Percentage</label>
+                        <input asp-for="Diploma_Percentages" class="form-control border-dark" id="diplomamarksheet" required />
+                    </div>
+                    <div class="col col-md-6">
+                        <label asp-for="Diploma_Branch" class="form-label">Diploma Branch</label>
+                        <input asp-for="Diploma_Branch" class="form-control border-dark" id="diplomabranch" required/>
+                    </div>
+                </div>
+                <div class=" row mb-3 d-flex">
+                    <div class="col col-md-6">
+                        <label asp-for="Diploma_Passing_Year" class="form-label">Diploma Passing Year</label>
+                        <input asp-for="Diploma_Passing_Year" class="form-control border-dark" id="diplomapassingyear" required/>
+                    </div>
+                    <div class="col col-md-6">
+                        <label asp-for="Diploma_Document_Path" class="form-label">Diploma Marksheet</label>
+                        <input asp-for="Diploma_Document_Path" type="file" class="form-control border-dark" id="diplomamarksheet" required/>
+                    </div>
+                </div>
+
+
+
+
+                
+
+
+
+
+                
+
+
+                <h5 class="fw-bold mt-4 mb-3">BTech Details</h5>
+
+
+                <div class=" row mb-3 d-flex">
+                    <div class="col col-md-6">
+                        <label asp-for="BTech_Branch" class="form-label">B Tech Branch</label>
+                        <input asp-for="BTech_Branch" class="form-control border-dark" id="btechbranch" required/>
+                    </div>
+                    <div class="col col-md-6">
+                        <label asp-for="BTech_Passing_Year" class="form-label">B Tech Passing Year</label>
+                        <input asp-for="BTech_Passing_Year" class="form-control border-dark" id="btechpassingyear" required/>
+                    </div>
+                </div>
+                <div class=" row mb-3 d-flex">
+                    <div class="col col-md-6">
+                        <label asp-for="BTech_Percentages" class="form-label">B Tech Percentage</label>
+                        <input asp-for="BTech_Percentages" class="form-control border-dark" id="btechpercentage" required />
+                    </div>
+                    <div class="col col-md-6">
+                        <label asp-for="BTech_Document_Path" class="form-label">B Tech Marksheet</label>
+                        <input asp-for="BTech_Document_Path" type="file" class="form-control border-dark" id="btechmarksheet" required/>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ========================================================= -->
+        <!-- ===================== STEP 3 CARD ======================== -->
+        <!-- ========================================================= -->
+
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-primary text-white fw-bold">
+                STEP 3 — Skills & Submit
+            </div>
+
+            <div class="card-body">
+
+                <div class=" row mb-3 d-flex">
+                    <div class="col col-md-6">
+                        <label asp-for="Skills" class="form-label">Skills</label>
+                        <input asp-for="Skills" class="form-control border-dark" required/>
+                    </div>
+                    <div class="col col-md-6">
+                        <label asp-for="Resume"  class="form-label">Resume</label>
+                        <input asp-for="Resume" type="file" class="form-control border-dark" required />
+                    </div>
+                </div>
+
+
+               
+
+               
+
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success w-100 fw-bold">
+            Submit Registration
+        </button>
+
+    </form>
+
+</div>
+
+
+<!-- ========================================== -->
+<!-- JS: Profile Photo Preview/Remove Function -->
+<!-- ========================================== -->
+
+<script>
+    function previewProfilePhoto(event) {
+        const output = document.getElementById('profilePreview');
+        output.src = URL.createObjectURL(event.target.files[0]);
+    }
+
+    function removeProfilePhoto() {
+        const img = document.getElementById('profilePreview');
+        img.src = "https://via.placeholder.com/120";
+        document.getElementById('profilePhotoInput').value = "";
+    }
+</script>
+<script>
+    const defaultAvatar = "https://via.placeholder.com/150?text=User";
+
+    function previewProfilePhoto(event) {
+        document.getElementById("profilePreview").src =
+            URL.createObjectURL(event.target.files[0]);
+    }
+</script>
