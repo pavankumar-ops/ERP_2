@@ -1,16 +1,44 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ERP_Placement.DAL;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace ERP_Placement.Controllers
 {
     public class Login : Controller
     {
         // GET: Login
+
+        private readonly StudentDAL _dal;
+
+        public Login(IConfiguration config)
+        {
+            _dal = new StudentDAL(config);
+        }
         public ActionResult Student_LoginPage()
         {
             return View();
         }
 
+
+
+        [HttpPost]
+        public IActionResult Stud_Login(string Username, string Password)
+        {
+            DataTable dt = _dal.StudentLogin(Username, Password);
+
+            if (dt.Rows.Count == 0)
+            {
+                TempData["error"] = "Invalid username or password";
+                return RedirectToAction("Login");
+            }
+
+            // Login success
+            //HttpContext.Session.SetString("StudentId", dt.Rows[0]["StudentId"].ToString());
+            //HttpContext.Session.SetString("StudentName", dt.Rows[0]["FirstName"].ToString());
+
+            return RedirectToAction("Home", "Index");
+        }
         // GET: Login/Details/5
         public ActionResult Details(int id)
         {

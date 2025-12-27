@@ -1,5 +1,5 @@
-var builder = WebApplication.CreateBuilder(args);
-
+﻿var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddSession();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -14,10 +14,12 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseSession();
+
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Trainer}/{action=Stud_List}/{id?}");
 
 app.Run();

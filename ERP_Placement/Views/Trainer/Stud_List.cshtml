@@ -1,0 +1,55 @@
+﻿<table class="table table-bordered table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Student ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Mobile No</th>
+            <th>Branch</th>
+            <th>SSC %</th>
+            <th>HSC %</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model != null && Model.Rows.Count > 0)
+        {
+            foreach (System.Data.DataRow row in Model.Rows)
+            {
+                <tr>
+                    <td>@row["StudentId"]</td>
+                    <td>@row["FirstName"]</td>
+                    <td>@row["LastName"]</td>
+                    <td>@row["Email"]</td>
+                    <td>@row["MobileNo"]</td>
+                    <td>@row["Branch"]</td>
+                    <td>@row["SSC"]</td>
+                    <td>@row["HSC"]</td>
+                    <td>
+                        <a class="btn btn-success btn-sm"
+                           href="@Url.Action("Approve", "Trainer", new { id = row["StudentId"] })">
+                            Approve
+                        </a>
+
+                        <a class="btn btn-success btn-sm"
+                           href="@Url.Action("View", "Trainer", new { id = row["StudentId"] })">
+                            View
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="9" class="text-center text-danger">
+                    No pending students found
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+                        

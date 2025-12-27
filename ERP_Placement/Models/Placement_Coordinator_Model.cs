@@ -1,9 +1,7 @@
 ﻿namespace ERP_Placement.Models
 {
-    public class StudentRegistration
+    public class Placement_Coordinator_Model
     {
-        // -------------------- StudentDetails Table --------------------
-
         public string StudentId { get; set; }
 
         public string FirstName { get; set; }
@@ -20,17 +18,17 @@
         public DateTime RegistrationDate { get; set; }
 
         public string Personal_Photo { get; set; }
-        
-        
-        
-        
+
+
+
+
         public string Acadamic_Year { get; set; }
         public string Roll_No { get; set; }
-        public string Branch  { get; set; }
-        public string Divison  { get; set; }
+        public string Branch { get; set; }
+        public string Divison { get; set; }
 
-        
-        
+
+
 
 
         // -------------------- StudentEducation Table --------------------
@@ -60,13 +58,5 @@
         public string Skills { get; set; }
         public string ResumePath { get; set; }
 
-        // Upload properties (not DB)
-        public IFormFile SSC_File { get; set; }
-        public IFormFile HSC_File { get; set; }
-        public IFormFile Diploma_File { get; set; }
-        public IFormFile BTech_File { get; set; }
-        public IFormFile Resume { get; set; }
-        public IFormFile Profile_photo { get; set; }
     }
-
 }
