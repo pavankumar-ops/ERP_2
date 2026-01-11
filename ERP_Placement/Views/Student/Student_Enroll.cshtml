@@ -49,7 +49,7 @@
                 <div class=" row mb-3 d-flex">
                     <div class="col col-md-4">
                     <label asp-for="FirstName" class="form-label">First Name</label>
-                    <input asp-for="FirstName" class="form-control border-dark"  id="firstname" />
+                    <input asp-for="FirstName" class="form-control border-dark"  id="firstname"  required/>
                     </div>
                     <div class="col col-md-4">
                     <label asp-for="MiddleName" class="form-label">Middle Name</label>
@@ -57,7 +57,7 @@
                     </div>
                     <div class="col col-md-4">
                     <label asp-for="LastName" class="form-label">Last Name</label>
-                    <input asp-for="LastName" class="form-control border-dark" id="lastname" />
+                    <input asp-for="LastName" class="form-control border-dark" id="lastname" required/>
                     </div>
                 </div>
 
@@ -65,7 +65,7 @@
                 <div class=" row mb-3 d-flex">
                     <div class="col col-md-4">
                         <label asp-for="Gender" class="form-label">Gender</label>
-                        <select asp-for="Gender" class="form-select border-dark" id="gender" >
+                        <select asp-for="Gender" class="form-select border-dark" id="gender" required>
                             <option value="">Select Gender</option>
                             <option>Male</option>
                             <option>Female</option>
@@ -74,8 +74,8 @@
                         </select>
                     </div>
                     <div class="col col-md-4">
-                        <label asp-for="DOB" class="form-label"></label>
-                        <input asp-for="DOB" type="date" class="form-control border-dark" id="dob"  />
+                        <label asp-for="DOB" class="form-label">Date of Birth</label>
+                        <input asp-for="DOB" type="date" class="form-control border-dark" id="dob"  required/>
                     </div>
                   
                 </div>
@@ -83,11 +83,11 @@
                 <div class=" row mb-3 d-flex">
                     <div class="col col-md-4">
                         <label asp-for="MobileNo" class="form-label">Mobile Number</label>
-                        <input asp-for="MobileNo" class="form-control border-dark" id="mobno" />
+                        <input asp-for="MobileNo" class="form-control border-dark" id="mobno" required/>
                     </div>
                     <div class="col col-md-4">
                         <label asp-for="AlternateMobile" class="form-label">Alternative Mobile Number</label>
-                        <input asp-for="AlternateMobile" class="form-control border-dark" id="alternativemobno" />
+                        <input asp-for="AlternateMobile" class="form-control border-dark" id="alternativemobno" required/>
                     </div>
                     
                 </div>
@@ -95,11 +95,11 @@
                 <div class=" row mb-3 d-flex">
                     <div class="col col-md-4">
                         <label asp-for="Email" class="form-label">Email Id</label>
-                        <input asp-for="Email" class="form-control border-dark" id="email" />
+                        <input asp-for="Email" class="form-control border-dark" id="email" required/>
                     </div>
                     <div class="col col-md-4">
                         <label asp-for="Email" class="form-label">Confirm Email Id</label>
-                        <input asp-for="Email" class="form-control border-dark" id="emailconfirm" />
+                        <input asp-for="Email" class="form-control border-dark" id="emailconfirm" required/>
                     </div>
                 </div>
 
@@ -125,11 +125,11 @@
                 <div class=" row mb-3 d-flex">
                     <div class="col col-md-4">
                         <label asp-for="Roll_No" class="form-label">Roll Number</label>
-                        <input asp-for="Roll_No" class="form-control border-dark" id="rollno" />
+                        <input asp-for="Roll_No" class="form-control border-dark" id="rollno" required />
                     </div>
                     <div class="col col-md-4">
                         <label  class="form-label">Confirm Roll No</label>
-                        <input  class="form-control border-dark" id="confirmrollno"/>
+                        <input  class="form-control border-dark" id="confirmrollno" required/>
                     </div>
                     
                 </div>
@@ -138,7 +138,7 @@
                 <div class=" row mb-3 d-flex">
                     <div class="col col-md-4">
                         <label asp-for="Branch" class="form-label">Select Branch</label>
-                        <select asp-for="Branch" class="form-select border-dark" id="branch" >
+                        <select asp-for="Branch" class="form-select border-dark" id="branch" required>
                             <option value="">Select Brach</option>
                             <option>Computer Science</option>
                             <option>Mechanical Engineering</option>
@@ -149,7 +149,7 @@
                     </div>
                     <div class="col col-md-4">
                         <label asp-for="Divison" class="form-label">Divison</label>
-                        <select asp-for="Divison" class="form-select border-dark" id="divsion" >
+                        <select asp-for="Divison" class="form-select border-dark" id="divsion" required >
                             <option value="">Select Brach</option>
                             <option>A</option>
                             
@@ -164,7 +164,7 @@
                 <div class=" row mb-3 d-flex">
                     <div class="col col-md-4">
                         <label asp-for="Acadamic_Year" class="form-label">Acadamic Year</label>
-                        <select asp-for="Acadamic_Year" class="form-select border-dark" id="acadamicyear" >
+                        <select asp-for="Acadamic_Year" class="form-select border-dark" id="acadamicyear" required>
                             <option value="">Select Academic Year</option>
                             <option>2022-2023</option>
                             <option>2023-2024</option>
@@ -197,11 +197,11 @@
                 <div class=" row mb-3 d-flex">
                     <div class="col col-md-6">
                         <label asp-for="SSC" class="form-label" >SSC Percentages</label>
-                        <input asp-for="SSC" class="form-control border-dark"  id="sscpercentage"/>
+                        <input asp-for="SSC" class="form-control border-dark"  id="sscpercentage" required/>
                     </div>
                     <div class="col col-md-6">
                         <label asp-for="SSC_Passing_Year" class="form-label">SSC Passing Year</label>
-                        <input asp-for="SSC_Passing_Year" class="form-control border-dark" id="sscpassingyear"  />
+                        <input asp-for="SSC_Passing_Year" class="form-control border-dark" id="sscpassingyear" required />
                     </div>
                 </div>
 
@@ -214,7 +214,7 @@
                 <div class="mb-3 ">
                     <<div class="col col-md-6">
                         <label  class="form-label">SSC Marksheet</label>
-                        <input asp-for="SSC_Document_Path" type="file" class="form-control border-dark" id="sscmarksheet" />
+                        <input asp-for="SSC_Document_Path" type="file" class="form-control border-dark" id="sscmarksheet" required/>
                     </div>
                 </div>
 
@@ -223,11 +223,11 @@
                 <div class=" row mb-3 d-flex">
                     <div class="col col-md-6">
                         <label asp-for="HSC" class="form-label">HSC Percentages</label>
-                        <input asp-for="HSC" class="form-control border-dark" id="hscpercentage" />
+                        <input asp-for="HSC" class="form-control border-dark" id="hscpercentage" required/>
                     </div>
                     <div class="col col-md-6">
                         <label asp-for="HSC_Passing_Year" class="form-label">HSC Passing Year</label>
-                        <input asp-for="HSC_Passing_Year" class="form-control border-dark" id="hscpassingyear"  />
+                        <input asp-for="HSC_Passing_Year" class="form-control border-dark" id="hscpassingyear"  required/>
                     </div>
                 </div>
 
@@ -237,7 +237,7 @@
                 <div class="mb-3 ">
                     <<div class="col col-md-6">
                     <label  class="form-label">HSC Marksheet</label>
-                        <input asp-for="HSC_Document_Path" type="file" class="form-control border-dark" id="hscmarksheet" />
+                        <input asp-for="HSC_Document_Path" type="file" class="form-control border-dark" id="hscmarksheet" required/>
                     </div>
                 </div>
 
