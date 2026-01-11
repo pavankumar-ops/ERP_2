@@ -94,11 +94,11 @@ Placement Team";
 
                 SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
                 smtp.EnableSsl = true;
-                smtp.UseDefaultCredentials = false; 
+                smtp.UseDefaultCredentials = false;
 
                 smtp.Credentials = new NetworkCredential(
                     "placementerp@gmail.com",
-                    "erkkhoqzdiiuigyj"   
+                    "erkkhoqzdiiuigyj"
                 );
 
                 smtp.Send(mail);

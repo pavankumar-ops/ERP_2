@@ -109,6 +109,7 @@ namespace ERP_Placement.DAL
                 SqlCommand cmd = new SqlCommand("SPStudentDetails", con);
                 cmd.CommandType = CommandType.StoredProcedure;
 
+                cmd.Parameters.AddWithValue("@Name_Title", s.Name_Title);
                 cmd.Parameters.AddWithValue("@FirstName", s.FirstName);
                 cmd.Parameters.AddWithValue("@MiddleName", s.MiddleName ?? "");
                 cmd.Parameters.AddWithValue("@LastName", s.LastName);
@@ -123,6 +124,8 @@ namespace ERP_Placement.DAL
                 cmd.Parameters.AddWithValue("@Branch", s.Branch);
                 cmd.Parameters.AddWithValue("@Roll_No", s.Roll_No);
                 cmd.Parameters.AddWithValue("@Divison", s.Divison);
+                cmd.Parameters.AddWithValue("@Password", s.Password == null ? DBNull.Value : s.Password);
+
                 cmd.Parameters.AddWithValue("@Approval_Status", "Not_Approved");
 
                 // Education
@@ -211,7 +214,7 @@ namespace ERP_Placement.DAL
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@Flag", "GetbyStudId");
-                    cmd.Parameters.AddWithValue("@StudentId", id);   
+                    cmd.Parameters.AddWithValue("@StudentId", id);
                     using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                     {
                         da.Fill(dt);
@@ -265,19 +268,30 @@ namespace ERP_Placement.DAL
             DataTable dt = new DataTable();
 
             using (SqlConnection con = new SqlConnection(_conn))
-            using (SqlCommand cmd = new SqlCommand("SPStudentDetails", con))
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@Flag", "StudentLogin");
-                cmd.Parameters.AddWithValue("@Email", username);
-                cmd.Parameters.AddWithValue("@Password", password);
+                string query = @"
+            SELECT StudentId, FirstName, Email
+            FROM StudentDetails
+            WHERE Email = @Email
+              AND Password = @Password
+              AND Approval_Status = 'Approved'";
 
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                da.Fill(dt);
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.CommandType = CommandType.Text;
+
+                    cmd.Parameters.Add("@Email", SqlDbType.VarChar, 100).Value = username;
+                    cmd.Parameters.Add("@Password", SqlDbType.NVarChar, 20).Value = password;
+
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    da.Fill(dt);
+                }
             }
 
             return dt;
         }
+
+
 
 
     }

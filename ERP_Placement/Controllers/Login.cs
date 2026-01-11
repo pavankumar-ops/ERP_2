@@ -1,6 +1,8 @@
 ﻿using ERP_Placement.DAL;
+using ERP_Placement.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Data;
 
 namespace ERP_Placement.Controllers
@@ -23,8 +25,10 @@ namespace ERP_Placement.Controllers
 
 
         [HttpPost]
-        public IActionResult Stud_Login(string Username, string Password)
+        public IActionResult Stud_Login(login_Properties model)
         {
+            string Username = model.UserId;
+            string Password = model.Password;
             DataTable dt = _dal.StudentLogin(Username, Password);
 
             if (dt.Rows.Count == 0)
@@ -34,10 +38,10 @@ namespace ERP_Placement.Controllers
             }
 
             // Login success
-            //HttpContext.Session.SetString("StudentId", dt.Rows[0]["StudentId"].ToString());
-            //HttpContext.Session.SetString("StudentName", dt.Rows[0]["FirstName"].ToString());
+            HttpContext.Session.SetString("StudentId", dt.Rows[0]["StudentId"].ToString());
+            HttpContext.Session.SetString("StudentName", dt.Rows[0]["FirstName"].ToString());
 
-            return RedirectToAction("Home", "Index");
+            return RedirectToAction("StudentDB", "Student");
         }
         // GET: Login/Details/5
         public ActionResult Details(int id)
@@ -52,60 +56,60 @@ namespace ERP_Placement.Controllers
         }
 
         // POST: Login/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Create(IFormCollection collection)
+        //{
+        //    try
+        //    {
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
 
-        // GET: Login/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
+        //// GET: Login/Edit/5
+        //public ActionResult Edit(int id)
+        //{
+        //    return View();
+        //}
 
-        // POST: Login/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        //// POST: Login/Edit/5
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Edit(int id, IFormCollection collection)
+        //{
+        //    try
+        //    {
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
 
-        // GET: Login/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
+        //// GET: Login/Delete/5
+        //public ActionResult Delete(int id)
+        //{
+        //    return View();
+        //}
 
-        // POST: Login/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        //// POST: Login/Delete/5
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Delete(int id, IFormCollection collection)
+        //{
+        //    try
+        //    {
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
     }
 }

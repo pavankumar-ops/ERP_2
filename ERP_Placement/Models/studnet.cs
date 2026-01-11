@@ -5,6 +5,7 @@
         // -------------------- StudentDetails Table --------------------
 
         public string StudentId { get; set; }
+        public string Name_Title { get; set; }
 
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
@@ -20,17 +21,19 @@
         public DateTime RegistrationDate { get; set; }
 
         public string Personal_Photo { get; set; }
-        
-        
-        
-        
+
+
+
+
         public string Acadamic_Year { get; set; }
         public string Roll_No { get; set; }
-        public string Branch  { get; set; }
-        public string Divison  { get; set; }
+        public string Branch { get; set; }
+        public string Divison { get; set; }
+        public string Password { get; set; }
 
-        
-        
+
+
+
 
 
         // -------------------- StudentEducation Table --------------------

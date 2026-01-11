@@ -83,7 +83,7 @@ namespace ERP_Placement.Controllers
         {
             // 🔹 Student name for file
             string studentName =
-                $"{model.FirstName}_{model.MiddleName}_{model.LastName}"   
+                $"{model.FirstName}_{model.MiddleName}_{model.LastName}"
                 .Replace(" ", "")
                 .ToUpper();
 
@@ -162,6 +162,9 @@ namespace ERP_Placement.Controllers
             return RedirectToAction("Student_Enroll");
         }
 
-
+        public IActionResult StudentDB()
+        {
+            return View();
+        }
     }
 }
