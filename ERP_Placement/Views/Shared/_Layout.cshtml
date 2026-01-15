@@ -59,12 +59,43 @@
                     Enroll Now
                 </a>
             </li>
-            <li>
+          @*   <li>
                 <a href="@Url.Action( "Student_LoginPage", "Login")"
                    style="background: white; color: #2E67F8; font-weight: 600; padding: 10px 22px;  text-decoration: none; transition: 0.3s;">
                     Log In
                 </a>
+            </li> *@
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle"
+                   href="#"
+                   id="loginDropdown"
+                   role="button"
+                   data-bs-toggle="dropdown"
+                   aria-expanded="false"
+                   style="background: white; color: #2E67F8; font-weight: 600; padding: 10px 22px;">
+                    Log In
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-end shadow"
+                    aria-labelledby="loginDropdown">
+                    <li>
+                        <a class="dropdown-item"
+                           href="@Url.Action("Student_LoginPage", "Login")">
+                            🎓 Student Login
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item"
+                           href="@Url.Action("TraineerLogin", "Login")">
+                            🏢 Placement Coordinator Login
+                        </a>
+                    </li>
+                </ul>
             </li>
+
+
+
         </ul><!-- Enroll Button -->
         
 

@@ -17,6 +17,12 @@ namespace ERP_Placement.Controllers
         {
             _dal = new StudentDAL(config);
         }
+
+        public ActionResult TraineerLogin()
+        {
+            return View();
+        }
+
         public ActionResult Student_LoginPage()
         {
             return View();
