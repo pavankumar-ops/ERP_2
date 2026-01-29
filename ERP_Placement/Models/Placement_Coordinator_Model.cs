@@ -58,5 +58,18 @@
         public string Skills { get; set; }
         public string ResumePath { get; set; }
 
+
+
+        //comapny registration
+        public int CompanyId { get; set; }
+
+        public string CompanyName { get; set; }
+        public string CompanyLogo { get; set; }
+        public string CompanyWebsite { get; set; }
+        public string CompanyDescription { get; set; }
+
+        public string RegisteredBy { get; set; }
+        public DateTime CompanyRegistrationDate { get; set; }
+
     }
 }

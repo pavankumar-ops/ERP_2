@@ -36,7 +36,72 @@ namespace ERP_Placement.Controllers
             return View(dt);
         }
 
+        [HttpGet]
+        public IActionResult CompanyRegistration()
+        {
+            return View("CompanyRegistration");
+        }
 
+        [HttpPost]
+        public IActionResult Register(Placement_Coordinator_Model model)
+        {
+            model.RegisteredBy = "Placement Coordinator"; // later from login
+
+            int companyId = _dal.InsertCompany(model);
+
+
+
+            TempData["Success"] = $"Company Registered Successfully. Company ID: {companyId}";
+            return RedirectToAction("CompanyRegistration");
+        }
+        [HttpPost]
+        [HttpPost]
+        public async Task<IActionResult> CompanySave(
+    Placement_Coordinator_Model model,
+    IFormFile CompanyLogo)
+        {
+            // 🔹 Company name for file naming
+            string companyName = model.CompanyName
+                .Replace(" ", "")
+                .ToUpper();
+
+            // 🔹 Save Company Logo
+            if (CompanyLogo != null && CompanyLogo.Length > 0)
+            {
+                string uploadPath = Path.Combine(
+                    Directory.GetCurrentDirectory(),
+                    "wwwroot",
+                    "img",
+                    "company"
+                );
+
+                if (!Directory.Exists(uploadPath))
+                    Directory.CreateDirectory(uploadPath);
+
+                string extension = Path.GetExtension(CompanyLogo.FileName);
+                string fileName = $"{companyName}_LOGO{extension}";
+                string fullPath = Path.Combine(uploadPath, fileName);
+
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    await CompanyLogo.CopyToAsync(stream);
+                }
+
+                // ✅ EXACT PATH YOU ASKED FOR
+                model.CompanyLogo = $"/img/company/{fileName}";
+            }
+
+            model.RegisteredBy = "Placement Coordinator";
+            model.RegistrationDate = DateTime.Now;
+
+            // 🔹 DAL insert (ADO.NET direct query)
+            int companyId = _dal.InsertCompany(model);
+
+            TempData["success"] =
+                $"Company Registered Successfully! Company ID: {companyId}";
+
+            return RedirectToAction("Register");
+        }
 
         public ActionResult Approve(string id)
         {

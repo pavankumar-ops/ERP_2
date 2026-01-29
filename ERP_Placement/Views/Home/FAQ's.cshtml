@@ -1,0 +1,131 @@
+﻿@{
+    ViewData["Title"] = "Student Enrollment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Bootstrap 5 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+    :root {
+        --bs-primary: #3b245f;
+        --bs-primary-rgb: 59, 36, 95;
+    }
+
+    html, body {
+        height: 100%;
+    }
+
+    .faq-panel {
+        min-height: 100vh;
+    }
+
+    .chat-body {
+        overflow-y: auto;
+    }
+
+    .message {
+        max-width: 70%;
+        padding: .75rem 1rem;
+        border-radius: .75rem;
+        font-size: .875rem;
+        margin-bottom: .75rem;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+
+        <!-- LEFT FAQ PANEL -->
+        <div class="col-md-3 bg-primary text-white p-4 faq-panel">
+            <h5 class="fw-semibold mb-4">📌 Placement FAQs</h5>
+
+            <button class="btn btn-light text-primary w-100 mb-2"
+                    onclick="sendFAQ(1)">
+                Placement Process
+            </button>
+
+            <button class="btn btn-light text-primary w-100 mb-2"
+                    onclick="sendFAQ(2)">
+                Eligible Branches
+            </button>
+
+            <button class="btn btn-light text-primary w-100 mb-2"
+                    onclick="sendFAQ(3)">
+                Resume Guidelines
+            </button>
+
+            <button class="btn btn-light text-primary w-100 mb-2"
+                    onclick="sendFAQ(4)">
+                Interview Schedule
+            </button>
+
+            <button class="btn btn-light text-primary w-100 mb-2"
+                    onclick="sendFAQ(5)">
+                Company Criteria
+            </button>
+
+            <button class="btn btn-light text-primary w-100"
+                    onclick="sendFAQ(6)">
+                Contact Placement Cell
+            </button>
+        </div>
+
+        <!-- RIGHT CHAT PANEL -->
+        <div class="col-md-9 d-flex flex-column p-0">
+
+            <!-- HEADER -->
+            <div class="bg-primary text-white p-3 fw-semibold fs-5">
+                🤖 Placement Assistant
+            </div>
+
+            <!-- CHAT BODY -->
+            <div class="flex-grow-1 p-4 bg-light chat-body" id="chatBody">
+                <div class="message bg-secondary-subtle text-dark">
+                    Hello 👋 <br />
+                    I’m your Placement Assistant.<br />
+                    Select a question from the left panel.
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    const chatBody = document.getElementById("chatBody");
+
+    const faqAnswers = {
+        1: "The placement process includes registration, aptitude test, technical interview, HR round, and offer letter.",
+        2: "Eligible branches depend on company criteria. Mostly CSE, IT, ENTC, Mechanical & Electrical.",
+        3: "Resume should be one page, updated, error-free, and approved by the placement coordinator.",
+        4: "Interview schedules are shared via ERP notification and official email.",
+        5: "Each company has different criteria such as CGPA, branch, and passing year.",
+        6: "Placement Cell Contact: placement@college.edu | Office Room No. 12"
+    };
+
+    function sendFAQ(id) {
+
+        const questionText = document.querySelectorAll(".faq-panel button")[id - 1].innerText;
+
+        // User Message
+        const userDiv = document.createElement("div");
+        userDiv.className = "message bg-primary text-white ms-auto text-end";
+        userDiv.innerText = questionText;
+        chatBody.appendChild(userDiv);
+
+        // Bot Message
+        setTimeout(() => {
+            const botDiv = document.createElement("div");
+            botDiv.className = "message bg-secondary-subtle text-dark";
+            botDiv.innerText = faqAnswers[id];
+            chatBody.appendChild(botDiv);
+
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }, 400);
+    }
+</script>

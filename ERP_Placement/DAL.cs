@@ -292,7 +292,29 @@ namespace ERP_Placement.DAL
         }
 
 
+        public int InsertCompany(Placement_Coordinator_Model model)
+        {
+            using SqlConnection con = new SqlConnection(_conn);
 
+            string query = @"
+        INSERT INTO CompanyMaster
+        (CompanyName, CompanyLogo, CompanyWebsite, CompanyDescription, RegisteredBy)
+        VALUES
+        (@CompanyName, @CompanyLogo, @CompanyWebsite, @CompanyDescription, @RegisteredBy);
+
+        SELECT SCOPE_IDENTITY();";
+
+            using SqlCommand cmd = new SqlCommand(query, con);
+
+            cmd.Parameters.AddWithValue("@CompanyName", model.CompanyName);
+            cmd.Parameters.AddWithValue("@CompanyLogo", model.CompanyLogo ?? "");
+            cmd.Parameters.AddWithValue("@CompanyWebsite", model.CompanyWebsite ?? "");
+            cmd.Parameters.AddWithValue("@CompanyDescription", model.CompanyDescription ?? "");
+            cmd.Parameters.AddWithValue("@RegisteredBy", model.RegisteredBy);
+
+            con.Open();
+            return Convert.ToInt32(cmd.ExecuteScalar());
+        }
 
     }
 }
