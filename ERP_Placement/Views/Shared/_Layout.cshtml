@@ -28,16 +28,12 @@
     <!-- Main CSS File -->
     <link href="~/css/main.css" rel="stylesheet" />
     <div class="container-fluid container-xl position-relative d-flex align-items-center">
-
-      
-
-
     </div>
 </head>
 
 <body class="index-page">
     <!-- Navbar -->
-    <nav id="navmenu" class="navmenu" style="display: flex; align-items: center; justify-content: space-between; background: #2E67F8; padding: 10px 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); position: fixed; top: 0; left: 0; right: 0; z-index: 1050;;">
+    <nav id="navmenu" class="navmenu" style="display: flex; align-items: center; justify-content: space-between; background: #3b245f; padding: 5px 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.08); position: fixed; top: 0; left: 0; right: 0; z-index: 1050;">
 
         <!-- Menu Links -->
         <ul style="list-style: none; margin: 0; padding: 0; display: flex; gap: 20px;">
@@ -50,16 +46,23 @@
             <li><a href="@Url.Action("Stud_List", "Trainer")" style="color: white; font-weight: 500; text-decoration: none;">Student List</a></li>
         </ul>
 
-        
-        
+
+
         <ul>
             <li>
                 <a href="@Url.Action("Student_Enroll", "Student")"
-                   style="background: white; color: #2E67F8; font-weight: 600; padding: 10px 22px;  text-decoration: none; transition: 0.3s;">
+                   style="background: white;
+                   color:#3b245f;
+                   font-weight: 400;
+                   padding: 8px 15px;
+                   border-radius: 20px;   /* 👈 radius added */
+                   text-decoration: none;
+                   transition: 0.3s;">
                     Enroll Now
                 </a>
             </li>
-          @*   <li>
+
+            @*   <li>
                 <a href="@Url.Action( "Student_LoginPage", "Login")"
                    style="background: white; color: #2E67F8; font-weight: 600; padding: 10px 22px;  text-decoration: none; transition: 0.3s;">
                     Log In
@@ -73,7 +76,11 @@
                    role="button"
                    data-bs-toggle="dropdown"
                    aria-expanded="false"
-                   style="background: white; color: #2E67F8; font-weight: 600; padding: 10px 22px;">
+                   style="background: white;
+                   color: #3b245f;
+                   font-weight: 400;
+                   padding: 8px 15px;
+                   border-radius: 20px;">
                     Log In
                 </a>
 
@@ -97,22 +104,21 @@
 
 
         </ul><!-- Enroll Button -->
-        
 
 
-       
+
+
 
     </nav>
 
     <!-- ======= Header/Navbar Section ======= -->
-   
     <!-- ======= Main Body Section ======= -->
     <main id="main" style="margin-top: 100px;">
         @RenderBody()
     </main>
 
     <!-- ======= Footer Section ======= -->
-   @*  <footer id="footer" class="footer accent-background">
+    @*  <footer id="footer" class="footer accent-background">
 
         <div class="container footer-top">
             <div class="row gy-4">

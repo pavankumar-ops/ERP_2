@@ -27,8 +27,29 @@ namespace ERP_Placement.Controllers
         {
             return View();
         }
+        [HttpPost]   
+        public ActionResult Traineer_Login(login_Properties model)
+        {
+            string Username = "placementerp@gmail.com";
 
 
+            string Password = "Placemnt@123";
+             
+            if (model.UserId == Username && model.Password == Password)
+            {
+                // Login success
+                HttpContext.Session.SetString("TraineerId", "1");
+                HttpContext.Session.SetString("TraineerName", "Placement Cordinator");
+                return RedirectToAction("TraineerDB", "Trainer");
+            }
+            else
+            {
+                TempData["error"] = "Invalid username or password";
+                return RedirectToAction("TraineerLogin");
+            }
+
+            return View();
+        }
 
         [HttpPost]
         public IActionResult Stud_Login(login_Properties model)

@@ -164,7 +164,8 @@ namespace ERP_Placement.Controllers
 
         public IActionResult StudentDB()
         {
-            return View();
+            return View( );
         }
     }
+
 }

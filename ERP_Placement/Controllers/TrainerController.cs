@@ -24,6 +24,11 @@ namespace ERP_Placement.Controllers
             return View();
         }
 
+
+        public ActionResult TraineerDB()
+        {
+            return View();
+        }
         // GET: TrainerController1/Details/5
         public ActionResult Stud_List(Placement_Coordinator_Model model)
         {

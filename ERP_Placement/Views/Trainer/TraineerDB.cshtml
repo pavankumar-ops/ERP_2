@@ -1,0 +1,242 @@
+﻿
+@{
+    ViewData["Title"] = "Student Enrollment";
+    Layout = "~/Views/Shared/Student_Layout.cshtml";
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Placement Coordinator Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body id="body" style="
+background:#f4f6fb;
+font-family:'Inter','Segoe UI',sans-serif;
+transition:0.3s;
+">
+
+    <div class="container-fluid p-3 p-lg-4">
+
+        <!-- HEADER -->
+        <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
+            <div>
+                <h3 style="font-weight:700;">Placement Module – Coordinator Dashboard</h3>
+                <p class="text-muted mb-0">Welcome to your Placement Management Overview</p>
+            </div>
+            <button onclick="toggleDark()" class="btn btn-outline-dark mt-2">
+                <i class="bi bi-moon-stars"></i> Dark Mode
+            </button>
+        </div>
+
+        <!-- TOP STATS -->
+        <div class="row g-3 mb-4">
+
+            <div class="col-xl-3 col-md-6">
+                <div style="background:linear-gradient(135deg,#2563eb,#1d4ed8);color:white;padding:18px;border-radius:14px;">
+                    <i class="bi bi-people fs-2"></i>
+                    <h2 class="fw-bold mt-2">158</h2>
+                    <span>Students Eligible</span>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div style="background:linear-gradient(135deg,#22c55e,#16a34a);color:white;padding:18px;border-radius:14px;">
+                    <i class="bi bi-briefcase fs-2"></i>
+                    <h2 class="fw-bold mt-2">32</h2>
+                    <span>Total Job Openings</span>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div style="background:linear-gradient(135deg,#fb923c,#f97316);color:white;padding:18px;border-radius:14px;">
+                    <i class="bi bi-calendar-event fs-2"></i>
+                    <h2 class="fw-bold mt-2">24</h2>
+                    <span>Interviews Scheduled</span>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div style="background:linear-gradient(135deg,#8b5cf6,#6d28d9);color:white;padding:18px;border-radius:14px;">
+                    <i class="bi bi-award fs-2"></i>
+                    <h2 class="fw-bold mt-2">14</h2>
+                    <span>Offers Made</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="row g-4">
+
+            <!-- STUDENT APPLICATIONS -->
+            <div class="col-lg-4">
+                <div class="bg-white p-3 rounded-4 shadow-sm">
+                    <div class="d-flex justify-content-between mb-2">
+                        <b>Student Applications</b>
+                        <a href="#">View All</a>
+                    </div>
+
+                    <div class="d-flex gap-2 mb-2">
+                        <select class="form-select form-select-sm"><option>All Departments</option></select>
+                        <select class="form-select form-select-sm"><option>All Statuses</option></select>
+                    </div>
+
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span>John Doe<br><small>Computer Science</small></span>
+                            <span class="badge bg-warning">Interview</span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span>Sarah Lee<br><small>Business</small></span>
+                            <span class="badge bg-success">Offer</span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span>Michael Chen<br><small>Engineering</small></span>
+                            <span class="badge bg-primary">Review</span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span>Emily White<br><small>IT</small></span>
+                            <span class="badge bg-secondary">Applied</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- UPCOMING INTERVIEWS -->
+            <div class="col-lg-4">
+                <div class="bg-white p-3 rounded-4 shadow-sm">
+                    <div class="d-flex justify-content-between mb-2">
+                        <b>Upcoming Interviews</b>
+                        <a href="#">View All</a>
+                    </div>
+
+                    <div class="border rounded p-2 mb-2">
+                        <b>Tech Solutions Inc.</b><br>
+                        <small>May 15, 10:00 AM</small>
+                        <button class="btn btn-sm btn-primary float-end">View Details</button>
+                    </div>
+
+                    <div class="border rounded p-2">
+                        <b>BrightMark Solutions</b><br>
+                        <small>May 17, 1:00 PM</small>
+                        <button class="btn btn-sm btn-primary float-end">View Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PLACEMENT ACTIVITY -->
+            <div class="col-lg-4">
+                <div class="bg-white p-3 rounded-4 shadow-sm">
+                    <div class="d-flex justify-content-between mb-2">
+                        <b>Placement Activity</b>
+                        <a href="#">View All</a>
+                    </div>
+
+                    <div class="mb-3">
+                        <b>Review Applications</b>
+                        <p class="small text-muted mb-1">Review pending applications & schedule interviews</p>
+                    </div>
+
+                    <div>
+                        <b>Follow Up Offers</b>
+                        <p class="small text-muted">Follow up with companies on pending offers</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LATEST JOBS -->
+            <div class="col-lg-4">
+                <div class="bg-white p-3 rounded-4 shadow-sm">
+                    <b>Latest Job Openings</b>
+
+                    <div class="d-flex justify-content-between mt-3">
+                        <span>Innovatech Corp<br><small>Software Developer</small></span>
+                        <button class="btn btn-sm btn-primary">View Job</button>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-3">
+                        <span>FinEdge Ltd.<br><small>Financial Analyst</small></span>
+                        <button class="btn btn-sm btn-primary">View Job</button>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-3">
+                        <span>HealthWave Systems<br><small>Healthcare Consultant</small></span>
+                        <button class="btn btn-sm btn-primary">View Job</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GRAPH -->
+            <div class="col-lg-5">
+                <div class="bg-white p-3 rounded-4 shadow-sm">
+                    <b>Placement Activity</b>
+                    <canvas id="placementChart" height="160"></canvas>
+                </div>
+            </div>
+
+            <!-- TASKS -->
+            <div class="col-lg-3">
+                <div class="bg-white p-3 rounded-4 shadow-sm">
+                    <div class="d-flex justify-content-between mb-2">
+                        <b>Tasks & Reminders</b>
+                        <a href="#">View All</a>
+                    </div>
+
+                    <p><b>Review Applications</b><br><small>Review pending & set interviews</small></p>
+                    <p><b>Follow Up Offers</b><br><small>Follow up with companies</small></p>
+
+                    <button class="btn btn-warning w-100">View All</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- GRAPH SCRIPT -->
+    <script>
+const ctx=document.getElementById('placementChart');
+new Chart(ctx,{
+type:'bar',
+data:{
+labels:['Applied Jobs','Interviews','Offers Made','Students Placed'],
+datasets:[{
+data:[150,120,60,150],
+backgroundColor:['#2563eb','#fb923c','#22c55e','#8b5cf6']
+}]
+},
+options:{
+animation:{
+duration:2000,
+easing:'easeOutQuart'
+},
+plugins:{legend:{display:false}},
+scales:{y:{beginAtZero:true}}
+}
+});
+    </script>
+
+    <!-- DARK MODE -->
+    <script>
+function toggleDark(){
+let b=document.getElementById("body");
+b.style.background="#0f172a";
+document.querySelectorAll(".bg-white").forEach(e=>{
+e.style.background="#1e293b";
+e.style.color="#e5e7eb";
+});
+}
+    </script>
+
+</body>
+</html>
