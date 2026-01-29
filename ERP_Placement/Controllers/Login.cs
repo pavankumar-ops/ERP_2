@@ -33,7 +33,7 @@ namespace ERP_Placement.Controllers
             string Username = "placementerp@gmail.com";
 
 
-            string Password = "Placemnt@123";
+            string Password = "Placemnt@1234";
              
             if (model.UserId == Username && model.Password == Password)
             {

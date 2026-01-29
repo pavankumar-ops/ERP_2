@@ -18,6 +18,7 @@
     <link href="https://fonts.googleapis.com" rel="preconnect">
     <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Raleway:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Vendor CSS Files -->
     <link href="~/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -32,91 +33,62 @@
 </head>
 
 <body class="index-page">
-    <!-- Navbar -->
-    <nav id="navmenu" class="navmenu" style="display: flex; align-items: center; justify-content: space-between; background: #3b245f; padding: 5px 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.08); position: fixed; top: 0; left: 0; right: 0; z-index: 1050;">
-
-        <!-- Menu Links -->
-        <ul style="list-style: none; margin: 0; padding: 0; display: flex; gap: 20px;">
-            <li><a href="index.html" style="color: white; font-weight: 500; text-decoration: none;">Home</a></li>
-            <li><a href="about.html" style="color: white; font-weight: 500; text-decoration: none;">About</a></li>
-            <li><a href="courses.html" style="color: white; font-weight: 500; text-decoration: none;">Courses</a></li>
-            <li><a href="instructors.html" style="color: white; font-weight: 500; text-decoration: none;">Instructors</a></li>
-            <li><a href="pricing.html" style="color: white; font-weight: 500; text-decoration: none;">Pricing</a></li>
-            <li><a href="blog.html" style="color: white; font-weight: 500; text-decoration: none;">Blog</a></li>
-            <li><a href="@Url.Action("Stud_List", "Trainer")" style="color: white; font-weight: 500; text-decoration: none;">Student List</a></li>
-        </ul>
 
 
+    <nav class="navbar navbar-expand-lg navbar-dark px-4 sticky-top" style="background:#3b245f;">
+        <a class="navbar-brand" href="#">
+            <i class="bi bi-mortarboard-fill"></i> EduCatal
+        </a>
 
-        <ul>
-            <li>
-                <a href="@Url.Action("Student_Enroll", "Student")"
-                   style="background: white;
-                   color:#3b245f;
-                   font-weight: 400;
-                   padding: 8px 15px;
-                   border-radius: 20px;   /* 👈 radius added */
-                   text-decoration: none;
-                   transition: 0.3s;">
-                    Enroll Now
-                </a>
-            </li>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-4">
+                <li class="nav-item"><a class="nav-link active" href="#">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" >Courses</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Placements</a></li>
+                <li class="nav-item"><a class="nav-link" href="@Url.Action("FAQs", "Home")">FAQ's</a></li>
+            </ul>
+        </div>
 
-            @*   <li>
-                <a href="@Url.Action( "Student_LoginPage", "Login")"
-                   style="background: white; color: #2E67F8; font-weight: 600; padding: 10px 22px;  text-decoration: none; transition: 0.3s;">
-                    Log In
-                </a>
-            </li> *@
+        <!-- Enroll Student Dropdown -->
+        <div class="me-3">
+            <a class="text-white text-decoration-none"
+               href="@Url.Action("Student_Enroll", "Student")">
+                <i class="bi bi-person-plus-fill"></i> Enroll Student
+            </a>
+        </div>
 
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle"
-                   href="#"
-                   id="loginDropdown"
-                   role="button"
-                   data-bs-toggle="dropdown"
-                   aria-expanded="false"
-                   style="background: white;
-                   color: #3b245f;
-                   font-weight: 400;
-                   padding: 8px 15px;
-                   border-radius: 20px;">
-                    Log In
-                </a>
-
-                <ul class="dropdown-menu dropdown-menu-end shadow"
-                    aria-labelledby="loginDropdown">
-                    <li>
-                        <a class="dropdown-item"
-                           href="@Url.Action("Student_LoginPage", "Login")">
-                            🎓 Student Login
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item"
-                           href="@Url.Action("TraineerLogin", "Login")">
-                            🏢 Placement Coordinator Login
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
-
-
-        </ul><!-- Enroll Button -->
-
-
-
-
-
+        <!-- Login Dropdown -->
+        <div class="dropdown">
+            <a class="text-white text-decoration-none dropdown-toggle"
+               href="#"
+               role="button"
+               data-bs-toggle="dropdown">
+                <i class="bi bi-person-circle"></i> Login
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                    <a href="@Url.Action("Student_LoginPage", "Login")" class="dropdown-item">
+                        🎓 Student Login
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("TraineerLogin", "Login")" class="dropdown-item">
+                        🏢 Placement Coordinator Login
+                    </a>
+                </li>
+            </ul>
+        </div>
     </nav>
+
+    <!-- Navbar -->
+   
 
     <!-- ======= Header/Navbar Section ======= -->
     <!-- ======= Main Body Section ======= -->
     <main id="main" style="margin-top: 100px;">
         @RenderBody()
     </main>
-
+    @Html.Partial("FloatingChatbot")
     <!-- ======= Footer Section ======= -->
     @*  <footer id="footer" class="footer accent-background">
 

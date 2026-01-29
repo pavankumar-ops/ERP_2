@@ -17,6 +17,16 @@ namespace ERP_Placement.Controllers
         {
             return View();
         }
+
+        public IActionResult FAQs()
+        {
+            return View("FAQ's");
+        }
+
+        public IActionResult FloatingChatbot()
+        {
+            return View();
+        }
         public IActionResult Index1()
         {
             return View();
