@@ -54,7 +54,7 @@ namespace ERP_Placement.Controllers
             TempData["Success"] = $"Company Registered Successfully. Company ID: {companyId}";
             return RedirectToAction("CompanyRegistration");
         }
-        [HttpPost]
+       
         [HttpPost]
         public async Task<IActionResult> CompanySave(
     Placement_Coordinator_Model model,
