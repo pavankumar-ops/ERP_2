@@ -21,13 +21,38 @@
                 </div>
             }
 
-            <form asp-action="CompanySave" method="post" class="row g-3">
+            <form asp-action="CompanySave"
+                  method="post"
+                  enctype="multipart/form-data"
+                  class="row g-3">
 
-                <input asp-for="CompanyName" class="form-control" placeholder="Company Name" required />
+                <input asp-for="CompanyName"
+                       class="form-control"
+                       placeholder="Company Name"
+                       required />
 
-                <input name="CompanyLogo" type="file" class="form-control" placeholder="Company Logo Path" />
+                <input type="file"
+                       name="CompanyLogo"
+                       class="form-control"
+                       accept="image/*" />
 
-                <input asp-for="CompanyWebsite" class="form-control" placeholder="Company Website" />
+                <input asp-for="CompanyWebsite"
+                       class="form-control"
+                       placeholder="Company Website" />
+
+                <input asp-for="CompanyDomain"
+                       class="form-control"
+                       placeholder="Company Domain" />
+                <input asp-for="HRName"
+                       class="form-control"
+                       placeholder="HR Name" />
+                <input asp-for="HRMail"
+                       class="form-control"
+                       placeholder="HR Mail" />
+                <input asp-for="HRMobNo"
+                       class="form-control"
+                       placeholder="HR Mobile Number" />
+               
 
                 <textarea asp-for="CompanyDescription"
                           class="form-control"
@@ -37,8 +62,8 @@
                 <button type="submit" class="btn btn-success w-100">
                     Register Company
                 </button>
-
             </form>
+
 
         </div>
     </div>

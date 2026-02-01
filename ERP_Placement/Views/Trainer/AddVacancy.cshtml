@@ -1,0 +1,139 @@
+﻿@model System.Data.DataTable
+@using System.Data
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<div class="container mt-4">
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            @TempData["Success"]
+            <button class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- ADD VACANCY FORM -->
+    <div class="card shadow mb-4">
+        <div class="card-header bg-primary text-white fw-bold">
+            Add Job Vacancy
+        </div>
+
+        <div class="card-body">
+            <form asp-action="AddVacancy" method="post" class="row g-3">
+
+               @*  <div class="col-md-6">
+                    <select name="CompanyId" class="form-select" required>
+                        <option value="">-- Select Company --</option>
+                        @foreach (DataRow row in (DataTable)ViewBag.CompanyList)
+                        {
+                            <option value="@row["CompanyId"]">
+                                @row["CompanyName"]
+                            </option>
+                        }
+                    </select>
+                </div>
+ *@
+                <div class="col-md-6">
+                    <input name="JobTitle"
+                           class="form-control"
+                           placeholder="Job Title"
+                           required />
+                </div>
+
+                <div class="col-md-4">
+                    <input name="NoOfOpenings"
+                           type="number"
+                           class="form-control"
+                           placeholder="No of Openings"
+                           required />
+                </div>
+
+                <div class="col-md-4">
+                    <input name="JobLocation"
+                           class="form-control"
+                           placeholder="Job Location" />
+                </div>
+
+                <div class="col-md-4">
+                    <input name="Salary"
+                           class="form-control"
+                           placeholder="Salary" />
+                </div>
+
+                <div class="col-md-6">
+                    <input name="LastDate"
+                           type="date"
+                           class="form-control"
+                           required />
+                </div>
+
+                <div class="col-12 text-end">
+                    <button class="btn btn-success px-4">
+                        Add Vacancy
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- VACANCY LIST -->
+    <div class="card shadow">
+        <div class="card-header bg-dark text-white fw-bold">
+            Vacancy List
+        </div>
+
+        <div class="card-body table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-secondary">
+                    <tr>
+                        <th>Company</th>
+                        <th>Job Title</th>
+                        <th>Openings</th>
+                        <th>Location</th>
+                        <th>Salary</th>
+                        <th>Last Date</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @if (Model != null && Model.Rows.Count > 0)
+                    {
+                        foreach (DataRow row in Model.Rows)
+                        {
+                            <tr>
+                                <td>@row["CompanyName"]</td>
+                                <td class="fw-semibold">@row["JobTitle"]</td>
+                                <td>
+                                    <span class="badge bg-success">
+                                        @row["NoOfOpenings"]
+                                    </span>
+                                </td>
+                                <td>@row["JobLocation"]</td>
+                                <td>@row["Salary"]</td>
+                                <td>
+                                    @Convert.ToDateTime(row["LastDate"])
+                                    .ToString("dd MMM yyyy")
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6"
+                                class="text-center text-danger">
+                                No vacancies added
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+

@@ -42,65 +42,77 @@ namespace ERP_Placement.Controllers
             return View("CompanyRegistration");
         }
 
-        [HttpPost]
-        public IActionResult Register(Placement_Coordinator_Model model)
+        [HttpGet]
+        public IActionResult CompanyList()
         {
-            model.RegisteredBy = "Placement Coordinator"; // later from login
-
-            int companyId = _dal.InsertCompany(model);
-
-
-
-            TempData["Success"] = $"Company Registered Successfully. Company ID: {companyId}";
-            return RedirectToAction("CompanyRegistration");
+            
+            DataTable dt = _dal.GetAllCompany();
+            return View("CompanyList", dt);
+            
         }
-       
+
+
+
+        public IActionResult AddVacancy(string id)
+        {
+            
+            return View();
+        }
+
+
+
         [HttpPost]
         public async Task<IActionResult> CompanySave(
     Placement_Coordinator_Model model,
     IFormFile CompanyLogo)
         {
-            // 🔹 Company name for file naming
+            
             string companyName = model.CompanyName
                 .Replace(" ", "")
                 .ToUpper();
 
-            // 🔹 Save Company Logo
-            if (CompanyLogo != null && CompanyLogo.Length > 0)
+            async Task<string> SaveFile(IFormFile file, string folderName, string suffix)
             {
+                if (file == null || file.Length == 0)
+                    return null;
+
                 string uploadPath = Path.Combine(
                     Directory.GetCurrentDirectory(),
                     "wwwroot",
                     "img",
-                    "company"
+                    folderName
                 );
 
                 if (!Directory.Exists(uploadPath))
                     Directory.CreateDirectory(uploadPath);
 
-                string extension = Path.GetExtension(CompanyLogo.FileName);
-                string fileName = $"{companyName}_LOGO{extension}";
+                string extension = Path.GetExtension(file.FileName);
+                string fileName = $"{companyName}_{suffix}{extension}";
                 string fullPath = Path.Combine(uploadPath, fileName);
 
-                using (var stream = new FileStream(fullPath, FileMode.Create))
-                {
-                    await CompanyLogo.CopyToAsync(stream);
-                }
+                using var stream = new FileStream(fullPath, FileMode.Create);
+                await file.CopyToAsync(stream);
 
-                // ✅ EXACT PATH YOU ASKED FOR
-                model.CompanyLogo = $"/img/company/{fileName}";
+                // ✅ Path stored in DB
+                return $"/img/{folderName}/{fileName}";
             }
 
-            model.RegisteredBy = "Placement Coordinator";
-            model.RegistrationDate = DateTime.Now;
+            // 🔥 SAVE LOGO
+            model.CompanyLogo = await SaveFile(
+                CompanyLogo,
+                "comapny",   // spelling preserved as you want
+                "LOGO"
+            );
 
-            // 🔹 DAL insert (ADO.NET direct query)
+            model.RegisteredBy = "Placement Coordinator";
+            model.CompanyRegistrationDate = DateTime.Now;
+
             int companyId = _dal.InsertCompany(model);
 
-            TempData["success"] =
+            TempData["Success"] =
                 $"Company Registered Successfully! Company ID: {companyId}";
 
-            return RedirectToAction("Register");
+            return RedirectToAction("CompanyRegistration");
         }
 
         public ActionResult Approve(string id)

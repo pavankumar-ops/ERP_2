@@ -33,7 +33,11 @@ namespace ERP_Placement.Controllers
             string Username = "placementerp@gmail.com";
 
 
+
             string Password = "1234";
+
+           
+
              
             if (model.UserId == Username && model.Password == Password)
             {
@@ -50,6 +54,7 @@ namespace ERP_Placement.Controllers
 
             return View();
         }
+
 
         [HttpPost]
         public IActionResult Stud_Login(login_Properties model)

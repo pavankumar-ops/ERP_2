@@ -1,0 +1,67 @@
+﻿
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="fw-bold">Registered Companies</h4>
+
+    <a asp-controller="Trainer"
+       asp-action="CompanyRegistration"
+       class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Add New Company
+    </a>
+
+</div>
+
+
+<table class="table table-bordered table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Company Name</th>
+            <th>Comapny Website</th>
+            <th>Comapny Doamin</th>
+            <th>HR Name</th>
+            <th>HR Mobile No</th>
+            <th>HR Email Id</th>
+            <th>Comapny Description</th>
+            <th>Registration Date</th>
+            
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model != null && Model.Rows.Count > 0)
+        {
+            foreach (System.Data.DataRow row in Model.Rows)
+            {
+                <tr>
+                    <td>@row["CompanyName"]</td>
+                    <td>@row["CompanyWebsite"]</td>
+                    <td>@row["CompanyDomain"]</td>
+                    <td>@row["HRName"]</td>
+                    <td>@row["HRMobNo"]</td>
+                    <td>@row["HREmailId"]</td>
+                    <td>@row["CompanyDescription"]</td>
+                    <td>@row["RegistrationDate"]</td>
+                    <td>
+                        <a class="btn btn-success btn-sm"
+                            href="@Url.Action("AddVacancy", "Trainer", new { id = row["CompanyId"] })">
+                            Vacancy 
+                        </a>
+
+                        <a class="btn btn-success btn-sm">
+                          @*  href="@Url.Action("View", "Trainer", new { id = row["StudentId"] })"> *@
+                            View
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="9" class="text-center text-danger">
+                    No pending students found
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

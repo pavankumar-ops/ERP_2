@@ -3,7 +3,7 @@
     public class Placement_Coordinator_Model
     {
         public string StudentId { get; set; }
-
+        
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
@@ -67,9 +67,21 @@
         public string CompanyLogo { get; set; }
         public string CompanyWebsite { get; set; }
         public string CompanyDescription { get; set; }
+        public string CompanyDomain { get; set; }
+        public string HRName{ get; set; }
+        public string HRMail { get; set; }
+        public string HRMobNo { get; set; }
 
         public string RegisteredBy { get; set; }
         public DateTime CompanyRegistrationDate { get; set; }
+
+        // job vaccacy
+
+        public string lastDate { get; set; }
+        public string salary { get; set; }
+        public string location { get; set; }
+        public string openings { get; set; }
+        public string jobTitle { get; set; }
 
     }
 }
