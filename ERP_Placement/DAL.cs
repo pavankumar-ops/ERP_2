@@ -285,6 +285,60 @@ namespace ERP_Placement.DAL
             }
         }
 
+
+        public int InsertTest(Placement_Coordinator_Model model)
+        {
+            using (SqlConnection con = new SqlConnection(_conn))
+            {
+                con.Open();
+                SqlTransaction tran = con.BeginTransaction();
+
+                try
+                {
+                    SqlCommand cmd = new SqlCommand(@"
+              INSERT INTO TestMaster (TestName, Branch, CreatedBy)
+              VALUES (@TestName, @Branch, 1);
+              SELECT SCOPE_IDENTITY();
+          ", con, tran);
+
+                    cmd.Parameters.AddWithValue("@TestName", model.TestName);
+                    cmd.Parameters.AddWithValue("@Branch", model.Branch);
+
+                    int testId = Convert.ToInt32(cmd.ExecuteScalar());
+
+                    foreach (var q in model.QuestionList)
+                    {
+                        SqlCommand qCmd = new SqlCommand(@"
+                  INSERT INTO TestQuestions
+                  (TestId, Question, OptionA, OptionB, OptionC, OptionD, CorrectOption, QuestionNo)
+                  VALUES
+                  (@TestId, @Question, @OptionA, @OptionB, @OptionC, @OptionD, @CorrectOption, @QuestionNo)
+              ", con, tran);
+
+                        qCmd.Parameters.AddWithValue("@TestId", testId);
+                        qCmd.Parameters.AddWithValue("@Question", q.Question);
+                        qCmd.Parameters.AddWithValue("@OptionA", q.OptionA);
+                        qCmd.Parameters.AddWithValue("@OptionB", q.OptionB);
+                        qCmd.Parameters.AddWithValue("@OptionC", q.OptionC);
+                        qCmd.Parameters.AddWithValue("@OptionD", q.OptionD);
+                        qCmd.Parameters.AddWithValue("@CorrectOption", q.CorrectOption);
+                        qCmd.Parameters.AddWithValue("@QuestionNo", q.QuestionNo);
+
+                        qCmd.ExecuteNonQuery();
+                    }
+
+                    tran.Commit();
+                    return testId;
+                }
+                catch
+                {
+                    tran.Rollback();
+                    throw;
+                }
+            }
+        }
+       
+
     }
 }
 

@@ -192,6 +192,36 @@ Placement Team";
         }
 
 
+        public ActionResult Test()
+        {
+            return View("Test");
+        }
+
+        [HttpPost]
+        public JsonResult SubmitTest([FromBody] Placement_Coordinator_Model model)
+        {
+            if (model == null || model.QuestionList == null)
+            {
+                return Json(new { success = false, message = "Invalid data received" });
+            }
+
+            if (model.QuestionList.Count != 20)
+            {
+                return Json(new { success = false, message = "Exactly 20 questions required" });
+            }
+
+            int testId = _dal.InsertTest(model);
+
+            return Json(new
+            {
+                success = true,
+                message = "Test saved successfully",
+                TestId = testId
+            });
+        }
+       
+
+
         // GET: TrainerController1/Create
         public ActionResult Create()
         {

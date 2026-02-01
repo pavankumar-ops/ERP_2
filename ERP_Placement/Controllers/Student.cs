@@ -18,6 +18,11 @@ namespace ERP_Placement.Controllers
             return View();
         }
 
+
+
+
+
+
         //   [HttpPost]
         //   public async Task<IActionResult> StudSave(
         //StudentRegistration model,

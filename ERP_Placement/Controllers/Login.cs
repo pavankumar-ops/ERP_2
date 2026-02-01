@@ -30,11 +30,13 @@ namespace ERP_Placement.Controllers
         [HttpPost]   
         public ActionResult Traineer_Login(login_Properties model)
         {
-            string Username = "placementerp@gmail.com";
+            //string Username = "placementerp@gmail.com";
+            string Username = "1";
+           
 
 
 
-            string Password = "1234";
+            string Password = "1";
 
            
 
