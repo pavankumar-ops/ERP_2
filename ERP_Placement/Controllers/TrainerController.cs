@@ -197,6 +197,28 @@ Placement Team";
             return View("Test");
         }
 
+        public ActionResult TestList()
+        {
+            DataTable dt = _dal.GetAllTest();
+
+            List<Placement_Coordinator_Model> list = new List<Placement_Coordinator_Model>();
+
+            foreach (DataRow row in dt.Rows)
+            {
+                list.Add(new Placement_Coordinator_Model
+                {
+                    TestId = Convert.ToInt32(row["TestId"]),
+                    TestName = row["TestName"].ToString(),
+                    Branch = row["Branch"].ToString(),
+                    CreatedBy = row["CreatedBy"].ToString(),
+                    CreatedDate = Convert.ToDateTime(row["CreatedDate"])
+                });
+            }
+
+            return View(list);
+        }
+
+
         [HttpPost]
         public JsonResult SubmitTest([FromBody] Placement_Coordinator_Model model)
         {

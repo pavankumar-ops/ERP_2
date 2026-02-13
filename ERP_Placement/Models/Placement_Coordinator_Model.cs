@@ -83,7 +83,13 @@
         public string openings { get; set; }
         public string jobTitle { get; set; }
 
+       
+
+        public int TestId { get; set; }
         public string TestName { get; set; }
+        //public string Branch { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime CreatedDate { get; set; }
 
 
         public List<QuestionModel> QuestionList { get; set; }

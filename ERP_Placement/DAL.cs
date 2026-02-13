@@ -123,6 +123,27 @@ namespace ERP_Placement.DAL
         }
 
 
+        public DataTable GetAllTest()
+        {
+            DataTable dt = new DataTable();
+
+            using (SqlConnection con = new SqlConnection(_conn))
+            {
+                using (SqlCommand cmd = new SqlCommand("SPPlacementCoordinator", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Flag", "GetAllTest");
+
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                    {
+                        da.Fill(dt);
+                    }
+                }
+            }
+
+            return dt;
+        }
+
 
         public DataTable GetStudById(string id)
         {
@@ -337,7 +358,110 @@ namespace ERP_Placement.DAL
                 }
             }
         }
-       
+
+        public DataTable GetUserByEmail(string email)
+        {
+            DataTable dt = new DataTable();
+
+            using (SqlConnection con = new SqlConnection(_conn))
+            {
+                string query = @"
+            SELECT *
+            FROM StudentDetails
+            WHERE Email = @Email
+            AND Approval_Status = 'Approved'
+        ";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@Email", email);
+
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                    {
+                        da.Fill(dt);
+                    }
+                }
+            }
+
+            return dt;
+        }
+
+
+        public void SaveOTP(string email, string otp, DateTime expiryTime)
+        {
+            using (SqlConnection con = new SqlConnection(_conn))
+            {
+                string query = @"
+            DELETE FROM UserOTP 
+            WHERE Email = @Email AND IsUsed = 0;
+
+            INSERT INTO UserOTP (Email, OTP, ExpiryTime, IsUsed)
+            VALUES (@Email, @OTP, @ExpiryTime, 0);
+        ";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@Email", email);
+                    cmd.Parameters.AddWithValue("@OTP", otp);
+                    cmd.Parameters.AddWithValue("@ExpiryTime", expiryTime);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+            }
+        }
+
+        public bool VerifyOTP(string email, string enteredOtp)
+        {
+            using (SqlConnection con = new SqlConnection(_conn))
+            {
+                string query = @"
+            SELECT COUNT(*)
+            FROM UserOTP
+            WHERE Email = @Email
+            AND OTP = @OTP
+            AND IsUsed = 0
+            AND ExpiryTime >= GETDATE()
+        ";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@Email", email);
+                    cmd.Parameters.AddWithValue("@OTP", enteredOtp);
+
+                    con.Open();
+                    int count = (int)cmd.ExecuteScalar();
+                    con.Close();
+
+                    return count > 0;
+                }
+            }
+        }
+
+        public bool UpdateStudentPassword(string email, string newPassword)
+        {
+            using (SqlConnection con = new SqlConnection(_conn))
+            {
+                string query = @"
+            UPDATE StudentDetails
+            SET Password = @Password
+            WHERE Email = @Email
+        ";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@Email", email);
+                    cmd.Parameters.AddWithValue("@Password", newPassword);
+
+                    con.Open();
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    con.Close();
+
+                    return rowsAffected > 0;
+                }
+            }
+        }
 
     }
 }

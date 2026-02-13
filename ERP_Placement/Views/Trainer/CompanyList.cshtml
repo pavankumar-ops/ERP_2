@@ -1,67 +1,157 @@
-﻿
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h4 class="fw-bold">Registered Companies</h4>
+﻿@model System.Data.DataTable
 
-    <a asp-controller="Trainer"
-       asp-action="CompanyRegistration"
-       class="btn btn-primary">
-        <i class="bi bi-plus-circle"></i> Add New Company
-    </a>
+@{
+    ViewBag.Title = "Registered Companies";
+}
 
-</div>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+<style>
+    .company-card {
+        border-radius: 16px;
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+        .company-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+        }
+
+    .company-header {
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        color: white;
+        border-radius: 16px 16px 0 0;
+        padding: 15px;
+    }
+
+    .company-info i {
+        width: 20px;
+    }
+
+    .badge-domain {
+        background: #eef2ff;
+        color: #1d4ed8;
+        font-weight: 500;
+    }
+
+    .card-footer {
+        background: #f9fafb;
+        border-top: none;
+    }
+</style>
 
 
-<table class="table table-bordered table-striped table-hover">
-    <thead class="table-dark">
-        <tr>
-            <th>Company Name</th>
-            <th>Comapny Website</th>
-            <th>Comapny Doamin</th>
-            <th>HR Name</th>
-            <th>HR Mobile No</th>
-            <th>HR Email Id</th>
-            <th>Comapny Description</th>
-            <th>Registration Date</th>
-            
-        </tr>
-    </thead>
+<div class="container mt-4">
 
-    <tbody>
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold text-dark">
+            <i class="bi bi-buildings me-2 text-primary"></i>
+            Registered Companies
+        </h4>
+
+        <a asp-controller="Trainer"
+           asp-action="CompanyRegistration"
+           class="btn btn-primary rounded-pill px-4 shadow-sm">
+            <i class="bi bi-plus-circle me-1"></i> Add New Company
+        </a>
+    </div>
+
+
+    <div class="row">
+
         @if (Model != null && Model.Rows.Count > 0)
         {
             foreach (System.Data.DataRow row in Model.Rows)
             {
-                <tr>
-                    <td>@row["CompanyName"]</td>
-                    <td>@row["CompanyWebsite"]</td>
-                    <td>@row["CompanyDomain"]</td>
-                    <td>@row["HRName"]</td>
-                    <td>@row["HRMobNo"]</td>
-                    <td>@row["HREmailId"]</td>
-                    <td>@row["CompanyDescription"]</td>
-                    <td>@row["RegistrationDate"]</td>
-                    <td>
-                        <a class="btn btn-success btn-sm"
-                            href="@Url.Action("AddVacancy", "Trainer", new { id = row["CompanyId"] })">
-                            Vacancy 
-                        </a>
+                <div class="col-md-6 col-lg-4 mb-4">
 
-                        <a class="btn btn-success btn-sm">
-                          @*  href="@Url.Action("View", "Trainer", new { id = row["StudentId"] })"> *@
-                            View
-                        </a>
-                    </td>
-                </tr>
+                    <div class="card company-card shadow-sm h-100">
+
+                        <!-- Company Header -->
+                        <div class="company-header">
+                            <h5 class="mb-0 fw-bold">
+                                @row["CompanyName"]
+                            </h5>
+                        </div>
+
+                        <div class="card-body">
+
+                            <div class="company-info mb-2">
+                                <p class="mb-1">
+                                    <i class="bi bi-globe text-muted me-2"></i>
+                                    <small>@row["CompanyWebsite"]</small>
+                                </p>
+
+                                <p class="mb-2">
+                                    <span class="badge badge-domain">
+                                        @row["CompanyDomain"]
+                                    </span>
+                                </p>
+                            </div>
+
+                            <hr />
+
+                            <!-- HR Details -->
+                            <p class="mb-1">
+                                <i class="bi bi-person-fill text-secondary me-2"></i>
+                                <strong>@row["HRName"]</strong>
+                            </p>
+
+                            <p class="mb-1">
+                                <i class="bi bi-telephone-fill text-secondary me-2"></i>
+                                @row["HRMobNo"]
+                            </p>
+
+                            <p class="mb-2">
+                                <i class="bi bi-envelope-fill text-secondary me-2"></i>
+                                @row["HREmailId"]
+                            </p>
+
+                            <!-- Description -->
+                            <p class="small text-muted mb-2">
+                                @row["CompanyDescription"]
+                            </p>
+
+                            <!-- Registration Date -->
+                            <p class="small text-muted">
+                                <i class="bi bi-calendar-event me-1"></i>
+                                @Convert.ToDateTime(row["RegistrationDate"]).ToString("dd MMM yyyy")
+                            </p>
+
+                        </div>
+
+                        <!-- Footer Buttons -->
+                        <div class="card-footer text-end">
+
+                            <a class="btn btn-sm btn-outline-success rounded-pill me-2"
+                               href="@Url.Action("AddVacancy", "Trainer", new { id = row["CompanyId"] })">
+                                <i class="bi bi-briefcase-fill me-1"></i> Vacancy
+                            </a>
+
+                            <a class="btn btn-sm btn-outline-primary rounded-pill"
+                               href="@Url.Action("ViewCompany", "Trainer", new { id = row["CompanyId"] })">
+                                <i class="bi bi-eye-fill me-1"></i> View
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
             }
         }
         else
         {
-            <tr>
-                <td colspan="9" class="text-center text-danger">
-                    No pending students found
-                </td>
-            </tr>
+            <div class="col-12">
+                <div class="alert alert-warning text-center shadow-sm">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    No registered companies found.
+                </div>
+            </div>
         }
-    </tbody>
-</table>
 
+    </div>
+
+</div>

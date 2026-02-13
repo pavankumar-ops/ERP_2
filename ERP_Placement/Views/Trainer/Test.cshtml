@@ -1,75 +1,128 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>Test Creation</title>
+    <title>ERP - Test Creation</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .question-card {
+            border-radius: 12px;
+            transition: 0.3s ease;
+        }
+
+            .question-card:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            }
+
+        .option-item {
+            background: #f8f9fa;
+            border: none;
+            margin-bottom: 6px;
+            border-radius: 8px;
+            transition: 0.2s ease;
+        }
+
+            .option-item:hover {
+                background: #eef2ff;
+            }
+
+        .correct-option {
+            background-color: #e6f7ee !important;
+            border-left: 4px solid #198754;
+        }</style>
+
+
 </head>
-<body>
+<body style="background:#f4f6f9;">
 
-    <div class="container mt-4">
+    <div class="container py-4">
 
-        <h4>ERP - Test Creation</h4>
+        <!-- Header Card -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h4 class="fw-bold text-primary">📘 ERP - Test Creation</h4>
 
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label>Branch</label>
-                <select id="branch" class="form-select">
-                    <option value="">-- Select --</option>
-                    <option>Computer Science</option>
-                    <option>IT</option>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <label class="fw-semibold">Branch</label>
+                        <select id="branch" class="form-select">
+                            <option value="">-- Select --</option>
+                            <option>Computer Science</option>
+                            <option>IT</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="fw-semibold">Test Name</label>
+                        <input type="text" id="testName" class="form-control">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question Card -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+
+                <h5 class="fw-bold">
+                    Question <span id="qNo">1</span>
+                </h5>
+
+                <div class="progress mb-3">
+                    <div id="progressBar" class="progress-bar bg-success" style="width:0%">0%</div>
+                </div>
+
+                <textarea id="question" class="form-control mb-3" placeholder="Enter Question"></textarea>
+
+                <div class="row">
+                    <div class="col-md-6"><input id="optA" class="form-control mb-2" placeholder="Option A"></div>
+                    <div class="col-md-6"><input id="optB" class="form-control mb-2" placeholder="Option B"></div>
+                    <div class="col-md-6"><input id="optC" class="form-control mb-2" placeholder="Option C"></div>
+                    <div class="col-md-6"><input id="optD" class="form-control mb-2" placeholder="Option D"></div>
+                </div>
+
+                <select id="correct" class="form-select mb-3">
+                    <option value="">Select Correct Option</option>
+                    <option value="A">Option A</option>
+                    <option value="B">Option B</option>
+                    <option value="C">Option C</option>
+                    <option value="D">Option D</option>
                 </select>
-            </div>
 
-            <div class="col-md-6">
-                <label>Test Name</label>
-                <input type="text" id="testName" class="form-control">
+                <button class="btn btn-primary" onclick="addQuestion()">➕ Add Question</button>
+                <span class="ms-3 fw-semibold">Added: <span id="count">0</span>/20</span>
+
             </div>
         </div>
 
-        <hr />
-
-        <h5>Question <span id="qNo">1</span></h5>
-
-        <input type="text" id="question" class="form-control mb-2" placeholder="Question">
-
-        <div class="row">
-            <div class="col-md-6"><input id="optA" class="form-control mb-2" placeholder="Option A"></div>
-            <div class="col-md-6"><input id="optB" class="form-control mb-2" placeholder="Option B"></div>
-            <div class="col-md-6"><input id="optC" class="form-control mb-2" placeholder="Option C"></div>
-            <div class="col-md-6"><input id="optD" class="form-control mb-2" placeholder="Option D"></div>
+        <!-- Preview Card -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h5 class="fw-bold text-secondary">📋 Question Preview</h5>
+                <div id="previewArea"></div>
+            </div>
         </div>
 
-        <select id="correct" class="form-select mb-3">
-            <option value="">Correct Option</option>
-            <option value="A">Option A</option>
-            <option value="B">Option B</option>
-            <option value="C">Option C</option>
-            <option value="D">Option D</option>
-        </select>
+        <!-- Submit -->
+        <div class="text-end">
+            <button class="btn btn-success px-4" onclick="submitTest()">✅ Submit Test</button>
+        </div>
 
-        <button class="btn btn-primary" onclick="addQuestion()">Next Question</button>
-        <span class="ms-3">Added: <span id="count">0</span>/20</span>
-
-        <hr />
-
-        <button class="btn btn-success" onclick="submitTest()">Submit Test</button>
     </div>
 
     <script>
+
         let questions = [];
+        let editIndex = -1;
 
         function addQuestion() {
 
-            if (questions.length >= 20) {
-                alert("Only 20 questions allowed");
-                return;
-            }
-
-            let q = question.value;
-            let a = optA.value;
-            let b = optB.value;
-            let c = optC.value;
-            let d = optD.value;
+            let q = question.value.trim();
+            let a = optA.value.trim();
+            let b = optB.value.trim();
+            let c = optC.value.trim();
+            let d = optD.value.trim();
             let correctOpt = correct.value;
 
             if (!q || !a || !b || !c || !d || !correctOpt) {
@@ -77,20 +130,131 @@
                 return;
             }
 
-            questions.push({
-                QuestionNo: questions.length + 1,
+            let data = {
+                QuestionNo: editIndex >= 0 ? editIndex + 1 : questions.length + 1,
                 Question: q,
                 OptionA: a,
                 OptionB: b,
                 OptionC: c,
                 OptionD: d,
                 CorrectOption: correctOpt
+            };
+
+            if (editIndex >= 0) {
+                questions[editIndex] = data;
+                editIndex = -1;
+            } else {
+                if (questions.length >= 20) {
+                    alert("Only 20 questions allowed");
+                    return;
+                }
+                questions.push(data);
+            }
+
+            clearFields();
+            renderPreview();
+            updateProgress();
+        }
+
+        function renderPreview() {
+
+            previewArea.innerHTML = "";
+
+            questions.forEach((q, index) => {
+
+                previewArea.innerHTML += `
+                        <div class="card mb-4 shadow-sm border-0 question-card">
+            <div class="card-body">
+
+                <!-- Question Header -->
+                <div class="d-flex justify-content-between align-items-start">
+                    <h6 class="fw-bold mb-3 text-primary">
+                        <span class="badge bg-primary me-2">Q${index+1}</span>
+                        ${q.Question}
+                    </h6>
+                </div>
+
+                <!-- Options -->
+                <ul class="list-group list-group-flush mb-3">
+                    <li class="list-group-item option-item ${q.CorrectOption=='A'?'correct-option':''}">
+                        <span class="fw-semibold">A.</span> ${q.OptionA}
+                        ${q.CorrectOption=='A' ? '<span class="badge bg-success float-end">Correct</span>' : ''}
+                    </li>
+
+                    <li class="list-group-item option-item ${q.CorrectOption=='B'?'correct-option':''}">
+                        <span class="fw-semibold">B.</span> ${q.OptionB}
+                        ${q.CorrectOption=='B' ? '<span class="badge bg-success float-end">Correct</span>' : ''}
+                    </li>
+
+                    <li class="list-group-item option-item ${q.CorrectOption=='C'?'correct-option':''}">
+                        <span class="fw-semibold">C.</span> ${q.OptionC}
+                        ${q.CorrectOption=='C' ? '<span class="badge bg-success float-end">Correct</span>' : ''}
+                    </li>
+
+                    <li class="list-group-item option-item ${q.CorrectOption=='D'?'correct-option':''}">
+                        <span class="fw-semibold">D.</span> ${q.OptionD}
+                        ${q.CorrectOption=='D' ? '<span class="badge bg-success float-end">Correct</span>' : ''}
+                    </li>
+                </ul>
+
+                <!-- Action Buttons -->
+                <div class="text-end">
+                    <button class="btn btn-sm btn-outline-warning rounded-pill px-3 me-2"
+                            onclick="editQuestion(${index})">
+                        ✏ Edit
+                    </button>
+
+                    <button class="btn btn-sm btn-outline-danger rounded-pill px-3"
+                            onclick="deleteQuestion(${index})">
+                        🗑 Delete
+                    </button>
+                </div>
+
+            </div>
+        </div>
+                `;
             });
 
             count.innerText = questions.length;
             qNo.innerText = questions.length + 1;
+        }
 
-            question.value = optA.value = optB.value = optC.value = optD.value = "";
+        function editQuestion(index) {
+
+            let q = questions[index];
+
+            question.value = q.Question;
+            optA.value = q.OptionA;
+            optB.value = q.OptionB;
+            optC.value = q.OptionC;
+            optD.value = q.OptionD;
+            correct.value = q.CorrectOption;
+
+            editIndex = index;
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function deleteQuestion(index) {
+
+            questions.splice(index, 1);
+            renderPreview();
+            updateProgress();
+        }
+
+        function updateProgress() {
+
+            let percent = (questions.length / 20) * 100;
+            progressBar.style.width = percent + "%";
+            progressBar.innerText = Math.round(percent) + "%";
+        }
+
+        function clearFields() {
+            question.value = "";
+            optA.value = "";
+            optB.value = "";
+            optC.value = "";
+            optD.value = "";
             correct.value = "";
         }
 
@@ -117,8 +281,8 @@
                 alert(d.message);
             });
         }
+
     </script>
 
 </body>
 </html>
- View file
