@@ -1,0 +1,1863 @@
+﻿@model ERP_Placement.Models.StudentRegistration
+
+@{
+    Layout = "~/Views/Shared/Student_Layout.cshtml";
+}
+
+
+<header>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+</header>
+<style>
+    .btn-sm {
+        background-color: #3b245f !important;
+        color: #ffffff !important;
+    }
+
+    .btn-sm:hover {
+            background-color: #2c1a47;
+            color: #ffffff;
+        }
+</style>
+<div class="container my-4">
+
+    <!-- =================== PROFILE PHOTO HEADER =================== -->
+
+    <form  id="studentForm" >
+        <div class="position-relative d-inline-block pb-3">
+
+            <!-- Profile Image -->
+            <img id="profilePreview"
+                 src="@(string.IsNullOrEmpty(Model.Personal_Photo)
+                                 ? "https://via.placeholder.com/150?text=User"
+                                 : Url.Content(Model.Personal_Photo))"
+                 class="rounded-circle"
+                 width="130" height="130"
+                 style="object-fit: cover; border: 3px solid #3b245f;">
+
+            <!-- Camera Icon -->
+            <label for="profilePhotoInput"
+                   class="btn rounded-circle p-2 position-absolute bottom-0 end-0 translate-middle d-flex align-items-center justify-content-center"
+                   style="width: 28px; height: 28px;">
+                <i class="bi bi-camera-fill fs-5" style="color:#3b245f"></i>
+            </label>
+
+            <!-- Hidden Input -->
+            <input type="file"
+                   id="profilePhotoInput"
+                   accept="image/jpeg,image/png"
+                   class="d-none"
+                   onchange="validateProfilePhoto(this)">
+
+            <!-- Keep old image -->
+            <input type="hidden" asp-for="Personal_Photo" />
+
+        </div>
+
+
+
+        <!-- ========================================================= -->
+        <!-- ===================== STEP 1 CARD ======================== -->
+        <!-- ========================================================= -->
+
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header  text-white fw-bold" style="background-color :  #3b245f">
+                <i class="bi bi-person"></i>   Personal Details
+            </div>
+
+            <div class="card-body">
+
+                <!-- Row 1 : Title + Name -->
+                <div class="row mb-3">
+                    <div class="col-md-2">
+                        <label class="form-label">Title</label>
+                        <select asp-for="Name_Title" id="nametitle" class="form-select border-dark" disabled>
+                            <option value="">Select</option>
+                            <option>Mr</option>
+                            <option>Ms</option>
+                            <option>Mrs</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="FirstName" class="form-label">First Name</label>
+                        <input asp-for="FirstName"
+                               type="text"
+                               id="firstname"
+                               class="form-control border-dark"
+                               pattern="[A-Za-z ]+"
+                               maxlength="50"
+                               inputmode="text"
+                               oninput="this.value=this.value.replace(/[^A-Za-z ]/g,'')"
+                               readonly />
+                    </div>
+
+                    <div class="col-md-3">
+                        <label asp-for="MiddleName" class="form-label">Middle Name</label>
+                        <input asp-for="MiddleName"
+                               type="text"
+                               id="middleName"
+                               class="form-control border-dark"
+                               pattern="[A-Za-z ]+"
+                               maxlength="50"
+                               inputmode="text"
+                               oninput="this.value=this.value.replace(/[^A-Za-z ]/g,'')"
+                                />
+                    </div>
+
+                    <div class="col-md-3">
+                        <label asp-for="LastName" class="form-label">Last Name</label>
+                        <input asp-for="LastName"
+                               type="text"
+                               id="lastname"
+                               class="form-control border-dark"
+                               pattern="[A-Za-z ]+"
+                               maxlength="50"
+                               inputmode="text"
+                               oninput="this.value=this.value.replace(/[^A-Za-z ]/g,'')"
+                               readonly />
+                    </div>
+                </div>
+
+                <!-- Row 2 : Gender + DOB -->
+                <div class="row mb-3">
+                    <div class="col-md-2">
+                        <label asp-for="Gender" class="form-label">Gender</label>
+
+                    </div>
+                    <div class="col-md-4">
+
+                        <select asp-for="Gender" id="gender" class="form-select border-dark"  disabled>
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label asp-for="DOB" class="form-label">Date of Birth</label>
+
+                    </div>
+                    <div class="col-md-3">
+
+                        <input asp-for="DOB" type="date" id="dob" class="form-control border-dark" readonly />
+                    </div>
+
+                </div>
+
+                <!-- Row 3 : Mobile Numbers -->
+                <div class="row mb-3">
+                    <div class="col-md-2">
+                        <label asp-for="MobileNo" class="form-label">Mobile Number</label>
+
+                    </div>
+                    <div class="col-md-4">
+
+                        <input asp-for="MobileNo" id="mobno" class="form-control border-dark" required />
+                    </div>
+
+
+                    <div class="col-md-3">
+                        <label asp-for="AlternateMobile" class="form-label">
+                            Alternate Mobile Number
+                        </label>
+
+                    </div>
+                    <div class="col-md-3">
+
+                        <input asp-for="AlternateMobile" id="AlternateMobile" class="form-control border-dark" required />
+                    </div>
+                </div>
+
+                <!-- Row 4 : Email -->
+                <div class="row mb-3">
+                    <div class="col-md-2">
+                        <label asp-for="Email" class="form-label">Email ID</label>
+
+                    </div>
+                    <div class="col-md-4">
+
+                        <input asp-for="Email" type="email" id="emailid" class="form-control border-dark" required />
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Confirm Email ID</label>
+
+                    </div>
+                    <div class="col-md-3">
+
+                        <input type="email" id="confimemailid" class="form-control border-dark" required />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+        <!-- ========================================================= -->
+        <!-- ===================== STEP 2 CARD ======================== -->
+        <!-- ========================================================= -->
+
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header  text-white fw-bold" style="background-color :  #3b245f">
+                <i class="bi bi-mortarboard"></i>  Acadamic Details
+            </div>
+
+            <div class="card-body">
+
+                <div class=" row mb-3 d-flex">
+                    <div class="col col-md-4">
+                        <label asp-for="Roll_No" class="form-label">Roll Number</label>
+                        <input asp-for="Roll_No" class="form-control border-dark" id="rollno" readonly />
+                    </div>
+                    <div class="col col-md-4">
+                        <label class="form-label">Confirm Roll No</label>
+                        <input asp-for="Roll_No" class="form-control border-dark" id="rollno" readonly />
+                    </div>
+
+                </div>
+
+
+                <div class=" row mb-3 d-flex">
+                    <div class="col col-md-4">
+                        <label asp-for="Branch" class="form-label">Select Branch</label>
+                        <select asp-for="Branch" class="form-select border-dark" id="branch" disabled>
+                            <option value="">Select Brach</option>
+                            <option>Computer Science</option>
+                            <option>Mechanical Engineering</option>
+                            <option>Electrical Engineering</option>
+                            <option>Civil Engineering</option>
+                            <option>Electronic Engineering</option>
+                        </select>
+                    </div>
+                    <div class="col col-md-4">
+                        <label asp-for="Divison" class="form-label">Divison</label>
+                        <select asp-for="Divison" class="form-select border-dark" id="divsion" readonly>
+                            <option value="">Select Brach</option>
+                            <option>A</option>
+
+                        </select>
+                    </div>
+
+                </div>
+
+
+
+
+                <div class=" row mb-3 d-flex">
+                    <div class="col col-md-4">
+                        <label asp-for="Acadamic_Year" class="form-label">Acadamic Year</label>
+                        <select asp-for="Acadamic_Year" class="form-select border-dark" id="acadamicyear" required>
+                            <option value="">Select Academic Year</option>
+                            <option>2022-2023</option>
+                            <option>2023-2024</option>
+                            <option>2024-2025</option>
+                            <option>2025-2026</option>
+                          
+                        </select>
+                    </div>
+
+                </div>
+
+
+
+
+
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- ===================== STEP 2 CARD ======================== -->
+        <!-- ========================================================= -->
+
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header  text-white fw-bold d-flex justify-content-between align-items-center flex-wrap" style="background-color :  #3b245f">
+                <div class="text-end">
+                    <i class="bi bi-book"></i> Educational Details
+                </div>
+
+                <!-- Left Side: Radio Buttons -->
+                <div class="d-flex gap-3 flex-wrap">
+
+                    <!-- Diploma -->
+                    <div class="form-check form-check-inline text-white">
+                        <input class="form-check-input" type="radio" name="EduType" value="Diploma"
+                               onchange="toggleEducation()"
+                               @(string.IsNullOrEmpty(Model.HSC) && !string.IsNullOrEmpty(Model.Diploma_Percentages) ? "checked" : "") disabled>
+                        <label class="form-check-label">Diploma</label>
+                    </div>
+
+                    <!-- HSC -->
+                    <div class="form-check form-check-inline text-white">
+                        <input class="form-check-input" type="radio" name="EduType" value="HSC"
+                               onchange="toggleEducation()"
+                               @(!string.IsNullOrEmpty(Model.HSC) && string.IsNullOrEmpty(Model.Diploma_Percentages) ? "checked" : "") disabled>
+                        <label class="form-check-label">HSC</label>
+                    </div>
+
+                    <!-- Both -->
+                    <div class="form-check form-check-inline text-white">
+                        <input class="form-check-input" type="radio" name="EduType" value="Both"
+                               onchange="toggleEducation()"
+                               @(!string.IsNullOrEmpty(Model.HSC) && !string.IsNullOrEmpty(Model.Diploma_Percentages) ? "checked" : "") disabled>
+                        <label class="form-check-label">Both</label>
+                    </div>
+
+                </div>
+
+                <!-- Right Side: Step Title -->
+
+            </div>
+
+            <div class="card-body">
+
+                <h5 class="fw-bold mb-3">SSC Details</h5>
+
+                <div class=" row mb-3 d-flex">
+                    <div class="col col-md-6">
+                        <label asp-for="SSC" class="form-label">SSC Percentages</label>
+                        <input asp-for="SSC" class="form-control border-dark" id="sscpercentage" readonly />
+                    </div>
+                    <div class="col col-md-6">
+                        <label  class="form-label">SSC Passing Year</label>
+                        <INPUT class="form-control border-dark" asp-for="SSC_Passing_Year" readonly/>
+                        @* <select asp-for="SSC_Passing_Year" class="form-select border-dark">
+                            <option value="">Select SSC Passing Year</option>
+
+                            @for (int year = DateTime.Now.Year - 10; year <= DateTime.Now.Year; year++)
+                            {
+                                var academic = $"{year}-{year + 1}";
+                                <option value="@academic">@academic</option>
+                            }
+                        </select> *@
+                    </div>
+                </div>
+
+
+
+
+
+
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+
+                        <label class="form-label">SSC Marksheet</label>
+
+                        <!-- 🔥 SHOW EXISTING FILE -->
+                        @if (!string.IsNullOrEmpty(Model.SSC_Document_Path))
+                        {
+                            <div class="mb-2">
+                                <a href="@Model.SSC_Document_Path" target="_blank" class="btn btn-sm btn-info">
+                                    View SSC Marksheet
+                                </a>
+                            </div>
+                        }
+
+                        <!-- 🔥 UPLOAD NEW FILE -->
+                       @*  <input asp-for="SSC_File"
+                               type="file"
+                               class="form-control border-dark"
+                               id="SSCMarksheet"
+                               accept=".pdf,.jpg,.jpeg,.png"
+                               onchange="validateSSCMarksheet(this)" readonly/> *@
+
+                    </div>
+                </div>
+
+
+
+
+
+
+                <div id="hscSection" style="display:none;">
+                    <h5 class="fw-bold mt-4 mb-3">HSC Details</h5>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="HSC" class="form-label">HSC Percentages</label>
+                            <input asp-for="HSC" class="form-control border-dark" id="hscpercentage" readonly/>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="HSC_Passing_Year" class="form-label">HSC Passing Year</label>
+                           @*  <select asp-for="HSC_Passing_Year" id="hscpassingyear" class="form-select border-dark">
+                                <option value="">Select HSC Passing Year</option>
+                            </select> *@
+
+                            <input asp-for="HSC_Passing_Year"  id="hscpassingyear"  class="form-control border-dark" readonly/>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">HSC Marksheet</label>
+
+                        <!-- 🔥 SHOW EXISTING FILE -->
+                        @if (!string.IsNullOrEmpty(Model.HSC_Document_Path))
+                        {
+                            <div class="mb-2">
+                                <a href="@Model.HSC_Document_Path"
+                                   target="_blank"
+                                   class="btn btn-sm btn-info">
+                                    View HSC Marksheet
+                                </a>
+                            </div>
+                        }
+
+                        <!-- 🔥 UPLOAD NEW FILE -->
+                        @* <input asp-for="HSC_File"
+                               type="file"
+                               class="form-control border-dark"
+                               id="HSCMarksheet"
+                               accept=".pdf,.jpg,.jpeg,.png"
+                               onchange="validateSSCMarksheet(this)" readonly/> *@
+
+                    </div>
+                </div>
+
+
+
+
+
+                <div id="diplomaSection" style="display:none;">
+                    <h5 class="fw-bold mt-4 mb-3">Diploma Details</h5>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Diploma_Percentages" class="form-label">Diploma Percentage</label>
+                            <input asp-for="Diploma_Percentages" class="form-control border-dark" id="diplomapercentage" readonly/>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Diploma_Branch" class="form-label">Diploma Branch</label>
+                            <select asp-for="Diploma_Branch" class="form-select border-dark" id="diplomabrnach" disabled>
+                                <option value="">Select Brach</option>
+                                <option>Computer Science</option>
+                                <option>Mechanical Engineering</option>
+                                <option>Electrical Engineering</option>
+                                <option>Civil Engineering</option>
+                                <option>Electronic Engineering</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Diploma_Passing_Year" class="form-label">Diploma Passing Year</label>
+                            @* <SELECT asp-for="Diploma_Passing_Year" id="diplomapssingyear" class="form-select border-dark">
+                                <option value="">Select Diploma Passing Year</option>
+                            </SELECT> *@
+
+                            <input asp-for="Diploma_Passing_Year" id="diplomapssingyear" class="form-control border-dark" readonly  />
+                        </div>
+                        <div class="col-md-6">
+
+                            <label class="form-label">Diploma Marksheet</label>
+
+                            <!-- 🔥 SHOW EXISTING FILE -->
+                            @if (!string.IsNullOrEmpty(Model.Diploma_Document_Path))
+                            {
+                                <div class="mb-2">
+                                    <a href="@Model.Diploma_Document_Path"
+                                       target="_blank"
+                                       class="btn btn-sm btn-info">
+                                        View Diploma Marksheet
+                                    </a>
+                                </div>
+                            }
+
+                            <!-- 🔥 UPLOAD NEW FILE -->
+                            @* <input asp-for="Diploma_File"
+                                   type="file"
+                                   class="form-control border-dark"
+                                   id="DiplomaMarksheet"
+                                   accept=".pdf,.jpg,.jpeg,.png"
+                                   onchange="validateSSCMarksheet(this)" readonly/> *@
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+                <h5 class="fw-bold mt-4 mb-3">BTech Details</h5>
+
+
+                <div class=" row mb-3 d-flex">
+
+                    <div class="col col-md-6">
+                        <label asp-for="BTech_Percentages" class="form-label">B Tech Percentage</label>
+                        <input asp-for="BTech_Percentages" class="form-control border-dark" id="btechpercentage" required />
+                    </div>
+                    <div class="col col-md-6">
+                        <label asp-for="BTech_Branch" class="form-label">B Tech Branch</label>
+                        <select asp-for="BTech_Branch" class="form-select border-dark" id="btechbranch" disabled>
+                            <option value="">Select Brach</option>
+                            <option>Computer Science</option>
+                            <option>Mechanical Engineering</option>
+                            <option>Electrical Engineering</option>
+                            <option>Civil Engineering</option>
+                            <option>Electronic Engineering</option>
+                        </select>
+
+                    </div>
+
+
+
+
+                </div>
+                <div class=" row mb-3 d-flex">
+                    <div class="col col-md-6">
+
+                        <label asp-for="BTech_Passing_Year" class="form-label">B Tech Passing Year</label>
+                       @*  <select asp-for="BTech_Passing_Year" class="form-select border-dark" id="btechpassingyear" required>
+                            <option value="">Select Btech Passing Year</option>
+                        </select> *@
+
+                        <input asp-for="BTech_Passing_Year" class="form-control border-dark" id="btechpassingyear" />
+                    </div>
+                    <div class="col-md-6">
+
+                        <label class="form-label">B Tech Marksheet</label>
+
+                        <!-- 🔥 SHOW EXISTING FILE -->
+                        @if (!string.IsNullOrEmpty(Model.BTech_Document_Path))
+                        {
+                            <div class="mb-2">
+                                <a href="@Model.BTech_Document_Path"
+                                   target="_blank"
+                                   class="btn btn-sm btn-info">
+                                    View BTech Marksheet
+                                </a>
+                            </div>
+                        }
+
+                        <!-- 🔥 UPLOAD NEW FILE -->
+                        <input asp-for="BTech_File"
+                               type="file"
+                               class="form-control border-dark"
+                               id="BtechMarksheet"
+                               accept=".pdf,.jpg,.jpeg,.png"
+                               onchange="validateSSCMarksheet(this)" />
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ========================================================= -->
+        <!-- ===================== STEP 3 CARD ======================== -->
+        <!-- ========================================================= -->
+
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header  text-white fw-bold" style="background-color :  #3b245f">
+                <i class="bi bi-stars"></i> Skills & Submit
+            </div>
+
+            <div class="card-body">
+
+                <div class="row mb-3 align-items-end">
+
+                    <!-- Skill Dropdown + Add Button -->
+                    <div class="col-md-4">
+                        <label class="form-label">Select Skill</label>
+
+                        <div class="d-flex">
+
+                            <select id="skillDropdown" class="form-select border-dark">
+                                <option value="">Select Skill</option>
+
+                                @foreach (var skill in ViewBag.Skills)
+                                {
+                                    <option value="@skill.SkillName">@skill.SkillName</option>
+                                }
+
+                            </select>
+
+                            <button type="button"
+                                    class="btn btn-success ms-2"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#addSkillModal"
+                                    style="white-space:nowrap;">
+                                + Add
+                            </button>
+
+                        </div>
+                    </div>
+
+                    <!-- Selected Skills -->
+                    <div class="col-md-4">
+                        <label asp-for="Skills" class="form-label">Selected Skills</label>
+
+                        <input asp-for="Skills"
+                               id="skills"
+                               class="form-control border-dark"
+                               readonly
+                               placeholder="Selected skills will appear here"
+                               required />
+                    </div>
+
+                    <!-- Resume Upload -->
+                    <div class="col-md-4">
+                       
+
+                       
+
+                        
+
+                            <label class="form-label">Resume</label>
+
+                            <!-- 🔥 SHOW EXISTING FILE -->
+                        @if (!string.IsNullOrEmpty(Model.ResumePath))
+                            {
+                                <div class="mb-2">
+                                    <a href="@Model.ResumePath"
+                                       target="_blank"
+                                       class="btn btn-sm btn-info">
+                                        View Resume
+                                    </a>
+                                </div>
+                            }
+
+                            <!-- 🔥 UPLOAD NEW FILE -->
+                            <input asp-for="ResumePath"
+                                   type="file"
+                                   class="form-control border-dark"
+                                   id="resume"
+                                   accept=".pdf,.jpg,.jpeg,.png"
+                                   onchange="validateSSCMarksheet(this)" />
+
+
+                        <input type="hidden" id="OldBTechPath" value="@Model.BTech_Document_Path" />
+                        <input type="hidden" id="OldResumePath" value="@Model.ResumePath" />
+                        <input type="hidden" id="StudentId" value="@Model.StudentId" />
+
+                        </div>
+                   
+
+                </div>
+
+
+
+
+
+
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2 mt-3">
+
+            <!-- Back Button -->
+            <button type="button" class="btn btn-secondary fw-bold">
+                Back
+            </button>
+
+            <!-- Clear / Reset Button -->
+            <button type="reset" class="btn btn-warning fw-bold">
+                Clear
+            </button>
+
+            <!-- Submit Button -->
+            <button id="UpdateAll" class="btn btn-success fw-bold">
+               Update 
+            </button>
+
+        </div>
+
+
+    </form>
+
+</div>
+
+
+<div class="modal fade" id="addSkillModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow-lg" style="border-radius:15px; border:none;">
+
+            <!-- Modal Header -->
+            <div class="modal-header text-white"
+                 style="background:linear-gradient(135deg,#1abc9c,#2ecc71); border-top-left-radius:15px;border-top-right-radius:15px;">
+
+                <h5 class="modal-title fw-bold">
+                    <i class="bi bi-lightning-charge-fill"></i> Add New Skill
+                </h5>
+
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body p-4">
+
+                <label class="form-label fw-semibold text-dark">
+                    Skill Name
+                </label>
+
+                <input type="text"
+                       id="newSkillName"
+                       class="form-control form-control-lg shadow-sm"
+                       placeholder="Enter new skill (Example: React, NodeJS)"
+                       style="border-radius:10px;border:2px solid #dfe6e9;" />
+
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer justify-content-between p-3">
+
+                <button class="btn btn-outline-secondary px-4"
+                        data-bs-dismiss="modal"
+                        style="border-radius:8px;">
+                    Close
+                </button>
+
+                <button class="btn text-white px-4"
+                        onclick="saveSkill()"
+                        style="background:linear-gradient(135deg,#00b894,#00cec9); border-radius:8px; font-weight:600;">
+                    <i class="bi bi-check-circle"></i> Save Skill
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Registration Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center p-4">
+
+            <div class="modal-body">
+
+                <!-- Bootstrap Logo -->
+                <i class="bi bi-check-circle-fill text-success"
+                   style="font-size:70px;"></i>
+
+                <h4 class="text-success fw-bold">
+                    Registration Successful
+                </h4>
+
+                <p class="mt-3 text-muted">
+                    Your registration is successfully completed.<br><br>
+
+                    Please wait for <b>Placement Coordinator Approval</b>.<br><br>
+
+                    Once approved, your <b>User ID</b> and <b>Password</b>
+                    will be sent to your registered <b>Email ID</b>.
+                </p>
+
+                <button class="btn btn-primary mt-3"
+                        data-bs-dismiss="modal">
+                    OK
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- ========================================== -->
+<!-- JS: Profile Photo Preview/Remove Function -->
+<!-- ========================================== -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function previewProfilePhoto(event) {
+        const output = document.getElementById('profilePreview');
+        output.src = URL.createObjectURL(event.target.files[0]);
+    }
+
+    function removeProfilePhoto() {
+        const img = document.getElementById('profilePreview');
+        img.src = "https://via.placeholder.com/120";
+        document.getElementById('profilePhotoInput').value = "";
+    }
+
+    //seleting the gender
+     document.getElementById("nametitle").addEventListener("change", function () {
+         debugger;
+        const title = this.value;
+        const genderSelect = document.getElementById("gender");
+
+        if (title === "Mr") {
+            genderSelect.value = "Male";
+        }
+        else if (title === "Ms" || title === "Mrs") {
+            genderSelect.value = "Female";
+        }
+
+    });
+
+    //date of birth validations
+     document.addEventListener("DOMContentLoaded", function () {
+
+        const dob = document.getElementById("dob");
+        const form = dob.closest("form");
+
+        function calculateAge(dobDate) {
+            const today = new Date();
+            let age = today.getFullYear() - dobDate.getFullYear();
+            const m = today.getMonth() - dobDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < dobDate.getDate())) {
+                age--;
+            }
+            return age;
+        }
+
+        function validateDOB() {
+            if (!dob.value) return true;
+
+            const selectedDate = new Date(dob.value);
+            const age = calculateAge(selectedDate);
+
+            if (age < 18 || age > 26) {
+                showToast("Student Age must be between 18 to 26");
+                dob.value = "";
+                dob.focus();
+                return false;
+            }
+            return true;
+        }
+
+        // 🔥 Trigger on manual typing
+        dob.addEventListener("input", validateDOB);
+
+        // 🔥 Trigger when leaving field
+        dob.addEventListener("blur", validateDOB);
+
+        // 🔥 Trigger on submit
+        form.addEventListener("submit", function (e) {
+            if (!validateDOB()) {
+                e.preventDefault();
+            }
+        });
+    });
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const mob = document.getElementById("mobno");
+
+        const form = mob.closest("form");
+
+        function isValidMobile(number) {
+            return /^[6-9]\d{9}$/.test(number);
+        }
+
+        function validateMobile() {
+            const value = mob.value.trim();
+
+            if (!value) return true;
+
+            if (!isValidMobile(value)) {
+                showToast("Mobile number must valid be 10 digits");
+                mob.value = "";
+                mob.focus();
+                return false;
+            }
+            return true;
+        }
+
+        // 🔹 Allow only numbers while typing
+        mob.addEventListener("input", function () {
+            this.value = this.value.replace(/\D/g, "");
+            if (this.value.length > 10) {
+                this.value = this.value.slice(0, 10);
+            }
+        });
+
+        // 🔹 Validate on leaving field
+        mob.addEventListener("blur", validateMobile);
+
+        // 🔹 Validate on submit
+        form.addEventListener("submit", function (e) {
+            if (!validateMobile()) {
+                e.preventDefault();
+            }
+        });
+    });
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const mob = document.getElementById("AlternateMobile");
+
+        const form = mob.closest("form");
+
+        function isValidMobile(number) {
+            return /^[6-9]\d{9}$/.test(number);
+        }
+
+        function validateMobile() {
+            const value = mob.value.trim();
+
+            if (!value) return true;
+
+            if (!isValidMobile(value)) {
+                showToast("Mobile number must valid be 10 digits");
+                mob.value = "";
+                mob.focus();
+                return false;
+            }
+            return true;
+        }
+
+        // 🔹 Allow only numbers while typing
+        mob.addEventListener("input", function () {
+            this.value = this.value.replace(/\D/g, "");
+            if (this.value.length > 10) {
+                this.value = this.value.slice(0, 10);
+            }
+        });
+
+        // 🔹 Validate on leaving field
+        mob.addEventListener("blur", validateMobile);
+
+        // 🔹 Validate on submit
+        form.addEventListener("submit", function (e) {
+            if (!validateMobile()) {
+                e.preventDefault();
+            }
+        });
+    });
+
+    function showToast(message) {
+
+        // Remove existing toast
+        const oldToast = document.getElementById("inlineToast");
+        if (oldToast) oldToast.remove();
+
+        const toast = document.createElement("div");
+        toast.id = "inlineToast";
+        toast.innerHTML = `
+            <span style="font-size:20px;">⚠️</span>
+            <span style="flex:1;">${message}</span>
+        `;
+
+        // Inline styles
+        Object.assign(toast.style, {
+            position: "fixed",
+            top: "20px",
+            right: "-400px",
+            minWidth: "280px",
+            maxWidth: "360px",
+            padding: "14px 18px",
+            background: "linear-gradient(135deg, #dc3545, #b02a37)",
+            color: "#fff",
+            borderRadius: "10px",
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            fontFamily: "Segoe UI, sans-serif",
+            fontSize: "14px",
+            fontWeight: "500",
+            boxShadow: "0 10px 25px rgba(0,0,0,0.25)",
+            zIndex: "99999",
+            transition: "right 0.4s ease"
+        });
+
+        document.body.appendChild(toast);
+
+        // Slide in
+        setTimeout(() => toast.style.right = "20px", 50);
+
+        // Slide out & remove
+        setTimeout(() => {
+            toast.style.right = "-400px";
+            setTimeout(() => toast.remove(), 400);
+        }, 3000);
+    }
+
+</script>
+<script>
+    const defaultAvatar = "https://via.placeholder.com/150?text=User";
+
+    function previewProfilePhoto(event) {
+        document.getElementById("profilePreview").src =
+            URL.createObjectURL(event.target.files[0]);
+    }
+</script>
+
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const mobile = document.getElementById("mobno");
+        const alternate = document.getElementById("AlternateMobile");
+
+        function normalize(val) {
+            return val.replace(/\D/g, "");
+        }
+
+        function validateNotSame(triggeredInput) {
+            const mobVal = normalize(mobile.value);
+            const altVal = normalize(alternate.value);
+
+            // If one or both empty → OK
+            if (!mobVal || !altVal) return true;
+
+            // If both filled & same
+            if (mobVal === altVal) {
+                showToast("Mobile number and Alternate mobile number must not be the same");
+                triggeredInput.value = "";
+                triggeredInput.focus();
+                return false;
+            }
+            return true;
+        }
+
+        // Allow only digits & max 10
+        [mobile, alternate].forEach(input => {
+            input.addEventListener("input", function () {
+                this.value = normalize(this.value).slice(0, 10);
+            });
+        });
+
+        // Blur validation on BOTH inputs
+        mobile.addEventListener("blur", function () {
+            validateNotSame(mobile);
+        });
+
+        alternate.addEventListener("blur", function () {
+            validateNotSame(alternate);
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const email = document.getElementById("emailid");
+        const confirmEmail = document.getElementById("confimemailid");
+
+
+        const gmailRegex = /^[a-z0-9._%+-]+@@gmail\.com$/;
+
+        function validateGmail(input) {
+            const value = input.value.trim();
+
+            if (!value) return true;
+
+            if (!gmailRegex.test(value)) {
+                showToast("Please Entre Valid Email Id");
+                input.value = "";
+                input.focus();
+                return false;
+            }
+            return true;
+        }
+
+        function validateMatch() {
+            if (!email.value || !confirmEmail.value) return true;
+
+            if (email.value !== confirmEmail.value) {
+                showToast("Email and Confirm Email must be the same");
+                email.value = "";
+                confirmEmail.value = "";
+                email.focus();
+                return false;
+            }
+            return true;
+        }
+
+        // 🔹 Blur validation
+        email.addEventListener("blur", function () {
+            if (validateGmail(email)) {
+                validateMatch();
+            }
+        });
+
+        confirmEmail.addEventListener("blur", function () {
+            if (validateGmail(confirmEmail)) {
+                validateMatch();
+            }
+        });
+    });
+</script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const roll = document.getElementById("rollno");
+        const confirmRoll = document.getElementById("confirmrollno");
+        const form = roll.closest("form");
+
+        function onlyDigits(input) {
+            input.value = input.value.replace(/\D/g, "").slice(0, 5);
+        }
+
+        function validateLength(input) {
+            if (input.value.length > 5) {
+                showToast("Roll number must be exactly 5 digits");
+                input.value = "";
+                input.focus();
+                return false;
+            }
+            return true;
+        }
+
+        function validateMatch(triggeredInput) {
+            if (!roll.value) return true; // 🔥 IMPORTANT RULE
+
+            if (!confirmRoll.value) return true;
+
+            if (roll.value !== confirmRoll.value) {
+                showToast("Roll Number and Confirm Roll Number must be the same");
+                roll.value = "";
+                confirmRoll.value = "";
+                triggeredInput.focus();
+                return false;
+            }
+            return true;
+        }
+
+        // Allow only digits
+        roll.addEventListener("input", () => onlyDigits(roll));
+        confirmRoll.addEventListener("input", () => onlyDigits(confirmRoll));
+
+        // 🔹 Roll blur
+        roll.addEventListener("blur", function () {
+            if (roll.value && validateLength(roll)) {
+                validateMatch(roll);
+            }
+        });
+
+        // 🔹 Confirm blur (BLOCKED if Roll is empty)
+        confirmRoll.addEventListener("blur", function () {
+            if (!roll.value) return; // 🚫 Do nothing
+            if (validateLength(confirmRoll)) {
+                validateMatch(confirmRoll);
+            }
+        });
+
+        // 🔹 Submit validation
+        form.addEventListener("submit", function (e) {
+            if (!roll.value) return; // Let required validation handle it
+
+            if (
+                !validateLength(roll) ||
+                !validateLength(confirmRoll) ||
+                !validateMatch(roll)
+            ) {
+                e.preventDefault();
+            }
+        });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const ddl = document.getElementById("sscpassingyear");
+        const HSC = document.getElementById("hscpassingyear");
+        const DIPLOMA = document.getElementById("diplomapssingyear");
+        const Btech = document.getElementById("btechpassingyear");
+        const currentYear = new Date().getFullYear();
+
+        const endYear = currentYear - 3;      // before 3 years
+        const startYear = endYear - 9;         // total 10 years range
+
+        for (let year = startYear; year <= endYear; year++) {
+            const academicYear = `${year}-${year + 1}`;
+            const option = document.createElement("option");
+            option.value = academicYear;
+            option.textContent = academicYear;
+            ddl.appendChild(option);
+        }
+        for (let year = startYear; year <= endYear; year++) {
+            const academicYear = `${year}-${year + 1}`;
+            const option = document.createElement("option");
+            option.value = academicYear;
+            option.textContent = academicYear;
+            HSC.appendChild(option);
+        }
+        for (let year = startYear; year <= endYear; year++) {
+            const academicYear = `${year}-${year + 1}`;
+            const option = document.createElement("option");
+            option.value = academicYear;
+            option.textContent = academicYear;
+            DIPLOMA.appendChild(option);
+        }
+        for (let year = startYear; year <= endYear; year++) {
+            const academicYear = `${year}-${year + 1}`;
+            const option = document.createElement("option");
+            option.value = academicYear;
+            option.textContent = academicYear;
+            Btech.appendChild(option);
+        }
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const fields = [
+            { id: "sscpercentage", label: "SSC" },
+            { id: "hscpercentage", label: "HSC" },
+            { id: "diplomapercentage", label: "Diploma" },
+            { id: "btechpercentage", label: "B.Tech" }
+        ];
+
+        const form = document.getElementById("sscpercentage").closest("form");
+
+        function validatePercentage(input, label) {
+            const value = input.value.trim();
+
+            // Empty allowed (required handled separately)
+            if (!value) return true;
+
+            const marks = Number(value);
+
+            if (isNaN(marks) || marks < 0 || marks > 100) {
+                showToast(`${label} percentage must be between 0 and 100`);
+                input.value = "";
+                input.focus();
+                return false;
+            }
+
+            if (marks < 35) {
+                showToast(`${label} percentage must be 35% or above (Passing marks)`);
+                input.value = "";
+                input.focus();
+                return false;
+            }
+
+            return true;
+        }
+
+        fields.forEach(field => {
+            const input = document.getElementById(field.id);
+
+            // 🔹 Allow only numbers + single decimal
+            input.addEventListener("input", function () {
+                this.value = this.value.replace(/[^0-9.]/g, "");
+
+                if ((this.value.match(/\./g) || []).length > 1) {
+                    this.value = this.value.slice(0, -1);
+                }
+            });
+
+            // 🔹 Blur validation
+            input.addEventListener("blur", function () {
+                validatePercentage(input, field.label);
+            });
+        });
+
+        // 🔹 Submit validation (checks all 4)
+        form.addEventListener("submit", function (e) {
+            for (let field of fields) {
+                const input = document.getElementById(field.id);
+                if (!validatePercentage(input, field.label)) {
+                    e.preventDefault();
+                    return;
+                }
+            }
+        });
+
+    });
+</script>
+
+<script>
+    function validateProfilePhoto(input) {
+
+        if (!input.files || !input.files[0]) return;
+
+        const file = input.files[0];
+
+        const allowedTypes = ["image/jpeg", "image/png"];
+        const maxSize = 1 * 1024 * 1024; // 1 MB
+
+        // ❌ Invalid format
+        if (!allowedTypes.includes(file.type)) {
+            showToast("Only JPG or PNG image formats are allowed");
+            input.value = "";
+            return;
+        }
+
+        // ❌ File too large
+        if (file.size > maxSize) {
+            showToast("Profile photo size must be less than 1 MB");
+            input.value = "";
+            return;
+        }
+
+        // ✅ Optional: preview image if valid
+        previewProfilePhoto({ target: input });
+    }
+</script>
+
+
+<script>
+    function validateSSCMarksheet(input) {
+
+        if (!input.files || !input.files[0]) return;
+        var hsc = document.getElementById("HSCMarksheet");
+        var ssc = document.getElementById("SSCMarksheet");
+        var diploma = document.getElementById("DiplomaMarksheet");
+        var btech = document.getElementById("BtechMarksheet");
+
+        const file = input.files[0];
+
+        const allowedTypes = [
+            "application/pdf",
+            "image/jpeg",
+            "image/png"
+        ];
+
+        const maxSize = 2 * 1024 * 1024; // 2 MB
+
+        // ❌ Invalid file type
+        if (!allowedTypes.includes(file.type)) {
+
+
+                      showToast("Only PDF, JPG, JPEG or PNG files are allowed for marksheet");
+            input.value = "";
+            return;
+
+
+
+
+
+        }
+
+        // ❌ File size exceeded
+        if (file.size > maxSize) {
+
+
+            showToast(" Marksheet file size must not exceed 2 MB");
+            input.value = "";
+            return;
+
+
+        }
+
+        // ✅ Valid file → do nothing
+    }
+</script>
+
+
+@* <script>
+    function toggleEducation() {
+        const selected = document.querySelector('input[name="EduType"]:checked').value;
+
+        const hsc = document.getElementById("hscSection");
+        const diploma = document.getElementById("diplomaSection");
+
+        // Hide both first
+        hsc.style.display = "none";
+        diploma.style.display = "none";
+
+        if (selected === "HSC") {
+            hsc.style.display = "block";
+        }
+        else if (selected === "Diploma") {
+            diploma.style.display = "block";
+        }
+        else if (selected === "Both") {
+            hsc.style.display = "block";
+            diploma.style.display = "block";
+        }
+    }
+</script>
+ *@
+@* <script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+        debugger;
+    document.getElementById("UpdateAll").addEventListener("click", function (e) {
+       // e.preventDefault(); // stop submit first
+        debugger;
+        var nametitle = document.getElementById("nametitle");
+        var firstname = document.getElementById("firstname");
+        var lastname = document.getElementById("lastname");
+        var gender = document.getElementById("gender");
+        var dob = document.getElementById("dob");
+        var mobno = document.getElementById("mobno");
+        var emailid = document.getElementById("emailid");
+        var confimemailid = document.getElementById("confimemailid");
+
+            const edu = document.querySelector('input[name="EduType"]:checked');
+
+    if (!edu) {
+        showToast("Please select Education Type");
+        return;
+    }
+
+        const selected =  edu.value;
+
+
+
+        var rollno = document.getElementById("rollno");
+        var confirmrollno = document.getElementById("confirmrollno");
+        var branch = document.getElementById("branch");
+        var divsion = document.getElementById("divsion");
+        var acadamicyear = document.getElementById("acadamicyear");
+
+        var sscpercentage = document.getElementById("sscpercentage");
+        var sscpassingyear = document.getElementById("sscpassingyear");
+        var SSCMarksheet = document.getElementById("SSCMarksheet");
+
+
+
+
+        var HSCpercentage = document.getElementById("hscpercentage");
+        var HSCpassingyear = document.getElementById("hscpassingyear");
+        var HSCMarksheet = document.getElementById("HSCMarksheet");
+
+
+        var diplomapercentage = document.getElementById("diplomapercentage");
+        var diplomabranch = document.getElementById("diplomabrnach");
+        var diplomapssingyear = document.getElementById("diplomapssingyear");
+        var DiplomaMarksheet = document.getElementById("DiplomaMarksheet");
+
+        var btechpercentage = document.getElementById("btechpercentage");
+        var btechbranch = document.getElementById("btechbranch");
+        var btechpassingyear = document.getElementById("btechpassingyear");
+        var BtechMarksheet = document.getElementById("BtechMarksheet");
+
+        var skills = document.getElementById("skills");
+        var resume = document.getElementById("resume");
+
+       // ---------------- PERSONAL ----------------
+        if (nametitle.value === "") { showToast("Please select Title"); nametitle.focus(); return; }
+        if (firstname.value === "") { showToast("Please enter First Name"); firstname.focus(); return; }
+        if (lastname.value === "") { showToast("Please enter Last Name"); lastname.focus(); return; }
+        if (gender.value === "") { showToast("Please select Gender"); gender.focus(); return; }
+        if (dob.value === "") { showToast("Please select Date of Birth"); dob.focus(); return; }
+        if (mobno.value === "") { showToast("Please enter Mobile Number"); mobno.focus(); return; }
+        if (emailid.value === "") { showToast("Please enter Email ID"); emailid.focus(); return; }
+        if (confimemailid.value === "") { showToast("Please confirm Email ID"); confimemailid.focus(); return; }
+
+        // ---------------- ACADEMIC ----------------
+        if (rollno.value === "") { showToast("Please enter Roll Number"); rollno.focus(); return; }
+        if (confirmrollno.value === "") { showToast("Please confirm Roll Number"); confirmrollno.focus(); return; }
+        if (branch.value === "") { showToast("Please select Branch"); branch.focus(); return; }
+        if (divsion.value === "") { showToast("Please select Division"); divsion.focus(); return; }
+        if (acadamicyear.value === "") { showToast("Please select Academic Year"); acadamicyear.focus(); return; }
+
+        // ---------------- SSC ----------------
+
+
+        if (sscpercentage.value === "") { showToast("Please enter SSC Percentage"); sscpercentage.focus(); return; }
+        if (sscpassingyear.value === "") { showToast("Please select SSC Passing Year"); sscpassingyear.focus(); return; }
+        if (SSCMarksheet.files.length === 0) { showToast("Please upload SSC Marksheet"); return; }
+
+             // HSC validation
+    if (selected === "HSC" || selected === "Both") {
+
+        if (HSCpercentage.value === "") {
+            showToast("Please enter HSC Percentage");
+            HSCpercentage.focus();
+            return;
+        }
+
+        if (HSCpassingyear.value === "") {
+            showToast("Please select HSC Passing Year");
+            HSCpassingyear.focus();
+            return;
+        }
+
+        if (HSCMarksheet.files.length === 0) {
+            showToast("Please upload HSC Marksheet");
+            return;
+        }
+    }
+
+
+    // Diploma validation
+    if (selected === "Diploma" || selected === "Both") {
+
+        if (diplomapercentage.value === "") {
+            showToast("Please enter Diploma Percentage");
+            diplomapercentage.focus();
+            return;
+        }
+
+        if (diplomabranch.value === "") {
+            showToast("Please enter Diploma Branch");
+            diplomabranch.focus();
+            return;
+        }
+
+        if (diplomapssingyear.value === "") {
+            showToast("Please select Diploma Passing Year");
+            diplomapssingyear.focus();
+            return;
+        }
+
+        if (DiplomaMarksheet.files.length === 0) {
+            showToast("Please upload Diploma Marksheet");
+            return;
+        }
+    }
+
+
+
+        // ---------------- BTECH ----------------
+        if (btechpercentage.value === "") { showToast("Please enter BTech Percentage"); btechpercentage.focus(); return; }
+        if (btechbranch.value === "") { showToast("Please select BTech Branch"); btechbranch.focus(); return; }
+        if (btechpassingyear.value === "") { showToast("Please select BTech Passing Year"); btechpassingyear.focus(); return; }
+        if (BtechMarksheet.files.length === 0) { showToast("Please upload BTech Marksheet"); return; }
+
+        // ---------------- FINAL ----------------
+        if (skills.value === "") { showToast("Please enter Skills"); skills.focus(); return; }
+        if (resume.files.length === 0) { showToast("Please upload Resume"); return; }
+
+
+
+
+
+
+
+
+    });
+
+    });
+
+
+
+        function toggleEducation() {
+        const selected = document.querySelector('input[name="EduType"]:checked').value;
+
+        const hsc = document.getElementById("hscSection");
+        const diploma = document.getElementById("diplomaSection");
+
+        // HSC inputs
+        const hscInputs = hsc.querySelectorAll("input, select");
+
+        // Diploma inputs
+        const diplomaInputs = diploma.querySelectorAll("input, select");
+
+        // Reset all
+        hsc.style.display = "none";
+        diploma.style.display = "none";
+
+        hscInputs.forEach(i => i.removeAttribute("required"));
+        diplomaInputs.forEach(i => i.removeAttribute("required"));
+
+        if (selected === "HSC") {
+            hsc.style.display = "block";
+            hscInputs.forEach(i => i.setAttribute("required", "required"));
+        }
+        else if (selected === "Diploma") {
+            diploma.style.display = "block";
+            diplomaInputs.forEach(i => i.setAttribute("required", "required"));
+        }
+        else if (selected === "Both") {
+            hsc.style.display = "block";
+            diploma.style.display = "block";
+
+            hscInputs.forEach(i => i.setAttribute("required", "required"));
+            diplomaInputs.forEach(i => i.setAttribute("required", "required"));
+        }
+    }
+</script> *@
+<script>
+
+    window.onload = function () {
+
+        var success = '@TempData["success"]';
+
+        if (success === "1") {
+
+            var myModal = new bootstrap.Modal(
+                document.getElementById('successModal')
+            );
+
+            myModal.show();
+        }
+
+    }
+
+
+        document.getElementById("skillDropdown").addEventListener("change", function () {
+
+        const skill = this.value;
+        const skillBox = document.getElementById("skills");
+
+        if (skill === "") return;
+
+        let currentSkills = skillBox.value.split(",").map(s => s.trim()).filter(s => s);
+
+        // prevent duplicate skill
+        if (currentSkills.includes(skill)) {
+            showToast("Skill already selected");
+            return;
+        }
+
+        currentSkills.push(skill);
+
+        skillBox.value = currentSkills.join(", ");
+
+        this.value = ""; // reset dropdown
+    });
+</script>
+
+<script>
+
+
+
+    function saveSkill() {
+        debugger;
+
+        var skillName = $("#newSkillName").val();
+
+        if (skillName == "") {
+            showToast("Enter Skill Name");
+            return;
+        }
+
+        $.ajax({
+            url: '@Url.Action("AddSkill", "Student")',
+            type: 'POST',
+            data: { skillName: skillName },
+
+            success: function (res) {
+
+                showToast("Skill Added Successfully");
+
+                $("#addSkillModal").modal('hide');
+
+                $("#skillDropdown").append(
+                    '<option value="' + skillName + '">' + skillName + '</option>'
+                );
+
+                $("#newSkillName").val("");
+
+            },
+            error: function () {
+                showToast("Error while saving skill");
+            }
+        });
+
+          function showToast(message) {
+
+        // Remove existing toast
+        const oldToast = document.getElementById("inlineToast");
+        if (oldToast) oldToast.remove();
+
+        const toast = document.createElement("div");
+        toast.id = "inlineToast";
+        toast.innerHTML = `
+            <span style="font-size:20px;">⚠️</span>
+            <span style="flex:1;">${message}</span>
+        `;
+
+        // Inline styles
+        Object.assign(toast.style, {
+            position: "fixed",
+            top: "20px",
+            right: "-400px",
+            minWidth: "280px",
+            maxWidth: "360px",
+            padding: "14px 18px",
+            background: "linear-gradient(135deg, #dc3545, #b02a37)",
+            color: "#fff",
+            borderRadius: "10px",
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            fontFamily: "Segoe UI, sans-serif",
+            fontSize: "14px",
+            fontWeight: "500",
+            boxShadow: "0 10px 25px rgba(0,0,0,0.25)",
+            zIndex: "99999",
+            transition: "right 0.4s ease"
+        });
+
+        document.body.appendChild(toast);
+
+        // Slide in
+        setTimeout(() => toast.style.right = "20px", 50);
+
+        // Slide out & remove
+        setTimeout(() => {
+            toast.style.right = "-400px";
+            setTimeout(() => toast.remove(), 400);
+        }, 3000);
+    }
+
+    }
+
+
+
+</script>
+
+<script>
+
+    $(document).ready(function () {
+
+        $('#skillDropdown').select2({
+            placeholder: "Search Skill",
+            allowClear: true,
+            width: '100%'
+        });
+
+    });
+
+</script>
+
+<script>
+    function validateProfilePhoto(input) {
+        if (input.files && input.files[0]) {
+
+            let file = input.files[0];
+
+            // Validate type
+            if (!file.type.match('image.*')) {
+                alert("Only image files allowed!");
+                input.value = "";
+                return;
+            }
+
+            // Validate size (2MB max)
+            if (file.size > 2 * 1024 * 1024) {
+                alert("Max size 2MB allowed!");
+                input.value = "";
+                return;
+            }
+
+            let reader = new FileReader();
+
+            reader.onload = function (e) {
+                document.getElementById("profilePreview").src = e.target.result;
+            };
+
+            reader.readAsDataURL(file);
+        }
+    }
+
+        for (let year = startYear; year <= endYear; year++) {
+        const academicYear = `${year}-${year + 1}`;
+        const option = document.createElement("option");
+        option.value = academicYear;
+        option.textContent = academicYear;
+        ddl.appendChild(option);
+    }
+
+        window.onload = function () {
+        toggleEducation();
+    };
+</script>
+
+<script>
+    function toggleEducation() {
+
+        var selectedValue = document.querySelector('input[name="EduType"]:checked')?.value;
+
+        var hscSection = document.getElementById("hscSection");
+        var diplomaSection = document.getElementById("diplomaSection");
+
+        if (selectedValue === "HSC") {
+            hscSection.style.display = "block";
+            diplomaSection.style.display = "none";
+        }
+        else if (selectedValue === "Diploma") {
+            hscSection.style.display = "none";
+            diplomaSection.style.display = "block";
+        }
+        else if (selectedValue === "Both") {
+            hscSection.style.display = "block";
+            diplomaSection.style.display = "block";
+        }
+        else {
+            // Default (nothing selected)
+            hscSection.style.display = "none";
+            diplomaSection.style.display = "none";
+        }
+    }
+
+    // Run on page load (important for edit mode)
+    window.onload = function () {
+        toggleEducation();
+    };
+</script>
+
+
+<script>
+    $(document).ready(function () {
+
+        $("#UpdateAll").click(function (e) {
+
+            debugger;
+
+            e.preventDefault();
+
+            var formData = new FormData();
+
+            formData.append("FirstName", $("#firstname").val());
+            formData.append("MiddleName", $("#middleName").val());
+            formData.append("LastName", $("#lastname").val());
+            formData.append("StudentId", $("#StudentId").val());
+            formData.append("MobileNo", $("#mobno").val());
+            
+            formData.append("AlternateMobile", $("#AlternateMobile").val());
+            formData.append("Email", $("#emailid").val());
+            formData.append("Acadamic_Year", $("#acadamicyear").val());
+            formData.append("BTech_Percentages", $("#btechpercentage").val());
+            formData.append("BTech_Passing_Year", $("#btechpassingyear").val());
+            formData.append("Skills", $("#skills").val());
+
+            // ✅ FILES
+        var btechFile = $("#BtechMarksheet")[0].files[0];
+        var resumeFile = $("#resume")[0].files[0];
+        var profileFile = $("#profilePhotoInput")[0].files[0];
+
+        if (profileFile) {
+        formData.append("Profile_photo", profileFile);
+        } else {
+                // 🔥 send old image path
+             formData.append("Personal_Photo", $("#OldProfilePhoto").val());
+         }
+
+        if (btechFile) {
+            formData.append("BTech_File", btechFile);
+        } else {
+            // 🔥 send old path
+            formData.append("BTech_Document_Path", $("#OldBTechPath").val());
+        }
+
+
+       
+
+        if (resumeFile) {
+            formData.append("Resume", resumeFile);
+        } else {
+            // 🔥 send old path
+            formData.append("ResumePath", $("#OldResumePath").val());
+        }
+
+            $.ajax({
+                url: '/Student/EditStudent',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+
+                success: function () {
+                    alert("Updated Successfully ✅");
+                },
+
+                error: function () {
+                    alert("Error ❌");
+                }
+            });
+
+        });
+
+    });
+</script>

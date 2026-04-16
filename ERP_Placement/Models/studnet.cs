@@ -70,6 +70,73 @@
         public IFormFile BTech_File { get; set; }
         public IFormFile Resume { get; set; }
         public IFormFile Profile_photo { get; set; }
+
+
+        // APPLIED JOB 
+
+        public int InterviewId { get; set; }
+        public string JobTitle { get; set; }
+        public string CompanyName { get; set; }
+        public string JobLocation { get; set; }
+        public string Salary { get; set; }
+        public DateTime InterviewDate { get; set; }
+        public string InterviewTime { get; set; }
+
+
+
+
     }
+
+
+    public class Test
+    {
+        public int TestId { get; set; }
+        public string TestName { get; set; }
+        public string Branch { get; set; }
+
+
+        public int QuestionId { get; set; }
+
+        //public int TestId { get; set; }
+
+        public string Question { get; set; }
+
+        public string OptionA { get; set; }
+
+        public string OptionB { get; set; }
+
+        public string OptionC { get; set; }
+
+        public string OptionD { get; set; }
+
+        public string CorrectOption { get; set; }
+
+        public int QuestionNo { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+        public string SelectedOption { get; set; }
+
+    }
+
+
+    public class AppliedInterview
+    {
+        public int InterviewId { get; set; }
+        public string JobTitle { get; set; }
+        public string CompanyName { get; set; }
+        public string JobLocation { get; set; }
+        public string Salary { get; set; }
+        public DateTime InterviewDate { get; set; }
+        public string InterviewTime { get; set; }
+        public string Status { get; set; }
+    }
+
+    public class SkillModel
+    {
+        public int SkillId { get; set; }
+
+        public string SkillName { get; set; }
+    }
+
 
 }

@@ -2,156 +2,710 @@
 
 @{
     ViewBag.Title = "Registered Companies";
+    Layout = "~/Views/Shared/Placement_Coordinator_layout.cshtml";
 }
 
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 <style>
+
+    body {
+        background: #f4f6fb;
+    }
+
+    .page-title {
+        color: #6a11cb;
+        font-weight: 600;
+    }
+
+    .filter-box {
+        background: white;
+        padding: 15px;
+        border-radius: 12px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        margin-bottom: 25px;
+    }
+
     .company-card {
-        border-radius: 16px;
-        transition: all 0.3s ease;
         border: none;
+        border-radius: 14px;
+        background: white;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        transition: 0.3s;
     }
 
         .company-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
 
     .company-header {
-        background: linear-gradient(135deg, #2563eb, #1d4ed8);
-        color: white;
-        border-radius: 16px 16px 0 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
         padding: 15px;
+        border-bottom: 1px solid #eee;
     }
 
-    .company-info i {
-        width: 20px;
+    .company-logo {
+        width: 55px;
+        height: 55px;
+        background: #f2f2f2;
+        border-radius: 10px;
+        padding: 4px;
+        object-fit: contain;
+    }
+
+    .company-name {
+        font-weight: 600;
+        font-size: 17px;
+        color: #333;
     }
 
     .badge-domain {
-        background: #eef2ff;
-        color: #1d4ed8;
-        font-weight: 500;
+        background: #e9ddff;
+        color: #6a11cb;
+        padding: 4px 10px;
+        border-radius: 8px;
+        font-size: 12px;
     }
 
-    .card-footer {
-        background: #f9fafb;
-        border-top: none;
+    .hr-box {
+        background: #f8f9ff;
+        border-radius: 10px;
+        padding: 10px;
+        margin-top: 10px;
     }
+
+
+    .company-card-hover {
+        transition: all 0.3s ease;
+    }
+
+        .company-card-hover:hover {
+            transform: translateY(-6px) scale(1.01);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
 </style>
 
 
-<div class="container mt-4">
 
-    <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="fw-bold text-dark">
-            <i class="bi bi-buildings me-2 text-primary"></i>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <h4 class="page-title">
+            <i class="bi bi-buildings me-2"></i>
             Registered Companies
         </h4>
 
-        <a asp-controller="Trainer"
-           asp-action="CompanyRegistration"
-           class="btn btn-primary rounded-pill px-4 shadow-sm">
-            <i class="bi bi-plus-circle me-1"></i> Add New Company
-        </a>
+        <button class="btn text-white"
+                style="background:#6a11cb"
+                data-bs-toggle="modal"
+                data-bs-target="#companyModal">
+
+            <i class="bi bi-plus-circle"></i>
+            Add Company
+
+        </button>
+
     </div>
 
 
-    <div class="row">
+    <div class="filter-box">
+
+        <div class="row g-2">
+
+            <div class="col-md-6">
+
+                <input type="text"
+                       id="searchCompany"
+                       class="form-control"
+                       placeholder="Search Company / HR Name">
+
+            </div>
+
+            <div class="col-md-6">
+
+                <select id="domainFilter" class="form-select">
+
+                    <option value="">All Domains</option>
+
+                    @if (Model != null)
+                    {
+                        var domains = Model.DefaultView.ToTable(true, "CompanyDomain");
+
+                        foreach (System.Data.DataRow dr in domains.Rows)
+                        {
+                            <option>@dr["CompanyDomain"]</option>
+                        }
+                    }
+
+                </select>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="row g-4">
 
         @if (Model != null && Model.Rows.Count > 0)
         {
             foreach (System.Data.DataRow row in Model.Rows)
             {
-                <div class="col-md-6 col-lg-4 mb-4">
 
-                    <div class="card company-card shadow-sm h-100">
+                <div class="col-md-6 col-lg-4 company-item"
+                     data-domain="@row["CompanyDomain"]">
 
-                        <!-- Company Header -->
-                        <div class="company-header">
-                            <h5 class="mb-0 fw-bold">
-                                @row["CompanyName"]
-                            </h5>
+                    <div class="card h-100 shadow-sm border-0 company-card-hover" style="border-radius:14px; overflow:hidden;">
+
+                        <!-- HEADER -->
+
+                        <div class="d-flex align-items-center p-3 text-white"
+                             style="background: linear-gradient(135deg,#6a11cb,#8e54e9);">
+
+                            <img src="@row["CompanyLogo"]"
+                                 class="me-3"
+                                 style="width:55px;height:55px;border-radius:10px;background:white;padding:4px;object-fit:contain;"
+                                 onerror="this.onerror=null;this.src='https://cdn-icons-png.flaticon.com/512/5968/5968705.png';" />
+
+                            <div class="flex-grow-1">
+
+                                <div class="fw-semibold" style="font-size:16px;">
+                                    @row["CompanyName"]
+                                </div>
+
+                                <span class="badge bg-light text-dark mt-1">
+                                    @row["CompanyDomain"]
+                                </span>
+
+                            </div>
+
                         </div>
+
+
+                        <!-- BODY -->
 
                         <div class="card-body">
 
-                            <div class="company-info mb-2">
-                                <p class="mb-1">
-                                    <i class="bi bi-globe text-muted me-2"></i>
-                                    <small>@row["CompanyWebsite"]</small>
-                                </p>
+                        <p class="text-muted small mb-3 description-text"
+                           data-bs-toggle="tooltip"
+                           data-bs-custom-class="custom-tooltip"
+                           title="@row["CompanyDescription"]"
+                           style="min-height:45px;">
 
-                                <p class="mb-2">
-                                    <span class="badge badge-domain">
-                                        @row["CompanyDomain"]
-                                    </span>
-                                </p>
-                            </div>
-
-                            <hr />
-
-                            <!-- HR Details -->
-                            <p class="mb-1">
-                                <i class="bi bi-person-fill text-secondary me-2"></i>
-                                <strong>@row["HRName"]</strong>
-                            </p>
-
-                            <p class="mb-1">
-                                <i class="bi bi-telephone-fill text-secondary me-2"></i>
-                                @row["HRMobNo"]
-                            </p>
-
-                            <p class="mb-2">
-                                <i class="bi bi-envelope-fill text-secondary me-2"></i>
-                                @row["HREmailId"]
-                            </p>
-
-                            <!-- Description -->
-                            <p class="small text-muted mb-2">
+                            <span style="
+                display:-webkit-box;
+                -webkit-line-clamp:2;
+                -webkit-box-orient:vertical;
+                overflow:hidden;">
                                 @row["CompanyDescription"]
+                            </span>
+
+                            <span class="read-more text-primary"
+                                  style="cursor:pointer; margin-left:5px;">
+                                Read More
+                            </span>
+                        </p>
+
+
+                            <p class="mb-2 small">
+
+                                <i class="bi bi-globe me-2 text-primary"></i>
+
+                                <a href="@row["CompanyWebsite"]"
+                                   target="_blank"
+                                   class="text-decoration-none">
+
+                                    @row["CompanyWebsite"]
+
+                                </a>
+
                             </p>
 
-                            <!-- Registration Date -->
-                            <p class="small text-muted">
-                                <i class="bi bi-calendar-event me-1"></i>
-                                @Convert.ToDateTime(row["RegistrationDate"]).ToString("dd MMM yyyy")
-                            </p>
+
+                            <!-- HR CONTACT BOX -->
+
+                            <div class="p-2 rounded"
+                                 style="background:#f6f4ff;">
+
+                                <p class="mb-1 small">
+
+                                    <i class="bi bi-person text-primary"></i>
+
+                                    <strong class="ms-1">
+                                        @row["HRName"]
+                                    </strong>
+
+                                </p>
+
+                                <p class="mb-1 small">
+
+                                    <i class="bi bi-telephone text-success"></i>
+
+                                    <span class="ms-1">
+                                        @row["HRMobNo"]
+                                    </span>
+
+                                </p>
+
+                                <p class="mb-0 small">
+
+                                    <i class="bi bi-envelope text-danger"></i>
+
+                                    <span class="ms-1">
+                                        @row["HREmailId"]
+                                    </span>
+
+                                </p>
+
+                            </div>
 
                         </div>
 
-                        <!-- Footer Buttons -->
-                        <div class="card-footer text-end">
 
-                            <a class="btn btn-sm btn-outline-success rounded-pill me-2"
+                        <!-- FOOTER -->
+
+                        <div class="card-footer bg-white border-0 text-end pb-3">
+
+                            <a class="btn btn-sm btn-success me-2"
                                href="@Url.Action("AddVacancy", "Trainer", new { id = row["CompanyId"] })">
-                                <i class="bi bi-briefcase-fill me-1"></i> Vacancy
+
+                                <i class="bi bi-briefcase"></i>
+                                Vacancy
+
                             </a>
 
-                            <a class="btn btn-sm btn-outline-primary rounded-pill"
-                               href="@Url.Action("ViewCompany", "Trainer", new { id = row["CompanyId"] })">
-                                <i class="bi bi-eye-fill me-1"></i> View
-                            </a>
+                            <button class="btn btn-sm btn-primary viewCompanyBtn"
+                                    data-logo="@row["CompanyLogo"]"
+                                    data-name="@row["CompanyName"]"
+                                    data-domain="@row["CompanyDomain"]"
+                                    data-desc="@row["CompanyDescription"]"
+                                    data-website="@row["CompanyWebsite"]"
+                                    data-hr="@row["HRName"]"
+                                    data-mobile="@row["HRMobNo"]"
+                                    data-email="@row["HREmailId"]">
+
+                                <i class="bi bi-eye"></i>
+                                View
+
+                            </button>
 
                         </div>
 
                     </div>
 
                 </div>
+
             }
         }
         else
         {
+
             <div class="col-12">
+
                 <div class="alert alert-warning text-center shadow-sm">
-                    <i class="bi bi-exclamation-triangle me-2"></i>
-                    No registered companies found.
+
+                    No Companies Registered
+
                 </div>
+
             </div>
+
         }
 
     </div>
 
+
+
+
+
+<!-- VIEW COMPANY MODAL -->
+
+<div class="modal fade" id="viewCompanyModal">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header text-white"
+                 style="background:#6a11cb">
+
+                <h5 class="modal-title">Company Details</h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"></button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="text-center mb-3">
+
+                    <img id="vLogo"
+                         style="width:80px;height:80px;border-radius:10px" onerror="this.onerror=null;this.src='https://cdn-icons-png.flaticon.com/512/5968/5968705.png';">
+
+                </div>
+
+                <h5 id="vName" class="text-center"></h5>
+
+                <p class="text-center">
+                    <span class="badge bg-secondary" id="vDomain"></span>
+                </p>
+
+                <p id="vDesc"></p>
+
+                <hr>
+
+                <p>
+                    <i class="bi bi-globe"></i>
+                    <a id="vWebsite" target="_blank"></a>
+                </p>
+
+                <p>
+                    <i class="bi bi-person"></i>
+                    <strong id="vHR"></strong>
+                </p>
+
+                <p>
+                    <i class="bi bi-telephone"></i>
+                    <span id="vMobile"></span>
+                </p>
+
+                <p>
+                    <i class="bi bi-envelope"></i>
+                    <span id="vEmail"></span>
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
+
+
+<!-- COMPANY REGISTRATION MODAL -->
+
+<div class="modal fade" id="companyModal">
+
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content">
+
+            <div class="modal-header text-white"
+                 style="background: linear-gradient(135deg,#6a11cb,#8e54e9);">
+
+                <h5 class="modal-title">Register Company</h5>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+
+            </div>
+
+
+            <form id="companyForm"
+                  asp-action="CompanySave"
+                  method="post"
+                  enctype="multipart/form-data">
+
+                <div class="modal-body">
+
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+
+                            <label>Company Name</label>
+                            <input id="CompanyName"
+                                   name="CompanyName"
+                                   class="form-control">
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label>Company Logo</label>
+
+                            <input type="file"
+                                   id="CompanyLogo"
+                                   name="CompanyLogo"
+                                   class="form-control"
+                                   accept=".jpg,.jpeg">
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label>Company Website</label>
+
+                            <input id="CompanyWebsite"
+                                   name="CompanyWebsite"
+                                   class="form-control">
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label>Company Domain</label>
+
+                            <select id="CompanyDomain"
+                                    name="CompanyDomain"
+                                    class="form-select">
+
+                                <option value="">Select Domain</option>
+                                <option value="Mechanical">Mechanical</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Civil">Civil</option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label>HR Name</label>
+
+                            <input id="HRName"
+                                   name="HRName"
+                                   class="form-control">
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label>HR Email</label>
+
+                            <input id="HRMail"
+                                   name="HRMail"
+                                   class="form-control">
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <label>HR Mobile</label>
+
+                            <input id="HRMobNo"
+                                   name="HRMobNo"
+                                   class="form-control">
+
+                        </div>
+
+                        <div class="col-12">
+
+                            <label>Description</label>
+
+<textarea id="CompanyDescription"
+          name="CompanyDescription"
+          class="form-control"
+          rows="3"></textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button type="submit"
+                            class="btn text-white w-100"
+                            style="background: linear-gradient(135deg,#6a11cb,#8e54e9);">
+
+                        Register Company
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    $("#searchCompany").on("keyup",function(){
+
+    var value=$(this).val().toLowerCase();
+
+    $(".company-item").filter(function(){
+
+    $(this).toggle($(this).text().toLowerCase().indexOf(value)>-1)
+
+    });
+
+    });
+
+
+    $("#domainFilter").change(function(){
+
+    var domain=$(this).val();
+
+    $(".company-item").each(function(){
+
+    var itemDomain=$(this).data("domain");
+
+    if(domain=="" || itemDomain==domain)
+    {
+    $(this).show();
+    }
+    else
+    {
+    $(this).hide();
+    }
+
+    });
+
+    });
+
+
+    $(".viewCompanyBtn").click(function(){
+
+    $("#vLogo").attr("src",$(this).data("logo"));
+    $("#vName").text($(this).data("name"));
+    $("#vDomain").text($(this).data("domain"));
+    $("#vDesc").text($(this).data("desc"));
+    $("#vWebsite").text($(this).data("website"));
+    $("#vWebsite").attr("href",$(this).data("website"));
+    $("#vHR").text($(this).data("hr"));
+    $("#vMobile").text($(this).data("mobile"));
+    $("#vEmail").text($(this).data("email"));
+
+    $("#viewCompanyModal").modal("show");
+
+    });
+
+</script>
+
+<script>
+
+    $("#companyForm").submit(function () {
+
+    if ($("#CompanyName").val().trim() == "") {
+    toastr.error("Please fill Company Name");
+    $("#CompanyName").focus();
+    return false;
+    }
+
+    if ($("#CompanyWebsite").val().trim() == "") {
+    toastr.error("Please fill Company Website");
+    $("#CompanyWebsite").focus();
+    return false;
+    }
+
+        if ($("#CompanyDomain").val() == "") {
+        toastr.error("Please select Company Domain");
+        $("#CompanyDomain").focus();
+        return false;
+    }
+
+    if ($("#HRName").val().trim() == "") {
+    toastr.error("Please fill HR Name");
+    $("#HRName").focus();
+    return false;
+    }
+
+    var email = $("#HRMail").val();
+
+    if (email.trim() == "") {
+    toastr.error("Please fill HR Email");
+    $("#HRMail").focus();
+    return false;
+    }
+
+    var emailPattern = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+
+    if (!emailPattern.test(email)) {
+    toastr.error("Please enter valid email");
+    $("#HRMail").focus();
+    return false;
+    }
+
+
+    var mobile = $("#HRMobNo").val();
+
+    if (mobile.trim() == "") {
+    toastr.error("Please fill HR Mobile");
+    $("#HRMobNo").focus();
+    return false;
+    }
+
+    var mobilePattern = /^[6-9][0-9]{9}$/;
+
+    if (!mobilePattern.test(mobile)) {
+    toastr.error("Enter valid 10 digit mobile number");
+    $("#HRMobNo").focus();
+    return false;
+    }
+
+
+    if ($("#CompanyDescription").val().trim() == "") {
+    toastr.error("Please enter company description");
+    $("#CompanyDescription").focus();
+    return false;
+    }
+
+
+    var file = $("#CompanyLogo")[0].files[0];
+
+    if (!file) {
+    toastr.error("Please upload company logo");
+    return false;
+    }
+
+    if (file.size > 1048576) {
+    toastr.error("Image must be less than 1 MB");
+    return false;
+    }
+
+    var allowed = ["image/jpeg", "image/jpg"];
+
+    if ($.inArray(file.type, allowed) === -1) {
+    toastr.error("Only JPG/JPEG image allowed");
+    return false;
+    }
+
+    });
+
+    $(document).ready(function () {
+
+        // Enable Bootstrap tooltip
+        $('[data-bs-toggle="tooltip"]').tooltip();
+
+        // Read More toggle
+        $(".read-more").click(function () {
+
+            var parent = $(this).closest(".description-text");
+            var text = parent.find(".short-text");
+
+            if (text.css("-webkit-line-clamp") == "2") {
+                text.css("-webkit-line-clamp", "unset");
+                $(this).text(" Read Less");
+            } else {
+                text.css("-webkit-line-clamp", "2");
+                $(this).text(" Read More");
+            }
+
+        });
+
+    });
+</script>
+
+   

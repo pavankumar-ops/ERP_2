@@ -1,139 +1,850 @@
-﻿@model System.Data.DataTable
-@using System.Data
+﻿@model JobVacancyModel
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+@{
+    
+    ViewData["Title"] = "Add Vacancy";
+    Layout = "~/Views/Shared/Placement_Coordinator_layout.cshtml";
 
-<div class="container mt-4">
 
-    @if (TempData["Success"] != null)
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+
+
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="fw-bold">Company Vacancy List</h4>
+
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#vacancyModal">
+            + Add New Vacancy
+        </button>
+    </div>
+
+
+
+    @if (TempData["success"] != null)
     {
-        <div class="alert alert-success alert-dismissible fade show">
-            @TempData["Success"]
-            <button class="btn-close" data-bs-dismiss="alert"></button>
+        <div class="modal fade" id="successModal">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content text-center">
+                    <div class="modal-body p-4">
+
+                        <div style="font-size:60px;color:#28a745;">✔</div>
+
+                        <h4 class="text-success mt-3">Success</h4>
+
+                        <p>@TempData["success"]</p>
+
+                        <button class="btn btn-success px-4" data-bs-dismiss="modal">OK</button>
+
+                    </div>
+                </div>
+            </div>
         </div>
     }
 
-    <!-- ADD VACANCY FORM -->
-    <div class="card shadow mb-4">
-        <div class="card-header bg-primary text-white fw-bold">
-            Add Job Vacancy
-        </div>
+    <div class="page-header"
+         style="background:linear-gradient(135deg,#6a11cb,#8e54e9);padding:15px 25px;border-radius:12px;color:white;margin-bottom:25px;box-shadow:0 8px 20px rgba(0,0,0,0.15);">
 
-        <div class="card-body">
-            <form asp-action="AddVacancy" method="post" class="row g-3">
+        <h4 class="mb-0">Job Vacancy List</h4>
 
-               @*  <div class="col-md-6">
-                    <select name="CompanyId" class="form-select" required>
-                        <option value="">-- Select Company --</option>
-                        @foreach (DataRow row in (DataTable)ViewBag.CompanyList)
-                        {
-                            <option value="@row["CompanyId"]">
-                                @row["CompanyName"]
-                            </option>
-                        }
-                    </select>
-                </div>
- *@
-                <div class="col-md-6">
-                    <input name="JobTitle"
-                           class="form-control"
-                           placeholder="Job Title"
-                           required />
-                </div>
-
-                <div class="col-md-4">
-                    <input name="NoOfOpenings"
-                           type="number"
-                           class="form-control"
-                           placeholder="No of Openings"
-                           required />
-                </div>
-
-                <div class="col-md-4">
-                    <input name="JobLocation"
-                           class="form-control"
-                           placeholder="Job Location" />
-                </div>
-
-                <div class="col-md-4">
-                    <input name="Salary"
-                           class="form-control"
-                           placeholder="Salary" />
-                </div>
-
-                <div class="col-md-6">
-                    <input name="LastDate"
-                           type="date"
-                           class="form-control"
-                           required />
-                </div>
-
-                <div class="col-12 text-end">
-                    <button class="btn btn-success px-4">
-                        Add Vacancy
-                    </button>
-                </div>
-
-            </form>
-        </div>
     </div>
 
-    <!-- VACANCY LIST -->
-    <div class="card shadow">
-        <div class="card-header bg-dark text-white fw-bold">
-            Vacancy List
-        </div>
+    <div class="row">
 
-        <div class="card-body table-responsive">
-            <table class="table table-hover align-middle">
-                <thead class="table-secondary">
-                    <tr>
-                        <th>Company</th>
-                        <th>Job Title</th>
-                        <th>Openings</th>
-                        <th>Location</th>
-                        <th>Salary</th>
-                        <th>Last Date</th>
-                    </tr>
-                </thead>
+        @if (ViewBag.VacancyList != null)
+        {
 
-                <tbody>
-                    @if (Model != null && Model.Rows.Count > 0)
-                    {
-                        foreach (DataRow row in Model.Rows)
-                        {
-                            <tr>
-                                <td>@row["CompanyName"]</td>
-                                <td class="fw-semibold">@row["JobTitle"]</td>
-                                <td>
-                                    <span class="badge bg-success">
-                                        @row["NoOfOpenings"]
-                                    </span>
-                                </td>
-                                <td>@row["JobLocation"]</td>
-                                <td>@row["Salary"]</td>
-                                <td>
-                                    @Convert.ToDateTime(row["LastDate"])
-                                    .ToString("dd MMM yyyy")
-                                </td>
-                            </tr>
-                        }
-                    }
-                    else
-                    {
-                        <tr>
-                            <td colspan="6"
-                                class="text-center text-danger">
-                                No vacancies added
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+            System.Data.DataTable dt = ViewBag.VacancyList as System.Data.DataTable;
+            foreach (System.Data.DataRow row in dt.Rows)
+            {
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+
+                    <div class="card shadow-lg"
+                         style="border:none;border-radius:16px;overflow:hidden;
+                    transition:all 0.3s ease;
+                    cursor:pointer;"
+                         onmouseover="this.style.transform='translateY(-8px) scale(1.02)';this.style.boxShadow='0 15px 35px rgba(0,0,0,0.2)';"
+                         onmouseout="this.style.transform='translateY(0) scale(1)';this.style.boxShadow='0 5px 15px rgba(0,0,0,0.1)';">
+
+                        <!-- CARD HEADER -->
+
+                        <div style="background:linear-gradient(135deg,#6a11cb,#8e54e9);
+                        padding:12px 15px;
+                        color:white;
+                        font-weight:600;
+                        display:flex;
+                        justify-content:space-between;
+                        align-items:center;">
+
+                            <span style="font-size:14px;">
+                                💼 Job Vacancy
+                            </span>
+
+                            <span class="badge bg-light text-dark"
+                                  style="font-size:11px;">
+                                @row["JobType"]
+                            </span>
+
+                        </div>
+
+
+                        <!-- CARD BODY -->
+
+                        <div class="card-body text-center p-4">
+
+                            <h5 style="color:#6a11cb;font-weight:700;">
+                                @row["JobTitle"]
+                            </h5>
+
+                            <hr style="margin:10px 0;">
+
+
+                            <p style="font-size:13px;color:#555;line-height:22px;">
+
+                                📍 <b>Location :</b> @row["JobLocation"] <br />
+
+                                👥 <b>Openings :</b> @row["NoOfOpenings"] <br />
+
+                                💰 <b>Salary :</b> ₹@row["Salary"]
+
+                            </p>
+
+
+                            <span class="badge bg-danger"
+                                  style="font-size:12px;padding:6px 10px;">
+
+                                ⏰ Last Date :
+                                @Convert.ToDateTime(row["LastDate"]).ToString("dd-MM-yyyy")
+
+                            </span>
+
+                        </div>
+
+
+                        <!-- CARD FOOTER -->
+
+                        <div class="card-footer bg-white border-0 pb-3">
+
+                            <div class="d-flex justify-content-center gap-2">
+
+                                <!-- VIEW BUTTON -->
+
+                                <button class="btn btn-sm viewBtn"
+                                        style="background:#6a11cb;color:white;border-radius:20px;padding:6px 16px;"
+                                        data-title="@row["JobTitle"]"
+                                        data-desc="@row["JobDescription"]"
+                                        data-open="@row["NoOfOpenings"]"
+                                        data-location="@row["JobLocation"]"
+                                        data-salary="@row["Salary"]"
+                                        data-type="@row["JobType"]"
+                                        data-exp="@row["ExperienceRequired"]"
+                                        data-qual="@row["Qualification"]"
+                                        data-skills="@row["SkillsRequired"]"
+                                        data-last="@Convert.ToDateTime(row["LastDate"]).ToString("dd-MM-yyyy")">
+
+                                    🔍 View
+
+                                </button>
+
+
+                                <!-- DELETE BUTTON -->
+
+                                <a href="/Trainer/DeleteVacancy/@row["VacancyId"]"
+                                   class="btn btn-danger btn-sm"
+                                   style="border-radius:20px;padding:6px 16px;">
+
+                                    🗑 Delete
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+        }
+
     </div>
 
+
+  
+
+   
+
+
+
+
+<div class="modal fade" id="messageModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center">
+
+            <div class="modal-body p-4">
+
+                <div style="font-size:60px;color:#dc3545;">
+                    <i class="bi bi-x-circle-fill"></i>
+                </div>
+
+                <h4 class="mt-3">Rejected</h4>
+
+                <p>@TempData["Message"]</p>
+
+                <button class="btn btn-danger mt-2" data-bs-dismiss="modal">
+                    OK
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="jobModal">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content"
+             style="border-radius:12px;overflow:hidden;">
+
+            <!-- HEADER -->
+
+            <div class="modal-header text-white py-2"
+                 style="background:linear-gradient(135deg,#6a11cb,#8e54e9);">
+
+                <h6 class="modal-title fw-bold">
+                    Job Details
+                </h6>
+
+                <button class="btn-close btn-close-white"
+                        data-bs-dismiss="modal"></button>
+
+            </div>
+
+
+            <!-- BODY -->
+
+            <div class="modal-body"
+                 style="background:#f7f3ff;padding:15px;">
+
+                <!-- TITLE -->
+
+                <h5 id="m_title"
+                    style="color:#6a11cb;font-weight:700;"></h5>
+
+                <p id="m_desc"
+                   style="font-size:13px;color:#555;margin-bottom:10px;"></p>
+
+
+                <!-- INFO GRID -->
+
+                <div class="row" style="font-size:13px;">
+
+                    <div class="col-6 mb-2">
+                        <b>📍 Location</b><br>
+                        <span id="m_location"></span>
+                    </div>
+
+                    <div class="col-6 mb-2">
+                        <b>👥 Openings</b><br>
+                        <span id="m_open"></span>
+                    </div>
+
+                    <div class="col-6 mb-2">
+                        <b>💰 Salary</b><br>
+                        ₹<span id="m_salary"></span>
+                    </div>
+
+                    <div class="col-6 mb-2">
+                        <b>💼 Job Type</b><br>
+                        <span id="m_type"></span>
+                    </div>
+
+                    <div class="col-6 mb-2">
+                        <b>⏳ Experience</b><br>
+                        <span id="m_exp"></span>
+                    </div>
+
+                    <div class="col-6 mb-2">
+                        <b>🎓 Qualification</b><br>
+                        <span id="m_qual"></span>
+                    </div>
+
+                </div>
+
+
+                <!-- SKILLS -->
+
+                <div class="mt-2">
+
+                    <b style="font-size:13px;color:#6a11cb;">
+                        Skills
+                    </b>
+
+                    <div id="m_skills" class="mt-1"></div>
+
+                </div>
+
+
+                <!-- LAST DATE -->
+
+                <div class="mt-3 text-end">
+
+                    <span class="badge bg-danger"
+                          style="font-size:12px;padding:5px 10px;">
+
+                        Last Date :
+                        <span id="m_last"></span>
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- FOOTER -->
+
+            <div class="modal-footer py-2">
+
+                <button class="btn btn-sm"
+                        style="background:#6a11cb;color:white;border-radius:20px;"
+                        data-bs-dismiss="modal">
+
+                    Close
+
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- VIEW MODAL -->
+
+<div class="modal fade" id="jobModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content"
+             style="border-radius:15px;overflow:hidden;">
+
+            <!-- HEADER -->
+
+            <div class="modal-header text-white"
+                 style="background:linear-gradient(135deg,#6a11cb,#8e54e9);">
+
+                <h5 class="modal-title fw-bold">
+                    💼 Job Vacancy Details
+                </h5>
+
+                <button class="btn-close btn-close-white"
+                        data-bs-dismiss="modal"></button>
+
+            </div>
+
+
+            <!-- BODY -->
+
+            <div class="modal-body"
+                 style="background:#f7f3ff;padding:25px;">
+
+
+                <!-- JOB TITLE SECTION -->
+
+                <div class="text-center mb-3">
+
+                    <h3 id="m_title"
+                        style="color:#6a11cb;font-weight:700;"></h3>
+
+                    <span class="badge bg-primary"
+                          style="padding:6px 14px;font-size:13px;"
+                          id="m_type"></span>
+
+                </div>
+
+                <hr>
+
+
+                <!-- JOB DESCRIPTION -->
+
+                <div class="mb-4">
+
+                    <h6 style="font-weight:700;color:#6a11cb;">
+                        📄 Job Description
+                    </h6>
+
+                    <p id="m_desc"
+                       style="color:#555;font-size:14px;"></p>
+
+                </div>
+
+
+                <!-- JOB DETAILS GRID -->
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+
+                        <div class="p-3"
+                             style="background:white;border-radius:10px;
+                                    box-shadow:0 3px 10px rgba(0,0,0,0.1);">
+
+                            📍 <b>Location</b><br>
+                            <span id="m_location"></span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-6 mb-3">
+
+                        <div class="p-3"
+                             style="background:white;border-radius:10px;
+                                    box-shadow:0 3px 10px rgba(0,0,0,0.1);">
+
+                            👥 <b>Openings</b><br>
+                            <span id="m_open"></span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-6 mb-3">
+
+                        <div class="p-3"
+                             style="background:white;border-radius:10px;
+                                    box-shadow:0 3px 10px rgba(0,0,0,0.1);">
+
+                            💰 <b>Salary</b><br>
+                            ₹<span id="m_salary"></span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-6 mb-3">
+
+                        <div class="p-3"
+                             style="background:white;border-radius:10px;
+                                    box-shadow:0 3px 10px rgba(0,0,0,0.1);">
+
+                            🎓 <b>Qualification</b><br>
+                            <span id="m_qual"></span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-6 mb-3">
+
+                        <div class="p-3"
+                             style="background:white;border-radius:10px;
+                                    box-shadow:0 3px 10px rgba(0,0,0,0.1);">
+
+                            ⏳ <b>Experience</b><br>
+                            <span id="m_exp"></span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-6 mb-3">
+
+                        <div class="p-3"
+                             style="background:white;border-radius:10px;
+                                    box-shadow:0 3px 10px rgba(0,0,0,0.1);">
+
+                            📅 <b>Last Date</b><br>
+                            <span id="m_last"></span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SKILLS -->
+
+                <hr>
+
+                <h6 style="font-weight:700;color:#6a11cb;">
+                    🧠 Required Skills
+                </h6>
+
+                <div id="m_skills" style="margin-top:8px;"></div>
+
+
+            </div>
+
+
+            <!-- FOOTER -->
+
+            <div class="modal-footer"
+                 style="background:#f7f3ff;">
+
+                <button class="btn"
+                        style="background:#6a11cb;color:white;
+                               border-radius:25px;padding:8px 25px;"
+                        data-bs-dismiss="modal">
+
+                    Close
+
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- ADD VACANCY MODAL -->
+
+<div class="modal fade" id="vacancyModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="border-radius:12px;overflow:hidden;">
+
+            <!-- HEADER -->
+
+            <div class="modal-header text-white"
+                 style="background:linear-gradient(135deg,#6a11cb,#8e54e9);">
+
+                <h5 class="modal-title fw-bold">
+                    Add Job Vacancy
+                </h5>
+
+                <button type="button"
+                        class="btn-close btn-close-white"
+                        data-bs-dismiss="modal"></button>
+
+            </div>
+
+            <!-- BODY -->
+
+            <div class="modal-body"
+                 style="background:#f7f3ff;padding:25px;">
+
+                <input type="hidden" id="CompanyId" value="@Model.CompanyId" />
+
+                <div class="row">
+
+                    <!-- Job Title -->
+
+                    <div class="col-md-6 mb-3">
+                        <label style="font-weight:600;">Job Title *</label>
+
+                        <input type="text"
+                               id="JobTitle"
+                               class="form-control"
+                               style="border-radius:8px;">
+                    </div>
+
+                    <!-- Openings -->
+
+                    <div class="col-md-6 mb-3">
+                        <label style="font-weight:600;">No Of Openings *</label>
+
+                        <input type="number"
+                               id="NoOfOpenings"
+                               class="form-control"
+                               style="border-radius:8px;">
+                    </div>
+
+                    <!-- Location -->
+
+                    <div class="col-md-6 mb-3">
+                        <label style="font-weight:600;">Job Location *</label>
+
+                        <input type="text"
+                               id="JobLocation"
+                               class="form-control"
+                               style="border-radius:8px;">
+                    </div>
+
+                    <!-- Salary -->
+
+                    <div class="col-md-6 mb-3">
+                        <label style="font-weight:600;">Salary</label>
+
+                        <input type="number"
+                               id="Salary"
+                               class="form-control"
+                               style="border-radius:8px;">
+                    </div>
+
+                    <!-- Job Type -->
+
+                    <div class="col-md-6 mb-3">
+                        <label style="font-weight:600;">Job Type *</label>
+
+                        <select id="JobType"
+                                class="form-control"
+                                style="border-radius:8px;">
+
+                            <option value="">Select</option>
+                            <option>Full Time</option>
+                            <option>Part Time</option>
+                            <option>Internship</option>
+
+                        </select>
+                    </div>
+
+                    <!-- Experience -->
+
+                    <div class="col-md-6 mb-3">
+                        <label style="font-weight:600;">Experience Required</label>
+
+                        <input type="text"
+                               id="ExperienceRequired"
+                               class="form-control"
+                               style="border-radius:8px;">
+                    </div>
+
+                    <!-- Qualification -->
+
+                    <div class="col-md-6 mb-3">
+                        <label style="font-weight:600;">Qualification *</label>
+
+                        <input type="text"
+                               id="Qualification"
+                               class="form-control"
+                               style="border-radius:8px;">
+                    </div>
+
+                    <!-- Last Date -->
+
+                    <div class="col-md-6 mb-3">
+                        <label style="font-weight:600;">Last Date *</label>
+
+                        <input type="date"
+                               id="LastDate"
+                               class="form-control"
+                               style="border-radius:8px;">
+                    </div>
+
+                    <!-- Job Description -->
+
+                    <div class="col-md-12 mb-3">
+                        <label style="font-weight:600;">Job Description</label>
+
+                        <textarea id="JobDescription"
+                                  rows="3"
+                                  class="form-control"
+                                  style="border-radius:8px;"></textarea>
+                    </div>
+
+                    <!-- Skills -->
+
+                    <div class="col-md-12 mb-3">
+                        <label style="font-weight:600;">Skills Required</label>
+
+                        <input type="text"
+                               id="SkillsRequired"
+                               class="form-control"
+                               placeholder="Example: C#, SQL, HTML"
+                               style="border-radius:8px;">
+                    </div>
+
+                    <!-- Active Checkbox -->
+
+                    <div class="col-md-12">
+
+                        <div style="background:white;padding:10px;border-radius:8px;border:1px solid #ddd;">
+
+                            <label style="font-weight:600;">
+                                <input type="checkbox"
+                                       id="IsActive"
+                                       checked
+                                       style="margin-right:6px;">
+
+                                Vacancy Active
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- FOOTER -->
+
+            <div class="modal-footer"
+                 style="background:#f7f3ff;">
+
+                <button class="btn"
+                        onclick="SaveVacancy()"
+                        style="background:#6a11cb;color:white;border-radius:25px;padding:8px 25px;">
+
+                    Save Vacancy
+
+                </button>
+
+                <button class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                        style="border-radius:25px;">
+
+                    Close
+
+                </button>
+
+            </div>
+
+        </div>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
+
+<script>
+
+    function SaveVacancy() {
+
+        if ($("#JobTitle").val() == "") {
+            toastr.error("Job Title Required");
+            return;
+        }
+
+        if ($("#NoOfOpenings").val() == "") {
+            toastr.error("Enter No Of Openings");
+            return;
+        }
+
+        if ($("#JobLocation").val() == "") {
+            toastr.error("Enter Job Location");
+            return;
+        }
+
+        if ($("#JobType").val() == "") {
+            toastr.error("Select Job Type");
+            return;
+        }
+
+        if ($("#Qualification").val() == "") {
+            toastr.error("Qualification Required");
+            return;
+        }
+
+        if ($("#LastDate").val() == "") {
+            toastr.error("Select Last Date");
+            return;
+        }
+
+        var model = {
+
+            CompanyId: $("#CompanyId").val(),
+            JobTitle: $("#JobTitle").val(),
+            JobDescription: $("#JobDescription").val(),
+            NoOfOpenings: $("#NoOfOpenings").val(),
+            JobLocation: $("#JobLocation").val(),
+            Salary: $("#Salary").val(),
+            JobType: $("#JobType").val(),
+            ExperienceRequired: $("#ExperienceRequired").val(),
+            Qualification: $("#Qualification").val(),
+            SkillsRequired: $("#SkillsRequired").val(),
+            LastDate: $("#LastDate").val(),
+            IsActive: $("#IsActive").is(":checked")
+        };
+
+        $.ajax({
+
+            url: '/Trainer/SaveVacancy',
+            type: 'POST',
+            data: model,
+
+            success: function (res) {
+
+                if (res.success) {
+
+                    toastr.success(res.message);
+
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1200);
+
+                } else {
+
+                    toastr.error(res.message);
+
+                }
+            }
+
+        });
+
+    }
+
+</script>
+
+
+<script>
+
+    $(document).on("click",".viewBtn",function(){
+
+    var btn=$(this);
+
+    $("#m_title").text(btn.data("title"));
+    $("#m_desc").text(btn.data("desc"));
+    $("#m_open").text(btn.data("open"));
+    $("#m_location").text(btn.data("location"));
+    $("#m_salary").text(btn.data("salary"));
+    $("#m_type").text(btn.data("type"));
+    $("#m_exp").text(btn.data("exp"));
+    $("#m_qual").text(btn.data("qual"));
+    $("#m_last").text(btn.data("last"));
+
+    var skills=btn.data("skills");
+
+    $("#m_skills").html("");
+
+    if(skills){
+
+    skills.split(',').forEach(function(s){
+
+    $("#m_skills").append('<span class="badge bg-primary me-1">'+s+'</span>');
+
+    });
+
+    }
+
+    $("#jobModal").modal("show");
+
+    });
+
+
+    $(document).ready(function () {
+
+    var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+
+    successModal.show();
+
+    });
+
+</script>
+
+<script>
+
+    $(document).ready(function () {
+
+        var message = '@(TempData["Message"] ?? "")';
+
+        if (message.trim() !== "") {
+
+            var modal = new bootstrap.Modal(document.getElementById('messageModal'));
+            modal.show();
+
+        }
+
+    });
+
+</script>

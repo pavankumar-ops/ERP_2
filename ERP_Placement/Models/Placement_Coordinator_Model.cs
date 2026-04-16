@@ -108,4 +108,113 @@
         public string CorrectOption { get; set; }
     }
 
+
+
+    public class JobVacancyModel
+    {
+        public int VacancyId { get; set; }
+
+       
+        public int CompanyId { get; set; }
+
+       
+        public string JobTitle { get; set; }
+
+        public string JobDescription { get; set; }
+
+        
+        public int NoOfOpenings { get; set; }
+
+        public string JobLocation { get; set; }
+
+        public decimal? Salary { get; set; }
+
+        public string JobType { get; set; }
+
+        public string ExperienceRequired { get; set; }
+
+        public string Qualification { get; set; }
+
+        public string SkillsRequired { get; set; }
+
+     
+        public DateTime LastDate { get; set; }
+
+        public DateTime CreatedOn { get; set; }
+
+        public bool IsActive { get; set; }
+    }
+
+
+    public class InterviewScheduleModel
+    {
+        public int InterviewId { get; set; }
+
+        public int VacancyId { get; set; }
+
+        public int StudentId { get; set; }
+
+        public string StudentName { get; set; }
+
+        public string Branch { get; set; }
+
+        public string InterviewType { get; set; }
+
+        public DateTime InterviewDate { get; set; }
+
+        public string InterviewTime { get; set; }
+
+        public DateTime LastDateToApply { get; set; }
+
+    }
+
+
+    public class OfferLetterModel
+    {
+        public int StudentId { get; set; }
+        public int CompanyId { get; set; }
+        public int VacancyId { get; set; }
+        public int InterviewId { get; set; }
+        public string OfferLetterFile { get; set; }
+    }
+
+    public class RecentStudent
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Branch { get; set; }
+        public string  Status { get; set; }
+    }
+
+    public class UpcomingInterview
+    {
+        public int InterviewId { get; set; }
+        public string CompanyName { get; set; }
+        public DateTime InterviewDate { get; set; }
+        public string InterviewTime { get; set; }
+        public string Postion { get; set; }
+    }
+
+
+    public class LatestJob
+    {
+        public string CompanyName { get; set; }
+        public string Position { get; set; }
+        public string Salary { get; set; }
+    }
+
+    public class PlacementActivity
+    {
+        public int AssignedCount { get; set; }
+        public int AppliedCount { get; set; }
+        public int SelectedCount { get; set; }
+    }
+
+
+    public class RecentTest
+    {
+        public int TestId { get; set; }
+        public string TestName { get; set; }
+        public string Branch { get; set; }
+    }
 }

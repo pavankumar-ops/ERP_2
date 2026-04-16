@@ -1,176 +1,333 @@
 ﻿@*
-    This layout uses the Learner Bootstrap Template
-    All pages that use @RenderBody() will appear inside this layout.
+    Layout File
 *@
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+
+    <style>
+        /* Floating Button */
+        #wa-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #25D366;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            color: white;
+            font-size: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+            z-index: 999;
+        }
+
+        /* Chat Box */
+        #wa-box {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 300px;
+            background: white;
+            border-radius: 10px;
+            display: none;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            overflow: hidden;
+            z-index: 999;
+        }
+
+        /* Header */
+        .wa-header {
+            background: #075E54;
+            color: white;
+            padding: 10px;
+        }
+
+        /* Body */
+        .wa-body {
+            padding: 10px;
+            background: #f1f1f1;
+        }
+
+        /* Footer */
+        .wa-footer {
+            display: flex;
+            border-top: 1px solid #ddd;
+        }
+
+            .wa-footer input {
+                flex: 1;
+                border: none;
+                padding: 10px;
+            }
+
+            .wa-footer button {
+                background: #25D366;
+                border: none;
+                color: white;
+                padding: 10px 15px;
+                cursor: pointer;
+            }</style>
+
     <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"] - ERP_Placement</title>
 
-    <!-- Favicons -->
+    <!-- Favicon -->
     <link href="~/img/favicon.png" rel="icon">
-    <link href="~img/apple-touch-icon.png" rel="apple-touch-icon">
 
-    <!-- Fonts -->
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect">
     <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Raleway:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Vendor CSS Files -->
+    <!-- Bootstrap CSS -->
     <link href="~/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
     <link href="~/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Other Vendor CSS -->
     <link href="~/vendor/aos/aos.css" rel="stylesheet">
     <link href="~/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
-    <!-- Main CSS File -->
+    <!-- Main CSS -->
     <link href="~/css/main.css" rel="stylesheet" />
-    <div class="container-fluid container-xl position-relative d-flex align-items-center">
-    </div>
+
 </head>
 
 <body class="index-page">
 
 
+    <!-- ================= NAVBAR ================= -->
+
     <nav class="navbar navbar-expand-lg navbar-dark px-4 sticky-top" style="background:#3b245f;">
-        <a class="navbar-brand" href="#">
+
+        <a class="navbar-brand" href="@Url.Action("Index", "Home")">
             <i class="bi bi-mortarboard-fill"></i> EduCatal
         </a>
 
         <div class="collapse navbar-collapse">
+
             <ul class="navbar-nav ms-4">
-                <li class="nav-item"><a class="nav-link active" href="#">Dashboard</a></li>
-                <li class="nav-item"><a class="nav-link" >Courses</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Placements</a></li>
-                <li class="nav-item"><a class="nav-link" href="@Url.Action("FAQs", "Home")">FAQ's</a></li>
+
+                <li class="nav-item">
+                    <a class="nav-link active" href="@Url.Action("Index", "Home")">Dashboard</a>
+                </li>
+
+
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("About", "Home")">About</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("FAQs", "Home")">FAQ's</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("TPO", "Home")">Training & Placement Cell</a>
+                </li>
+
+
             </ul>
+
         </div>
 
-        <!-- Enroll Student Dropdown -->
+        <!-- Enroll Student -->
+
         <div class="me-3">
+
             <a class="text-white text-decoration-none"
                href="@Url.Action("Student_Enroll", "Student")">
+
                 <i class="bi bi-person-plus-fill"></i> Enroll Student
+
             </a>
+
         </div>
 
-        <!-- Login Dropdown -->
+
+        <!-- LOGIN DROPDOWN -->
+
         <div class="dropdown">
+
             <a class="text-white text-decoration-none dropdown-toggle"
                href="#"
                role="button"
-               data-bs-toggle="dropdown">
+               data-bs-toggle="dropdown"
+               aria-expanded="false">
+
                 <i class="bi bi-person-circle"></i> Login
+
             </a>
+
             <ul class="dropdown-menu dropdown-menu-end">
+
                 <li>
-                    <a href="@Url.Action("Student_LoginPage", "Login")" class="dropdown-item">
+
+                    <a href="@Url.Action("Student_LoginPage", "Login")"
+                       class="dropdown-item">
+
                         🎓 Student Login
+
                     </a>
+
                 </li>
+
                 <li>
-                    <a href="@Url.Action("TraineerLogin", "Login")" class="dropdown-item">
+
+                    <a href="@Url.Action("TraineerLogin", "Login")"
+                       class="dropdown-item">
+
                         🏢 Placement Coordinator Login
+
                     </a>
+
                 </li>
+
             </ul>
+
         </div>
+
     </nav>
 
-    <!-- Navbar -->
-   
 
-    <!-- ======= Header/Navbar Section ======= -->
-    <!-- ======= Main Body Section ======= -->
-    <main id="main" style="margin-top: 100px;">
+    <!-- ================= MAIN BODY ================= -->
+
+    <main id="main" style="margin-top:0px;">
+
         @RenderBody()
+
     </main>
-   @*  @Html.Partial("FloatingChatbot") *@
-    <!-- ======= Footer Section ======= -->
-    @*  <footer id="footer" class="footer accent-background">
 
-        <div class="container footer-top">
-            <div class="row gy-4">
-                <div class="col-lg-5 col-md-12 footer-about">
-                    <a href="index.html" class="logo d-flex align-items-center">
-                        <span class="sitename">Learner</span>
-                    </a>
-                    <p>Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita valies darta donna mare fermentum iaculis eu non diam phasellus.</p>
-                    <div class="social-links d-flex mt-4">
-                        <a href=""><i class="bi bi-twitter-x"></i></a>
-                        <a href=""><i class="bi bi-facebook"></i></a>
-                        <a href=""><i class="bi bi-instagram"></i></a>
-                        <a href=""><i class="bi bi-linkedin"></i></a>
-                    </div>
-                </div>
 
-                <div class="col-lg-2 col-6 footer-links">
-                    <h4>Useful Links</h4>
-                    <ul>
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">About us</a></li>
-                        <li><a href="#">Services</a></li>
-                        <li><a href="#">Terms of service</a></li>
-                        <li><a href="#">Privacy policy</a></li>
-                    </ul>
-                </div>
-
-                <div class="col-lg-2 col-6 footer-links">
-                    <h4>Our Services</h4>
-                    <ul>
-                        <li><a href="#">Web Design</a></li>
-                        <li><a href="#">Web Development</a></li>
-                        <li><a href="#">Product Management</a></li>
-                        <li><a href="#">Marketing</a></li>
-                        <li><a href="#">Graphic Design</a></li>
-                    </ul>
-                </div>
-
-                <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
-                    <h4>Contact Us</h4>
-                    <p>A108 Adam Street</p>
-                    <p>New York, NY 535022</p>
-                    <p>United States</p>
-                    <p class="mt-4"><strong>Phone:</strong> <span>+1 5589 55488 55</span></p>
-                    <p><strong>Email:</strong> <span>info@example.com</span></p>
-                </div>
-
-            </div>
-        </div>
-
-        <div class="container copyright text-center mt-4">
-            <p>© <span>Copyright</span> <strong class="px-1 sitename">Learner</strong> <span>All Rights Reserved</span></p>
-            <div class="credits">
-                <!-- All the links in the footer should remain intact. -->
-                <!-- You can delete the links only if you've purchased the pro version. -->
-                <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
-                Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-            </div>
-        </div>
-
-    </footer> *@
     <!-- Scroll Top -->
-    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
+
+    <a href="#" id="scroll-top"
+       class="scroll-top d-flex align-items-center justify-content-center">
+
         <i class="bi bi-arrow-up-short"></i>
+
     </a>
 
+
     <!-- Preloader -->
+
     <div id="preloader"></div>
 
-    <!-- Vendor JS Files -->
+
+    <!-- ================= JS FILES ================= -->
+    <!-- Bootstrap JS -->
+
     <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Vendor JS -->
+
     <script src="~/vendor/php-email-form/validate.js"></script>
     <script src="~/vendor/aos/aos.js"></script>
     <script src="~/vendor/purecounter/purecounter_vanilla.js"></script>
     <script src="~/vendor/swiper/swiper-bundle.min.js"></script>
 
-    <!-- Main JS File -->
+    <!-- Main JS -->
+
     <script src="~/js/main.js"></script>
 
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+
+    <!-- WhatsApp Chat Widget -->
+    <!-- WhatsApp Widget -->
+    <div style="position:fixed; bottom:20px; right:20px; z-index:999;">
+
+        <!-- Floating Button -->
+        <div onclick="toggleChat()"
+             class="shadow-lg"
+             style="width:65px; height:65px; border-radius:50%; background:#25D366;
+                display:flex; align-items:center; justify-content:center;
+                cursor:pointer; transition:0.3s;">
+
+            <i class="bi bi-whatsapp text-white" style="font-size:32px;"></i>
+        </div>
+
+        <!-- Chat Box -->
+        <div id="waBox" class="card shadow-lg mt-3"
+             style="width:320px; border-radius:15px; display:none; overflow:hidden;">
+
+            <!-- Header -->
+            <div class="d-flex align-items-center p-3 text-white"
+                 style="background:linear-gradient(45deg,#075E54,#128C7E);">
+
+                <i class="bi bi-headset me-2 fs-4"></i>
+
+                <div>
+                    <strong>Support Team</strong><br>
+                    <small style="font-size:12px;">Online • Replies instantly</small>
+                </div>
+            </div>
+
+            <!-- Chat Body -->
+            <div class="p-3" style="background:#f5f5f5; height:180px; overflow-y:auto;">
+
+                <div class="bg-white p-2 rounded shadow-sm"
+                     style="width:fit-content; max-width:80%;">
+                    👋 Hello! Welcome to EduCatal.<br>
+                    How can we help you today?
+                </div>
+
+            </div>
+
+            <!-- Input Area -->
+            <div class="p-2 border-top d-flex">
+
+                <input type="text" id="waInput"
+                       class="form-control me-2"
+                       placeholder="Type a message...">
+
+                <button onclick="sendMessage()"
+                        class="btn btn-success">
+                    <i class="bi bi-send-fill"></i>
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+    <script>
+        function toggleChat() {
+            var box = document.getElementById("waBox");
+            box.style.display = (box.style.display === "block") ? "none" : "block";
+        }
+
+        function sendMessage() {
+            var input = document.getElementById("waInput");
+            var userMessage = input.value;
+
+            // ✅ Company intro message
+            var companyMessage = "Hii, I'm from Educat Placement Portal";
+
+            var finalMessage = companyMessage;
+
+            // 👉 Add user message after intro
+            if (userMessage.trim() !== "") {
+                finalMessage += ". " + userMessage;
+            }
+
+            var phone = "919545818238"; // correct format
+
+            var url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(finalMessage);
+
+            window.open(url, "_blank");
+
+            input.value = "";
+        }
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 

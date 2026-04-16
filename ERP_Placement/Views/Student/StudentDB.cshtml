@@ -1,8 +1,10 @@
 ﻿@model ERP_Placement.Models.StudentRegistration
 
 @{
-    ViewData["Title"] = "Student Enrollment";
+    ViewData["Title"] = "Student Dashboard";
     Layout = "~/Views/Shared/Student_Layout.cshtml";
+
+    var interviews = ViewBag.AppliedInterviews as System.Data.DataTable;
 }
 
 <!DOCTYPE html>
@@ -11,220 +13,471 @@
     <meta charset="UTF-8">
     <title>Student Dashboard</title>
 
-    <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
     <style>
+
         body {
-            background-color: #f4f6f9;
+            background: #f4f6fb;
+            font-family: 'Inter','Segoe UI',sans-serif;
         }
 
-        .dashboard-title {
-            font-weight: 600;
-            color: #0d3b66;
+        .dashboard-box {
+            background: white;
+            padding: 18px;
+            border-radius: 16px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
         }
 
-        .card-box {
-            color: #fff;
-            border-radius: 10px;
+        .stat-card {
+            color: white;
             padding: 20px;
-            min-height: 110px;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: .3s;
         }
 
-        .green {
-            background: linear-gradient(45deg, #28a745, #5cd65c);
+            .stat-card:hover {
+                transform: translateY(-4px);
+            }
+
+        .gradient-blue {
+            background: linear-gradient(135deg,#2563eb,#1d4ed8);
         }
 
-        .blue {
-            background: linear-gradient(45deg, #007bff, #4da3ff);
+        .gradient-pink {
+            background: linear-gradient(135deg,#ec4899,#db2777);
         }
 
-        .orange {
-            background: linear-gradient(45deg, #fd7e14, #ffb066);
+        .gradient-purple {
+            background: linear-gradient(135deg,#a855f7,#7c3aed);
         }
 
-        .purple {
-            background: linear-gradient(45deg, #6f42c1, #9d7df2);
+        .gradient-green {
+            background: linear-gradient(135deg,#22c55e,#16a34a);
         }
 
-        .section-card {
-            border-radius: 10px;
+        .gradient-orange {
+            background: linear-gradient(135deg,#fb923c,#f97316);
         }
 
-        .progress-box {
-            color: #fff;
-            font-weight: bold;
-            text-align: center;
-            padding: 15px;
-            border-radius: 8px;
-        }
     </style>
+
 </head>
+
 <body>
 
-    <div class="container my-4">
+    <div class="container-fluid p-4">
 
-        <!-- Header -->
-        <div class="text-center mb-4">
-            <h3 class="dashboard-title">Placement Module - Student Dashboard</h3>
-            <p class="text-muted">Welcome to your Placement Progress Overview!</p>
+        <!-- HEADER -->
+        <div class="mb-4">
+
+            <h3 style="font-weight:700;">Placement Module – Student Dashboard</h3>
+
+            <p class="text-muted">
+                Welcome back
+                <b>@Context.Session.GetString("StudentName")</b>
+            </p>
+
         </div>
 
-        <!-- Top Cards -->
+
+        <!-- TOP STATS -->
         <div class="row g-3 mb-4">
-            <div class="col-md-3">
-                <div class="card-box green">
-                    <h6><i class="bi bi-check-circle"></i> Eligibility Status</h6>
-                    <h5>Eligible for Placement</h5>
+
+            <div class="col">
+                <div class="stat-card gradient-green">
+
+                    <i class="bi bi-check-circle fs-2"></i>
+
+                    <h5 class="mt-2">Eligibility Status</h5>
+
+                    <h4>Eligible</h4>
+
                 </div>
             </div>
 
-            <div class="col-md-3">
-                <div class="card-box blue">
-                    <h6><i class="bi bi-briefcase"></i> Applied Jobs</h6>
-                    <h3>5</h3>
+
+            <div class="col">
+                <div onclick="location.href='@Url.Action("AssignCompany", "Student")'"
+                     class="stat-card gradient-blue">
+
+                    <i class="bi bi-building fs-2"></i>
+
+                    <h2 class="fw-bold mt-2">@ViewBag.Assign</h2>
+
+                    <span>Assigned Companies</span>
+
                 </div>
             </div>
 
-            <div class="col-md-3">
-                <div class="card-box orange">
-                    <h6><i class="bi bi-calendar-event"></i> Interviews Scheduled</h6>
-                    <h3>2</h3>
+
+            <div class="col">
+                <div onclick="location.href='@Url.Action("AppliedJob", "Student")'"
+                     class="stat-card gradient-orange">
+
+                    <i class="bi bi-journal-text fs-2"></i>
+
+                    <h2 class="fw-bold mt-2">@ViewBag.Applied</h2>
+
+                    <span>Applied Jobs</span>
+
                 </div>
             </div>
 
-            <div class="col-md-3">
-                <div class="card-box purple">
-                    <h6><i class="bi bi-award"></i> Offers Received</h6>
-                    <h3>1</h3>
+
+            <div class="col">
+                <div onclick="location.href='@Url.Action("ScheduledInterviews", "Student")'"
+                     class="stat-card gradient-purple">
+
+                    <i class="bi bi-award fs-2"></i>
+
+                    <h2 class="fw-bold mt-2">@ViewBag.Selected</h2>
+
+                    <span>Offer Letters</span>
+
                 </div>
             </div>
+
+
+            <div class="col">
+                <div onclick="location.href='@Url.Action("TestList", "Student")'"
+                     class="stat-card gradient-pink">
+
+                    <i class="bi bi-file-earmark-text fs-2"></i>
+
+                    <h2 class="fw-bold mt-2">@ViewBag.TestCount</h2>
+
+                    <span>Tests</span>
+
+                </div>
+            </div>
+
         </div>
 
-        <!-- Middle Section -->
-        <div class="row g-3">
 
-            <!-- Upcoming Interviews -->
-            <div class="col-md-4">
-                <div class="card section-card">
-                    <div class="card-header fw-bold">Upcoming Interviews</div>
-                    <div class="card-body">
-                        <p>
-                            <i class="bi bi-building"></i>
-                            <strong>Tech Solutions Inc.</strong><br>
-                            May 15, 2024 – 10:00 AM
-                            <a class="btn btn-sm btn-primary float-end">View Details</a>
-                        </p>
-                        <hr>
-                        <p>
-                            <i class="bi bi-building"></i>
-                            <strong>Global Finance Ltd.</strong><br>
-                            May 18, 2024 – 2:00 PM
-                            <a class="btn btn-sm btn-primary float-end">View Details</a>
-                        </p>
+
+        <!-- MIDDLE SECTION -->
+        <div class="row g-4">
+
+
+            <!-- UPCOMING INTERVIEWS -->
+            <div class="col-lg-4">
+
+                <div class="dashboard-box">
+
+                    <div class="d-flex justify-content-between mb-3">
+
+                        <b>Upcoming Interviews</b>
+
                     </div>
+
+                    @if (interviews != null && interviews.Rows.Count > 0)
+                    {
+                        foreach (System.Data.DataRow row in interviews.Rows)
+                        {
+
+                            <div class="border rounded p-2 mb-2 d-flex justify-content-between align-items-center">
+
+                                <div>
+                                    <b>@row["CompanyName"]</b><br>
+                                    <small>@row["InterviewTime"]</small>
+                                </div>
+
+                                <small class="text-muted">
+                                    @Convert.ToDateTime(row["InterviewDate"]).ToString("MMM dd")
+                                </small>
+
+                            </div>
+
+                        }
+                    }
+                    else
+                    {
+                        <p>No interviews scheduled</p>
+                    }
+
                 </div>
+
             </div>
 
-            <!-- Application Status -->
-            <div class="col-md-4">
-                <div class="card section-card">
-                    <div class="card-header fw-bold">Application Status</div>
-                    <div class="card-body">
-                        <div class="row text-center">
-                            <div class="col-3">
-                                <div class="progress-box green">40%</div>
-                                <small>Applied</small>
+
+
+            <!-- SUCCESS RATE -->
+            <div class="col-lg-4">
+
+                <div class="dashboard-box">
+
+                    <b>Success Rate</b>
+
+                    <div class="mt-3">
+
+                        <div class="progress" style="height:22px">
+
+                            <div class="progress-bar bg-success"
+                                 style="width:@ViewBag.SelectedPercentage%">
+
+                                @ViewBag.SelectedPercentage%
+
                             </div>
-                            <div class="col-3">
-                                <div class="progress-box orange">30%</div>
-                                <small>In Review</small>
-                            </div>
-                            <div class="col-3">
-                                <div class="progress-box blue">20%</div>
-                                <small>Interview</small>
-                            </div>
-                            <div class="col-3">
-                                <div class="progress-box purple">10%</div>
-                                <small>Offered</small>
-                            </div>
+
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
 
-            <!-- Placement Tips -->
-            <div class="col-md-4">
-                <div class="card section-card">
-                    <div class="card-header fw-bold">Placement Tips & Resources</div>
-                    <div class="card-body">
+
+
+            <!-- PLACEMENT TIPS -->
+            <div class="col-lg-4">
+
+                <div class="dashboard-box">
+
+                    <b>Placement Tips</b>
+
+                    <div class="mt-3">
+
                         <p>
-                            <i class="bi bi-file-earmark-text"></i>
+                            <i class="bi bi-file-earmark-text text-primary"></i>
                             Resume Writing Guide
-                            <a href="#" class="float-end">Read More</a>
+                            <span class="float-end text-primary"
+                                  data-bs-toggle="modal"
+                                  data-bs-target="#resumeModal">
+                                Read More
+                            </span>
                         </p>
+
                         <hr>
+
                         <p>
-                            <i class="bi bi-person-video"></i>
+                            <i class="bi bi-person-video text-success"></i>
                             Acing the Interview
-                            <a href="#" class="float-end">Read More</a>
+                            <span class="float-end text-primary"
+                                  data-bs-toggle="modal"
+                                  data-bs-target="#interviewModal">
+                                Read More
+                            </span>
                         </p>
+
                         <hr>
+
                         <p>
-                            <i class="bi bi-building"></i>
-                            Company Research Tips
-                            <a href="#" class="float-end">Read More</a>
+                            <i class="bi bi-building text-warning"></i>
+                            Company Research
+                            <span class="float-end text-primary"
+                                  data-bs-toggle="modal"
+                                  data-bs-target="#companyModal">
+                                Read More
+                            </span>
                         </p>
+
                     </div>
+
                 </div>
+
             </div>
+
+
         </div>
 
-        <!-- Bottom Section -->
-        <div class="row g-3 mt-2">
 
-            <!-- Recommended Jobs -->
-            <div class="col-md-4">
-                <div class="card section-card">
-                    <div class="card-header fw-bold">Recommended Jobs</div>
-                    <div class="card-body">
-                        <p>
-                            <strong>Software Developer</strong><br>
-                            InnovaTech Corp
-                            <a class="btn btn-sm btn-primary float-end">View Job</a>
-                        </p>
-                        <hr>
-                        <p>
-                            <strong>Marketing Analyst</strong><br>
-                            BrightMark Solutions
-                            <a class="btn btn-sm btn-primary float-end">View Job</a>
-                        </p>
-                    </div>
+
+        <!-- BOTTOM SECTION -->
+        <div class="row g-4 mt-1">
+
+            <!-- RECOMMENDED JOBS -->
+            <div class="col-lg-4">
+
+                <div class="dashboard-box">
+
+                    <b>Recommended Jobs</b>
+
+                    @if (ViewBag.AssignInterviews != null && ((System.Data.DataTable)ViewBag.AssignInterviews).Rows.Count > 0)
+                    {
+                        foreach (System.Data.DataRow row in ((System.Data.DataTable)ViewBag.AssignInterviews).Rows)
+                        {
+
+                            <div class="border rounded p-2 mt-2 d-flex justify-content-between">
+
+                                <div>
+                                    <b>@row["CompanyName"]</b><br>
+                                    <small>@row["JobTitle"]</small>
+                                </div>
+
+                                <a class="btn btn-sm btn-primary">View Job</a>
+
+                            </div>
+
+                        }
+                    }
+                    else
+                    {
+                        <p class="mt-2">No jobs assigned</p>
+                    }
+
                 </div>
+
             </div>
 
-            <!-- Offer Details -->
-            <div class="col-md-8">
-                <div class="card section-card">
-                    <div class="card-header fw-bold">Offer Details</div>
-                    <div class="card-body">
-                        <h5>ABC Technologies</h5>
-                        <p>
-                            Position: Data Analyst<br>
-                            Location: New York, NY<br>
-                            Salary: $75,000 per year
-                        </p>
-                        <button class="btn btn-warning float-end">Confirm Offer</button>
-                    </div>
+
+
+            <!-- OFFER DETAILS -->
+            <div class="col-lg-8">
+
+                <div class="dashboard-box">
+
+                    <b>Offer Details</b>
+
+                    @if (ViewBag.OfferLetters != null && ((System.Data.DataTable)ViewBag.OfferLetters).Rows.Count > 0)
+                    {
+
+                        foreach (System.Data.DataRow row in ((System.Data.DataTable)ViewBag.OfferLetters).Rows)
+                        {
+
+                            <div class="border-bottom pb-2 mb-2">
+
+                                <h6>@row["CompanyName"]</h6>
+
+                                <small>
+
+                                    Position : @row["JobTitle"] <br>
+                                    Location : @row["JobLocation"] <br>
+                                    Salary : @row["Salary"]
+
+                                </small>
+
+                                <div class="float-end">
+
+                                    <button class="btn btn-primary btn-sm"
+                                            onclick="viewOffer(@row["InterviewId"])">
+
+                                        <i class="bi bi-eye"></i> View
+
+                                    </button>
+
+                                    <a asp-controller="Student"
+                                       asp-action="DownloadOfferLetter"
+                                       asp-route-interviewId="@row["InterviewId"]"
+                                       class="btn btn-success btn-sm">
+
+                                        <i class="bi bi-download"></i> Download
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        }
+
+                    }
+                    else
+                    {
+                        <p>No Offer Letters Available</p>
+                    }
+
                 </div>
+
             </div>
 
         </div>
 
     </div>
+
+    <!-- MODALS -->
+    <!-- Resume Modal -->
+    <div class="modal fade" id="resumeModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title"><i class="bi bi-file-earmark-text"></i> Resume Writing Guide</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        <li>Keep your resume concise (1-2 pages).</li>
+                        <li>Highlight your achievements and skills.</li>
+                        <li>Use a clean, modern format.</li>
+                        <li>Tailor it for the job you are applying for.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interview Modal -->
+    <div class="modal fade" id="interviewModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title"><i class="bi bi-person-video"></i> Acing the Interview</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        <li>Research the company and the role.</li>
+                        <li>Prepare answers for common interview questions.</li>
+                        <li>Dress professionally and maintain good body language.</li>
+                        <li>Ask insightful questions at the end of the interview.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Company Modal -->
+    <div class="modal fade" id="companyModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-white">
+                    <h5 class="modal-title"><i class="bi bi-building"></i> Company Research Tips</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        <li>Understand the company’s products and services.</li>
+                        <li>Follow recent news and achievements.</li>
+                        <li>Check employee reviews and company culture.</li>
+                        <li>Analyze the competitors and market positioning.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Offer Letter Modal -->
+    <div class="modal fade" id="offerModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title">Offer Letter</h5>
+                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body p-0">
+                    <iframe id="offerFrame" width="100%" height="600" style="border:none"></iframe>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        function viewOffer(interviewId){
+            var url = "/Trainer/ViewOfferLetter?interviewId=" + interviewId;
+            document.getElementById("offerFrame").src = url;
+            var modal = new bootstrap.Modal(document.getElementById("offerModal"));
+            modal.show();
+        }
+    </script>
 
 </body>
 </html>

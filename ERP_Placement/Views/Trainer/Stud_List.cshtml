@@ -1,55 +1,638 @@
-﻿<table class="table table-bordered table-striped table-hover">
-    <thead class="table-dark">
-        <tr>
-            <th>Student ID</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
-            <th>Mobile No</th>
-            <th>Branch</th>
-            <th>SSC %</th>
-            <th>HSC %</th>
-            <th>Action</th>
-        </tr>
-    </thead>
+﻿@model System.Data.DataTable
+@{
+    ViewData["Title"] = "Student Enrollment";
+    Layout = "~/Views/Shared/Placement_Coordinator_layout.cshtml";
+}
 
-    <tbody>
+@if (TempData["success"] != null)
+{
+    <div class="modal fade" id="successModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content text-center">
+
+                <div class="modal-body p-4">
+
+                    <div style="font-size:60px;color:#28a745;">
+                        ✔
+                    </div>
+
+                    <h4 class="mt-3 text-success">Success</h4>
+
+                    <p class="mt-2">
+                        @TempData["success"]
+                    </p>
+
+                    <button class="btn btn-success mt-3 px-4"
+                            data-bs-dismiss="modal">
+                        OK
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Student List</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <style>
+
+        body {
+            font-family: 'Segoe UI';
+            color: #3b245f;
+        }
+
+        /* PAGE HEADER */
+
+        .page-header {
+            background: linear-gradient(135deg,#6a11cb,#8e54e9);
+            padding: 15px 25px;
+            border-radius: 12px;
+            color: white;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        /* FILTER BOX */
+
+        .filter-box {
+            background: white;
+            padding: 18px;
+            border-radius: 12px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        /* STUDENT CARD */
+
+        .student-card {
+            border: none;
+            border-radius: 15px;
+            transition: 0.3s;
+            background: white;
+            overflow: hidden;
+        }
+
+            .student-card:hover {
+                transform: translateY(-6px);
+                box-shadow: 0 12px 28px rgba(0,0,0,0.18);
+            }
+
+        /* CARD STRIP */
+
+        .card-strip {
+            height: 45px;
+            background: linear-gradient(135deg,#6a11cb,#8e54e9);
+        }
+
+        /* IMAGE */
+
+        .student-img {
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            border: 4px solid white;
+            margin-top: -38px;
+            object-fit: cover;
+        }
+
+        /* NAME */
+
+        .student-name {
+            font-weight: 700;
+            font-size: 17px;
+            color: #6a11cb;
+        }
+
+        /* INFO */
+
+        .student-info {
+            font-size: 13px;
+            text-align: left;
+            margin-top: 10px;
+        }
+
+        /* BUTTONS */
+
+        .action-btn {
+            font-size: 12px;
+            border-radius: 20px;
+            padding: 6px 14px;
+        }
+
+        /* PROFILE PHOTO */
+
+        .profile-photo {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: 5px solid #6a11cb;
+            object-fit: cover;
+        }
+
+        /* SECTION */
+
+        .section-title {
+            font-weight: 700;
+            border-left: 5px solid #6a11cb;
+            padding-left: 10px;
+            margin-bottom: 12px;
+            color: #6a11cb;
+        }
+
+        /* SKILLS */
+
+        .skill-badge {
+            background: #6a11cb;
+            color: white;
+            margin: 3px;
+            font-size: 12px;
+        }
+
+        /* MODAL */
+
+        .modal-header {
+            background: linear-gradient(135deg,#6a11cb,#8e54e9);
+        }
+
+        /* STATUS BADGE */
+
+        .status-approved {
+            background: #28a745;
+        }
+
+        .status-pending {
+            background: #ffc107;
+            color: black;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+
+    <div class="page-header">
+        <h4 class="mb-0">Student List</h4>
+    </div>
+
+    <!-- FILTERS -->
+
+    <div class="filter-box">
+
+        <div class="row">
+
+            <div class="col-md-4">
+                <input type="text" id="searchName" class="form-control" placeholder="Search Student Name">
+            </div>
+
+            <div class="col-md-4">
+                <select id="statusFilter" class="form-select">
+                    <option value="">All Status</option>
+                    <option value="Approved">Approved</option>
+                    <option value="Not_Approved">Not Approved</option>
+                </select>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="row" id="studentContainer">
+
         @if (Model != null && Model.Rows.Count > 0)
         {
             foreach (System.Data.DataRow row in Model.Rows)
             {
-                <tr>
-                    <td>@row["StudentId"]</td>
-                    <td>@row["FirstName"]</td>
-                    <td>@row["LastName"]</td>
-                    <td>@row["Email"]</td>
-                    <td>@row["MobileNo"]</td>
-                    <td>@row["Branch"]</td>
-                    <td>@row["SSC"]</td>
-                    <td>@row["HSC"]</td>
-                    <td>
-                        <a class="btn btn-success btn-sm"
-                           href="@Url.Action("Approve", "Trainer", new { id = row["StudentId"] })">
-                            Approve
-                        </a>
 
-                        <a class="btn btn-success btn-sm"
-                           href="@Url.Action("View", "Trainer", new { id = row["StudentId"] })">
-                            View
-                        </a>
-                    </td>
-                </tr>
+                var status = row["Approval_Status"].ToString();
+
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4 student-item"
+                     data-name="@row["FirstName"] @row["LastName"]"
+                     data-status="@status"
+                     data-branch="@row["Branch"]">
+
+                    <div class="card student-card shadow-sm">
+
+                        <div class="card-strip"></div>
+
+                        <div class="card-body text-center p-3">
+
+                            <img src="@row["Personal_Photo"]"
+                                 class="student-img"
+                                 onerror="this.onerror=null;this.src='https://cdn-icons-png.flaticon.com/512/149/149071.png';" />
+
+                            <div class="student-name">
+                                @row["FirstName"] @row["LastName"]
+                            </div>
+
+                            <div class="student-info">
+
+                                <p><b>Email:</b> @row["Email"]</p>
+                                <p><b>Mobile:</b> @row["MobileNo"]</p>
+                                <p><b>Branch:</b> @row["Branch"]</p>
+
+                            </div>
+
+                            <span class="badge @(status=="Approved" ? "status-approved" : "status-pending")">
+                                @status
+                            </span>
+
+                            <div class="d-flex justify-content-center gap-1 mt-3">
+
+                                @if (status!="Approved")
+                                {
+                                    <a href="/Trainer/Approve/@row["StudentId"]"
+                                       class="btn btn-success action-btn">
+                                        Approve
+                                    </a>
+                                }
+
+                                <a href="/Trainer/Reject/@row["StudentId"]"
+                                   class="btn btn-danger action-btn">
+                                    Reject
+                                </a>
+
+                                <button class="btn btn-primary action-btn viewBtn"
+                                        data-code="@row["StduentCode"]"
+                                        data-name="@row["FirstName"] @row["LastName"]"
+                                        data-gender="@row["Gender"]"
+                                        data-dob="@row["DOB"]"
+                                        data-email="@row["Email"]"
+                                        data-mobile="@row["MobileNo"]"
+                                        data-altmobile="@row["AlternateMobile"]"
+                                        data-academicyear="@row["Acadamic_Year"]"
+                                        data-branch="@row["Branch"]"
+                                        data-roll="@row["Roll_No"]"
+                                        data-division="@row["Divison"]"
+                                        data-status="@row["Approval_Status"]"
+                                        data-ssc="@row["SSC"]"
+                                        data-sscYear="@row["SSC_Passing_Year"]"
+                                        data-hsc="@row["HSC"]"
+                                        data-hscYear="@row["HSC_Passing_Year"]"
+                                        data-diplomaBranch="@row["Diploma_Branch"]"
+                                        data-diplomaPer="@row["Diploma_Percentages"]"
+                                        data-diplomaYear="@row["Diploma_Passing_Year"]"
+                                        data-btechBranch="@row["BTech_Branch"]"
+                                        data-btechPer="@row["BTech_Percentages"]"
+                                        data-btechYear="@row["BTech_Passing_Year"]"
+                                        data-skills="@row["Skills"]"
+                                        data-sscDoc="@row["SSC_Document_Path"]"
+                                        data-hscDoc="@row["HSC_Document_Path"]"
+                                        data-diplomaDoc="@row["Diploma_Document_Path"]"
+                                        data-btechDoc="@row["BTech_Document_Path"]"
+                                        data-photo="@row["Personal_Photo"]"
+                                        data-resume="@row["Resume"]">
+
+                                    View
+
+                                </button>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
             }
         }
-        else
-        {
-            <tr>
-                <td colspan="9" class="text-center text-danger">
-                    No pending students found
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
 
-                        
+    </div>
+
+    </div>
+
+
+    <!-- MODAL -->
+
+
+    <div class="modal fade" id="studentModal">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+
+                <div class="modal-header text-white"
+                     style="background:linear-gradient(135deg,#6a11cb,#8e54e9);">
+
+                    <h5 class="modal-title fw-bold">Student Placement Profile</h5>
+
+                    <button class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"></button>
+
+                </div>
+
+                <div class="modal-body" style="background:#f7f3ff;">
+
+                    <div class="row">
+
+                        <!-- LEFT PROFILE -->
+
+                        <div class="col-md-4">
+
+                            <div class="profile-card p-4 text-center shadow-sm rounded"
+                                 style="background:white;">
+
+                                <img id="m_photo" class="profile-photo mb-3"
+                                     style="width:130px;height:130px;border-radius:50%;border:5px solid #6a11cb;object-fit:cover;" />
+
+                                <h4 id="m_name" style="color:#6a11cb;font-weight:700;"></h4>
+
+                                <p class="mb-1">Student Code : <b id="m_code"></b></p>
+
+                                <span id="m_status" class="badge bg-success px-3 py-2"></span>
+
+                                <hr>
+
+                                <p class="mb-1"><b>Email</b></p>
+                                <p id="m_email"></p>
+
+                                <p class="mb-1"><b>Mobile</b></p>
+                                <p id="m_mobile"></p>
+
+                                <p class="mb-1"><b>Alternate Mobile</b></p>
+                                <p id="m_altmobile"></p>
+
+                                <hr>
+
+                                <a id="resumeDoc"
+                                   class="btn w-100"
+                                   style="background:#6a11cb;color:white;border-radius:25px;"
+                                   target="_blank">
+
+                                    📄 Download Resume
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                        <!-- RIGHT DETAILS -->
+
+                        <div class="col-md-8">
+
+                            <!-- PERSONAL DETAILS -->
+
+                            <div class="mb-3">
+
+                                <h6 class="section-title"
+                                    style="border-left:4px solid #6a11cb;padding-left:8px;color:#6a11cb;font-weight:700;">
+
+                                    Personal Details
+
+                                </h6>
+
+                                <div class="row">
+
+                                    <div class="col-md-6 mb-2">
+                                        <b>Gender :</b> <span id="m_gender"></span>
+                                    </div>
+
+                                    <div class="col-md-6 mb-2">
+                                        <b>DOB :</b> <span id="m_dob"></span>
+                                    </div>
+
+                                    <div class="col-md-6 mb-2">
+                                        <b>Academic Year :</b> <span id="m_year"></span>
+                                    </div>
+
+                                    <div class="col-md-6 mb-2">
+                                        <b>Branch :</b> <span id="m_branch"></span>
+                                    </div>
+
+                                    <div class="col-md-6 mb-2">
+                                        <b>Roll No :</b> <span id="m_roll"></span>
+                                    </div>
+
+                                    <div class="col-md-6 mb-2">
+                                        <b>Division :</b> <span id="m_division"></span>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <hr>
+
+                            <!-- EDUCATION -->
+
+                            <div class="mb-3">
+
+                                <h6 class="section-title"
+                                    style="border-left:4px solid #6a11cb;padding-left:8px;color:#6a11cb;font-weight:700;">
+
+                                    Education
+
+                                </h6>
+
+                                <div class="row">
+
+                                    <div class="col-md-6 mb-2" id="sscBlock">
+                                        <b>SSC :</b> <span id="m_ssc"></span>%
+                                        (<span id="m_sscYear"></span>)
+                                    </div>
+
+                                    <div class="col-md-6 mb-2" id="hscBlock">
+                                        <b>HSC :</b> <span id="m_hsc"></span>%
+                                        (<span id="m_hscYear"></span>)
+                                    </div>
+
+                                    <div class="col-md-6 mb-2" id="diplomaBlock">
+                                        <b>Diploma :</b>
+                                        <span id="m_diplomaBranch"></span>
+                                        (<span id="m_diplomaPer"></span>%
+                                        - <span id="m_diplomaYear"></span>)
+                                    </div>
+
+                                    <div class="col-md-6 mb-2" id="btechBlock">
+                                        <b>BTech :</b>
+                                        <span id="m_btechBranch"></span>
+                                        (<span id="m_btechPer"></span>%
+                                        - <span id="m_btechYear"></span>)
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <hr>
+
+                            <!-- SKILLS -->
+
+                            <div class="mb-3">
+
+                                <h6 class="section-title"
+                                    style="border-left:4px solid #6a11cb;padding-left:8px;color:#6a11cb;font-weight:700;">
+
+                                    Skills
+
+                                </h6>
+
+                                <div id="m_skills"></div>
+
+                            </div>
+
+                            <hr>
+
+                            <!-- DOCUMENTS -->
+
+                            <div>
+
+                                <h6 class="section-title"
+                                    style="border-left:4px solid #6a11cb;padding-left:8px;color:#6a11cb;font-weight:700;">
+
+                                    Documents
+
+                                </h6>
+
+                                <a id="sscDoc" target="_blank"
+                                   class="btn btn-outline-primary btn-sm me-2 mb-2">
+
+                                    📑 SSC Marksheet
+
+                                </a>
+
+                                <a id="hscDoc" target="_blank"
+                                   class="btn btn-outline-success btn-sm me-2 mb-2">
+
+                                    📑 HSC Marksheet
+
+                                </a>
+
+                                <a id="diplomaDoc" target="_blank"
+                                   class="btn btn-outline-warning btn-sm me-2 mb-2">
+
+                                    📑 Diploma Marksheet
+
+                                </a>
+
+                                <a id="btechDoc" target="_blank"
+                                   class="btn btn-outline-dark btn-sm mb-2">
+
+                                    📑 BTech Marksheet
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        </div>
+
+
+
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+        <script>
+
+            $(document).on("click",".viewBtn",function(){
+
+            var btn=$(this);
+
+            $("#m_code").text(btn.data("code"));
+            $("#m_name").text(btn.data("name"));
+            $("#m_gender").text(btn.data("gender"));
+            $("#m_dob").text(btn.data("dob"));
+            $("#m_email").text(btn.data("email"));
+            $("#m_mobile").text(btn.data("mobile"));
+            $("#m_altmobile").text(btn.data("altmobile"));
+            $("#m_year").text(btn.data("academicyear"));
+            $("#m_branch").text(btn.data("branch"));
+            $("#m_roll").text(btn.data("roll"));
+            $("#m_division").text(btn.data("division"));
+            $("#m_status").text(btn.data("status"));
+
+            $("#m_ssc").text(btn.data("ssc"));
+            $("#m_sscYear").text(btn.data("sscyear"));
+
+            $("#m_hsc").text(btn.data("hsc"));
+            $("#m_hscYear").text(btn.data("hscyear"));
+
+            $("#m_diplomaBranch").text(btn.data("diplomabranch"));
+            $("#m_diplomaPer").text(btn.data("diplomaper"));
+            $("#m_diplomaYear").text(btn.data("diplomayear"));
+
+            $("#m_btechBranch").text(btn.data("btechbranch"));
+            $("#m_btechPer").text(btn.data("btechper"));
+            $("#m_btechYear").text(btn.data("btechyear"));
+
+            $("#m_photo").attr("src",btn.data("photo"));
+
+            $("#sscDoc").attr("href",btn.data("sscdoc"));
+            $("#hscDoc").attr("href",btn.data("hscdoc"));
+            $("#diplomaDoc").attr("href",btn.data("diplomadoc"));
+            $("#btechDoc").attr("href",btn.data("btechdoc"));
+
+            $("#resumeDoc").attr("href",btn.data("resume"));
+
+            var skills=btn.data("skills");
+
+            $("#m_skills").html("");
+
+            if(skills){
+            skills.split(',').forEach(function(s){
+            $("#m_skills").append('<span class="badge skill-badge">'+s+'</span>');
+            });
+            }
+
+            btn.data("hsc")?$("#hscBlock").show():$("#hscBlock").hide();
+            btn.data("diplomabranch")?$("#diplomaBlock").show():$("#diplomaBlock").hide();
+            btn.data("btechbranch")?$("#btechBlock").show():$("#btechBlock").hide();
+
+            $("#studentModal").modal("show");
+
+            });
+
+
+            $("#searchName,#statusFilter").on("keyup change",function(){
+
+            var name=$("#searchName").val().toLowerCase();
+            var status=$("#statusFilter").val();
+
+            $(".student-item").each(function(){
+
+            var card=$(this);
+
+            var cname=card.data("name").toLowerCase();
+            var cstatus=card.data("status");
+
+            var show=true;
+
+            if(name && !cname.includes(name)) show=false;
+            if(status && status!=cstatus) show=false;
+
+            card.toggle(show);
+
+            });
+
+            });
+
+
+             $(document).ready(function () {
+
+                var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+
+                successModal.show();
+
+            });
+        </script>
+
+</body>
+</html>

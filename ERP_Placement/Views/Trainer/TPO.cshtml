@@ -1,0 +1,298 @@
+﻿@{
+    ViewData["Title"] = "Training & Placement Cell";
+    Layout = "~/Views/Shared/Placement_Coordinator_layout.cshtml";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+<style>
+
+    /* Page Title */
+
+    .page-title {
+        text-align: center;
+        font-size: 38px;
+        font-weight: 700;
+        margin-top: 35px;
+        color: #3b245f;
+    }
+
+    /* Card */
+
+    .member-card {
+        border: none;
+        border-radius: 12px;
+        overflow: hidden;
+        background: white;
+        transition: 0.3s;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+        height: 100%;
+    }
+
+        .member-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 28px rgba(59,36,95,0.35);
+        }
+
+    /* Image */
+
+    .member-img {
+        width: 100%;
+        height: 230px;
+        object-fit: cover;
+    }
+
+    /* Card body */
+
+    .member-body {
+        padding: 18px;
+        text-align: center;
+    }
+
+    /* Name */
+
+    .member-name {
+        font-size: 18px;
+        font-weight: 600;
+        color: #3b245f;
+    }
+
+    /* Role */
+
+    .member-role {
+        font-size: 14px;
+        color: #666;
+    }
+
+    /* Icons */
+
+    .dept-icon {
+        font-size: 20px;
+        margin-top: 8px;
+        color: #3b245f;
+    }
+
+    /* Badge */
+
+    .badge {
+        margin-top: 10px;
+    }
+
+    /* Responsive */
+
+    .member-col {
+        margin-bottom: 28px;
+    }
+
+</style>
+
+
+
+
+    <h2 class="page-title">Training & Placement Cell</h2>
+
+    <div class="row mt-5">
+
+        <!-- Chairman -->
+
+        <div class="col-lg-3 col-md-4 col-sm-6 member-col">
+            <div class="member-card">
+
+                <img src="https://static6.depositphotos.com/1008005/595/i/950/depositphotos_5954955-stock-photo-senior-indian-man.jpg" class="member-img">
+
+                <div class="member-body">
+                    <div class="member-name">Dr. Sunil D. Jadhav</div>
+                    <div class="member-role">Principal, DIET Satara</div>
+
+                    <i class="fa-solid fa-user-tie dept-icon"></i>
+
+                    <div>
+                        <span class="badge" style="background:#3b245f;">Chairman</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Civil -->
+
+        <div class="col-lg-3 col-md-4 col-sm-6 member-col">
+            <div class="member-card">
+
+                <img src="https://tse4.mm.bing.net/th/id/OIP.lrTDDIIZn09m4hjhPLbUfAHaE7?pid=Api&P=0&h=220" class="member-img">
+
+                <div class="member-body">
+                    <div class="member-name">Prof. Janhavi R. More</div>
+                    <div class="member-role">Civil Engineering</div>
+
+                    <i class="fa-solid fa-building dept-icon"></i>
+
+                    <div>
+                        <span class="badge bg-success">Faculty</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Computer -->
+
+        <div class="col-lg-3 col-md-4 col-sm-6 member-col">
+            <div class="member-card">
+
+                <img src="https://as2.ftcdn.net/v2/jpg/03/73/95/67/1000_F_373956798_Uxao7R9DMfNMBYmZJ74H2f7VJS3yNLih.jpg" class="member-img">
+
+                <div class="member-body">
+                    <div class="member-name">Prof. Suvarna S. Shinde</div>
+                    <div class="member-role">Computer Engineering</div>
+
+                    <i class="fa-solid fa-laptop-code dept-icon"></i>
+
+                    <div>
+                        <span class="badge bg-success">Faculty</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Electrical -->
+
+        <div class="col-lg-3 col-md-4 col-sm-6 member-col">
+            <div class="member-card">
+
+                <img src="https://www.shutterstock.com/image-photo/portrait-smiling-man-indian-ethnicity-260nw-2016819593.jpg" class="member-img">
+
+                <div class="member-body">
+                    <div class="member-name">Prof. Shayam S. Sundar</div>
+                    <div class="member-role">Electrical Engineering</div>
+
+                    <i class="fa-solid fa-bolt dept-icon"></i>
+
+                    <div>
+                        <span class="badge bg-success">Faculty</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ETC -->
+
+        <div class="col-lg-3 col-md-4 col-sm-6 member-col">
+            <div class="member-card">
+
+                <img src="https://as1.ftcdn.net/v2/jpg/03/77/30/16/1000_F_377301660_ClhyVNc3ThqShLjkfk7zq0SeCenc4xb7.jpg" class="member-img">
+
+                <div class="member-body">
+                    <div class="member-name">Prof. Abhi S. Jagtap</div>
+                    <div class="member-role">Electronics & Tele-Comm</div>
+
+                    <i class="fa-solid fa-microchip dept-icon"></i>
+
+                    <div>
+                        <span class="badge bg-success">Faculty</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Mechanical -->
+
+        <div class="col-lg-3 col-md-4 col-sm-6 member-col">
+            <div class="member-card">
+
+                <img src="https://www.shutterstock.com/image-photo/serious-handsome-young-indian-professional-600nw-2451794195.jpg" class="member-img">
+
+                <div class="member-body">
+                    <div class="member-name">Prof. Rahul M. Patil</div>
+                    <div class="member-role">Mechanical Engineering</div>
+
+                    <i class="fa-solid fa-gears dept-icon"></i>
+
+                    <div>
+                        <span class="badge bg-success">Faculty</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Student -->
+
+        <div class="col-lg-3 col-md-4 col-sm-6 member-col">
+            <div class="member-card">
+
+                <img src="https://prod-lab.github.io/RiskNet/riya.jpg" class="member-img">
+
+                <div class="member-body">
+                    <div class="member-name">Ms. Riya K. Bhosale</div>
+                    <div class="member-role">Student Representative</div>
+
+                    <i class="fa-solid fa-user-graduate dept-icon"></i>
+
+                    <div>
+                        <span class="badge bg-warning text-dark">Student</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    <div class="col-lg-3 col-md-4 col-sm-6 member-col">
+        <div class="member-card">
+
+            <img src="https://img.freepik.com/premium-photo/indian-teacher-with-laptop-classroom-school-college-education_1257902-853.jpg" class="member-img" class="member-img">
+
+            <div class="member-body">
+                <div class="member-name">Mr. Rohit K. Jadhav</div>
+                <div class="member-role">Student Representative</div>
+
+                <i class="fa-solid fa-user-graduate dept-icon"></i>
+
+                <div>
+                    <span class="badge bg-warning text-dark">Student</span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+        <!-- TPO -->
+
+        <div class="col-lg-3 col-md-4 col-sm-6 member-col">
+            <div class="member-card">
+
+                <img src="https://as2.ftcdn.net/v2/jpg/04/22/82/39/1000_F_422823992_ZtyrE96o6wGTJcyZolZ6pLRUGHBRCH9c.jpg" class="member-img">
+
+                <div class="member-body">
+                    <div class="member-name">Prof. Balasaheb S. Nale</div>
+                    <div class="member-role">Training & Placement Officer</div>
+
+                    <i class="fa-solid fa-briefcase dept-icon"></i>
+
+                    <div>
+                        <span class="badge bg-danger">Member Secretary</span>
+                    </div>
+
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>

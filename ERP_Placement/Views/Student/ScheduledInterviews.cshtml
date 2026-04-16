@@ -1,0 +1,335 @@
+﻿@{
+    ViewData["Title"] = "My Interviews";
+    Layout = "~/Views/Shared/Student_Layout.cshtml";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+
+<style>
+
+    body {
+        background: #f4f6f9;
+    }
+
+    .page-title {
+        font-weight: 700;
+        color: #2c3e50;
+    }
+
+    .job-card {
+        border-radius: 16px;
+        border: none;
+        background: white;
+        transition: 0.3s;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+    }
+
+        .job-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+    .company-logo {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #eee;
+    }
+
+    .job-title {
+        font-weight: 600;
+        color: #34495e;
+        font-size: 17px;
+    }
+
+    .company-name {
+        font-size: 14px;
+        color: #7f8c8d;
+    }
+
+    .job-desc {
+        font-size: 13px;
+        color: #555;
+        height: 40px;
+        overflow: hidden;
+    }
+
+    .badge-custom {
+        background: #ecf0f1;
+        color: #34495e;
+        font-size: 12px;
+        padding: 6px 10px;
+        border-radius: 20px;
+        margin-right: 5px;
+    }
+
+    .apply-btn {
+        background: #2ecc71;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+    }
+
+        .apply-btn:hover {
+            background: #27ae60;
+        }
+
+    .status-badge {
+        font-size: 12px;
+    }
+
+    .hr-mail {
+        font-size: 13px;
+        color: #555;
+    }
+
+</style>
+
+
+<div class="container mt-4">
+
+    <h4 class="page-title mb-4">My Interview Opportunities</h4>
+
+    <div class="row g-4">
+
+        @if (ViewBag.InterviewList != null)
+        {
+            foreach (System.Data.DataRow row in ViewBag.InterviewList.Rows)
+            {
+
+                var interviewTime = Convert.ToDateTime(row["InterviewTime"]).ToString("hh:mm tt");
+
+                <div class="col-lg-4 col-md-6">
+
+                     <div class="card shadow-sm border-0" style="border-radius:12px; overflow:hidden;">
+
+                        <!-- Gradient Header -->
+                        <div class="p-3 text-white"
+                             style="background:linear-gradient(135deg,#6a11cb,#8e54e9);">
+
+                            <div class="d-flex align-items-center">
+
+                                <img src="@row["CompanyLogo"]"
+                                     class="me-3"
+                                     style="width:55px;height:55px;border-radius:50%;object-fit:cover;background:white;padding:3px;"
+                                     onerror="this.onerror=null;this.src='https://cdn-icons-png.flaticon.com/512/5968/5968705.png';" />
+
+                                <div>
+
+                                    <div style="font-size:17px;font-weight:600;">
+                                        @row["JobTitle"]
+                                    </div>
+
+                                    <div style="font-size:13px;opacity:0.9;">
+                                        @row["CompanyName"]
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Card Body -->
+                        <div class="card-body">
+
+                            <!-- Description -->
+                            <p class="text-muted small mb-3" style="height:40px;overflow:hidden;">
+                                @row["CompanyDescription"]
+                            </p>
+
+
+                            <!-- Job Tags -->
+                            <div class="mb-3">
+
+                                <span class="badge bg-light text-dark me-1 mb-1">
+                                    📍 @row["JobLocation"]
+                                </span>
+
+                                <span class="badge bg-light text-dark me-1 mb-1">
+                                    💰 @row["Salary"]
+                                </span>
+
+                                <span class="badge bg-light text-dark me-1 mb-1">
+                                    💼 @row["JobType"]
+                                </span>
+
+                                <span class="badge bg-info text-dark mb-1">
+                                    💻 @row["InterviewType"]
+                                </span>
+
+                            </div>
+
+
+                            <!-- Interview Info -->
+                            <div class="small text-muted mb-3">
+
+                                <div>
+                                    📅 Interview :
+                                    <b>@Convert.ToDateTime(row["InterviewDate"]).ToString("dd MMM yyyy")</b>
+                                </div>
+
+                                <div>
+                                    ⏰ Time :
+                                    <b>@interviewTime</b>
+                                </div>
+
+                                <div>
+                                    🕒 Last Apply :
+                                    <b>@Convert.ToDateTime(row["LastDateToApply"]).ToString("dd MMM yyyy")</b>
+                                </div>
+
+                            </div>
+
+
+                            <!-- HR Email -->
+                            <div class="small mb-3">
+                                📧 HR Email :
+                                <b>@row["HREmailId"]</b>
+                            </div>
+
+
+                            <!-- Buttons -->
+                            @if (row["Status"].ToString()=="Assign")
+                            {
+
+                                <button class="btn w-100 text-white"
+                                        style="background:linear-gradient(135deg,#6a11cb,#8e54e9);border:none;font-weight:600;"
+                                        onclick="ApplyInterview('@row["InterviewId"]','@row["HREmailId"]','@row["VacancyId"]','@row["StudentId"]')">
+
+                                    Apply Now
+
+                                </button>
+
+                            }
+                            else if (row["Status"].ToString()=="Applied")
+                            {
+
+                                <button class="btn btn-secondary w-100" disabled>
+                                    Applied
+                                </button>
+
+                            }
+                            else if (row["Status"].ToString()=="Selected")
+                            {
+
+                                <div class="d-grid gap-2">
+
+                                   <button class="btn btn-info viewOfferBtn"
+                data-bs-toggle="modal"
+                data-bs-target="#viewOfferModal"
+                data-interview="@row["InterviewId"]">
+            View Offer Letter
+        </button>
+
+                                    <a href="@Url.Action("DownloadOfferLetter", "Trainer", new { interviewId = row["InterviewId"] })"
+                                       class="btn btn-primary">
+
+                                        Download Offer Letter
+
+                                    </a>
+
+                                </div>
+
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            }
+        }
+
+    </div>
+
+</div>
+
+<div class="modal fade" id="viewOfferModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Offer Letter</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <iframe id="offerFrame" style="width:100%; height:600px;" frameborder="0"></iframe>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<script>
+
+    function ApplyInterview(interviewId,hrEmail,vacancyId,studentId){
+
+    $.ajax({
+
+    url:'/Student/ApplyInterview',
+
+    type:'POST',
+
+    data:{
+    InterviewId:interviewId,
+    HREmailId:hrEmail,
+    VacancyId:vacancyId,
+    StudentId:studentId
+    },
+
+    success:function(res){
+
+    if(res.success){
+
+    toastr.success("Applied Successfully");
+
+    setTimeout(function(){
+
+    location.reload();
+
+    },1000)
+
+    }
+
+    }
+
+    })
+
+    }
+
+</script>
+
+<script>
+
+    $(document).ready(function(){
+
+        $(".viewOfferBtn").click(function(){
+
+            var interviewId = $(this).data("interview");
+
+            var url = "/Trainer/ViewOfferLetter?interviewId=" + interviewId;
+
+            $("#offerFrame").attr("src", url);
+
+        });
+
+        $('#viewOfferModal').on('hidden.bs.modal', function () {
+
+            $("#offerFrame").attr("src", "");
+
+        });
+
+    });
+
+</script>

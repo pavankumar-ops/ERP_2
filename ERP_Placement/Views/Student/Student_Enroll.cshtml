@@ -1,6 +1,11 @@
 ﻿@model ERP_Placement.Models.StudentRegistration
 
 
+<header>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+</header>
 <div class="container my-4">
 
     <!-- =================== PROFILE PHOTO HEADER =================== -->
@@ -51,9 +56,9 @@
                 <div class="row mb-3">
                     <div class="col-md-2">
                         <label class="form-label">Title</label>
-                        <select asp-for="Name_Title" id="nametitle" class="form-select border-dark" required >
-                            <option  value="">Select</option>
-                            <option >Mr</option>
+                        <select asp-for="Name_Title" id="nametitle" class="form-select border-dark" required>
+                            <option value="">Select</option>
+                            <option>Mr</option>
                             <option>Ms</option>
                             <option>Mrs</option>
                         </select>
@@ -138,14 +143,14 @@
 
 
                     <div class="col-md-3">
-                        <label asp-for="AlternateMobile"  class="form-label">
+                        <label asp-for="AlternateMobile" class="form-label">
                             Alternate Mobile Number
                         </label>
 
                     </div>
                     <div class="col-md-3">
 
-                        <input asp-for="AlternateMobile" id="mobno2" id="AlternateMobile" class="form-control border-dark" required/>
+                        <input asp-for="AlternateMobile"  id="AlternateMobile" class="form-control border-dark" required />
                     </div>
                 </div>
 
@@ -157,7 +162,7 @@
                     </div>
                     <div class="col-md-4">
 
-                        <input asp-for="Email" type="email" id="emailid" class="form-control border-dark" required/>
+                        <input asp-for="Email" type="email" id="emailid" class="form-control border-dark" required />
                     </div>
 
                     <div class="col-md-3">
@@ -166,7 +171,7 @@
                     </div>
                     <div class="col-md-3">
 
-                        <input type="email" id="confimemailid" class="form-control border-dark" required/>
+                        <input type="email" id="confimemailid" class="form-control border-dark" required />
                     </div>
                 </div>
 
@@ -189,11 +194,11 @@
                 <div class=" row mb-3 d-flex">
                     <div class="col col-md-4">
                         <label asp-for="Roll_No" class="form-label">Roll Number</label>
-                        <input asp-for="Roll_No" class="form-control border-dark" id="rollno" required/>
+                        <input asp-for="Roll_No" class="form-control border-dark" id="rollno" required />
                     </div>
                     <div class="col col-md-4">
                         <label class="form-label">Confirm Roll No</label>
-                        <input class="form-control border-dark" id="confirmrollno" required/>
+                        <input class="form-control border-dark" id="confirmrollno" required />
                     </div>
 
                 </div>
@@ -251,7 +256,7 @@
 
         <div class="card mb-4 shadow-sm">
             <div class="card-header  text-white fw-bold d-flex justify-content-between align-items-center flex-wrap" style="background-color :  #3b245f">
-                <div class="text-end" >
+                <div class="text-end">
                     <i class="bi bi-book"></i> Educational Details
                 </div>
 
@@ -274,7 +279,7 @@
                 </div>
 
                 <!-- Right Side: Step Title -->
-               
+
             </div>
 
             <div class="card-body">
@@ -284,7 +289,7 @@
                 <div class=" row mb-3 d-flex">
                     <div class="col col-md-6">
                         <label asp-for="SSC" class="form-label">SSC Percentages</label>
-                        <input asp-for="SSC" class="form-control border-dark" id="sscpercentage" required/>
+                        <input asp-for="SSC" class="form-control border-dark" id="sscpercentage" required />
                     </div>
                     <div class="col col-md-6">
                         <label asp-for="SSC_Passing_Year" class="form-label">SSC Passing Year</label>
@@ -306,7 +311,6 @@
                         <input asp-for="SSC_Document_Path"
                                type="file"
                                class="form-control border-dark"
-
                                id="SSCMarksheet"
                                required
                                accept=".pdf,.jpg,.jpeg,.png"
@@ -317,7 +321,7 @@
 
 
 
-               
+
 
 
                 <div id="hscSection" style="display:none;">
@@ -326,11 +330,11 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label asp-for="HSC" class="form-label">HSC Percentages</label>
-                            <input asp-for="HSC" class="form-control border-dark" id="hscpercentage" required/>
+                            <input asp-for="HSC" class="form-control border-dark" id="hscpercentage"  />
                         </div>
                         <div class="col-md-6">
                             <label asp-for="HSC_Passing_Year" class="form-label">HSC Passing Year</label>
-                            <select asp-for="HSC_Passing_Year" id ="hscpassingyear"class="form-select border-dark"  required>
+                            <select asp-for="HSC_Passing_Year" id="hscpassingyear" class="form-select border-dark" >
                                 <option value="">Select HSC Passing Year</option>
                             </select>
                         </div>
@@ -341,7 +345,7 @@
                             <label class="form-label">HSC Marksheet</label>
                             <input asp-for="HSC_Document_Path" type="file"
                                    class="form-control border-dark"
-                                   id=" HSCMarksheet"
+                                   id="HSCMarksheet"
                                    required
                                    accept=".pdf,.jpg,.jpeg,.png"
                                    onchange="validateSSCMarksheet(this)">
@@ -359,11 +363,11 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label asp-for="Diploma_Percentages" class="form-label">Diploma Percentage</label>
-                            <input asp-for="Diploma_Percentages" class="form-control border-dark" required id="diplomapercentage" />
+                            <input asp-for="Diploma_Percentages" class="form-control border-dark"  id="diplomapercentage" />
                         </div>
                         <div class="col-md-6">
                             <label asp-for="Diploma_Branch" class="form-label">Diploma Branch</label>
-                            <select asp-for="Diploma_Branch" class="form-select border-dark" id="diplomabrnach" required>
+                            <select asp-for="Diploma_Branch" class="form-select border-dark" id="diplomabrnach" >
                                 <option value="">Select Brach</option>
                                 <option>Computer Science</option>
                                 <option>Mechanical Engineering</option>
@@ -377,13 +381,13 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label asp-for="Diploma_Passing_Year" class="form-label">Diploma Passing Year</label>
-                            <SELECT asp-for="Diploma_Passing_Year" id="diplomapssingyear" class="form-select border-dark" required >
+                            <SELECT asp-for="Diploma_Passing_Year" id="diplomapssingyear" class="form-select border-dark" >
                                 <option value="">Select Diploma Passing Year</option>
                             </SELECT>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Diploma Marksheet</label>
-                            <input asp-for="Diploma_Document_Path"  class="form-control border-dark"
+                            <input asp-for="Diploma_Document_Path" class="form-control border-dark"
                                    type="file"
                                    id=" DiplomaMarksheet"
                                    required
@@ -403,12 +407,11 @@
 
 
 
-
                 <h5 class="fw-bold mt-4 mb-3">BTech Details</h5>
 
 
                 <div class=" row mb-3 d-flex">
-                   
+
                     <div class="col col-md-6">
                         <label asp-for="BTech_Percentages" class="form-label">B Tech Percentage</label>
                         <input asp-for="BTech_Percentages" class="form-control border-dark" id="btechpercentage" required />
@@ -425,10 +428,14 @@
                         </select>
 
                     </div>
+
+
+
+
                 </div>
                 <div class=" row mb-3 d-flex">
                     <div class="col col-md-6">
-                       
+
                         <label asp-for="BTech_Passing_Year" class="form-label">B Tech Passing Year</label>
                         <select asp-for="BTech_Passing_Year" class="form-select border-dark" id="btechpassingyear" required>
                             <option value="">Select Btech Passing Year</option>
@@ -438,7 +445,7 @@
                         <label class="form-label">B Tech Marksheet</label>
                         <input asp-for="BTech_Document_Path" class="form-control border-dark"
                                type="file"
-                               id=" BtechMarksheet"
+                               id="BtechMarksheet"
                                required
                                accept=".pdf,.jpg,.jpeg,.png"
                                onchange="validateSSCMarksheet(this)">
@@ -461,15 +468,58 @@
 
             <div class="card-body">
 
-                <div class=" row mb-3 d-flex">
-                    <div class="col col-md-6">
-                        <label asp-for="Skills" class="form-label">Skills</label>
-                        <input asp-for="Skills" class="form-control border-dark" id="skills"  required/>
+                <div class="row mb-3 align-items-end">
+
+                    <!-- Skill Dropdown + Add Button -->
+                    <div class="col-md-4">
+                        <label class="form-label">Select Skill</label>
+
+                        <div class="d-flex">
+
+                            <select id="skillDropdown" class="form-select border-dark">
+                                <option value="">Select Skill</option>
+
+                                @foreach (var skill in ViewBag.Skills)
+                                {
+                                    <option value="@skill.SkillName">@skill.SkillName</option>
+                                }
+
+                            </select>
+
+                            <button type="button"
+                                    class="btn btn-success ms-2"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#addSkillModal"
+                                    style="white-space:nowrap;">
+                                + Add
+                            </button>
+
+                        </div>
                     </div>
-                    <div class="col col-md-6">
+
+                    <!-- Selected Skills -->
+                    <div class="col-md-4">
+                        <label asp-for="Skills" class="form-label">Selected Skills</label>
+
+                        <input asp-for="Skills"
+                               id="skills"
+                               class="form-control border-dark"
+                               readonly
+                               placeholder="Selected skills will appear here"
+                               required />
+                    </div>
+
+                    <!-- Resume Upload -->
+                    <div class="col-md-4">
                         <label class="form-label">Resume</label>
-                        <input asp-for="Resume" type="file" id="resume" class="form-control border-dark" required/>
+
+                        <input asp-for="Resume"
+                               type="file"
+                               id="resume"
+                               class="form-control border-dark"
+                               required />
                     </div>
+
                 </div>
 
 
@@ -505,10 +555,95 @@
 </div>
 
 
+<div class="modal fade" id="addSkillModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow-lg" style="border-radius:15px; border:none;">
+
+            <!-- Modal Header -->
+            <div class="modal-header text-white"
+                 style="background:linear-gradient(135deg,#1abc9c,#2ecc71); border-top-left-radius:15px;border-top-right-radius:15px;">
+
+                <h5 class="modal-title fw-bold">
+                    <i class="bi bi-lightning-charge-fill"></i> Add New Skill
+                </h5>
+
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body p-4">
+
+                <label class="form-label fw-semibold text-dark">
+                    Skill Name
+                </label>
+
+                <input type="text"
+                       id="newSkillName"
+                       class="form-control form-control-lg shadow-sm"
+                       placeholder="Enter new skill (Example: React, NodeJS)"
+                       style="border-radius:10px;border:2px solid #dfe6e9;" />
+
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer justify-content-between p-3">
+
+                <button class="btn btn-outline-secondary px-4"
+                        data-bs-dismiss="modal"
+                        style="border-radius:8px;">
+                    Close
+                </button>
+
+                <button class="btn text-white px-4"
+                        onclick="saveSkill()"
+                        style="background:linear-gradient(135deg,#00b894,#00cec9); border-radius:8px; font-weight:600;">
+                    <i class="bi bi-check-circle"></i> Save Skill
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Registration Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center p-4">
+
+            <div class="modal-body">
+
+                <!-- Bootstrap Logo -->
+                <i class="bi bi-check-circle-fill text-success"
+                   style="font-size:70px;"></i>
+
+                <h4 class="text-success fw-bold">
+                    Registration Successful
+                </h4>
+
+                <p class="mt-3 text-muted">
+                    Your registration is successfully completed.<br><br>
+
+                    Please wait for <b>Placement Coordinator Approval</b>.<br><br>
+
+                    Once approved, your <b>User ID</b> and <b>Password</b>
+                    will be sent to your registered <b>Email ID</b>.
+                </p>
+
+                <button class="btn btn-primary mt-3"
+                        data-bs-dismiss="modal">
+                    OK
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
 <!-- ========================================== -->
 <!-- JS: Profile Photo Preview/Remove Function -->
 <!-- ========================================== -->
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     function previewProfilePhoto(event) {
         const output = document.getElementById('profilePreview');
@@ -533,7 +668,7 @@
         else if (title === "Ms" || title === "Mrs") {
             genderSelect.value = "Female";
         }
-        
+
     });
 
     //date of birth validations
@@ -1059,26 +1194,26 @@
         // ❌ Invalid file type
         if (!allowedTypes.includes(file.type)) {
 
-                
+
                       showToast("Only PDF, JPG, JPEG or PNG files are allowed for marksheet");
             input.value = "";
             return;
-                
 
 
-            
-          
+
+
+
         }
 
         // ❌ File size exceeded
         if (file.size > maxSize) {
-           
+
 
             showToast(" Marksheet file size must not exceed 2 MB");
             input.value = "";
             return;
-            
-            
+
+
         }
 
         // ✅ Valid file → do nothing
@@ -1086,7 +1221,7 @@
 </script>
 
 
-<script>
+@* <script>
     function toggleEducation() {
         const selected = document.querySelector('input[name="EduType"]:checked').value;
 
@@ -1109,13 +1244,13 @@
         }
     }
 </script>
-
+ *@
 <script>
 
     document.addEventListener("DOMContentLoaded", function () {
         debugger;
     document.getElementById("submitAll").addEventListener("click", function (e) {
-        e.preventDefault(); // stop submit first
+       // e.preventDefault(); // stop submit first
         debugger;
         var nametitle = document.getElementById("nametitle");
         var firstname = document.getElementById("firstname");
@@ -1126,6 +1261,17 @@
         var emailid = document.getElementById("emailid");
         var confimemailid = document.getElementById("confimemailid");
 
+            const edu = document.querySelector('input[name="EduType"]:checked');
+
+    if (!edu) {
+        showToast("Please select Education Type");
+        return;
+    }
+
+        const selected =  edu.value;
+
+
+
         var rollno = document.getElementById("rollno");
         var confirmrollno = document.getElementById("confirmrollno");
         var branch = document.getElementById("branch");
@@ -1135,6 +1281,14 @@
         var sscpercentage = document.getElementById("sscpercentage");
         var sscpassingyear = document.getElementById("sscpassingyear");
         var SSCMarksheet = document.getElementById("SSCMarksheet");
+
+
+
+
+        var HSCpercentage = document.getElementById("hscpercentage");
+        var HSCpassingyear = document.getElementById("hscpassingyear");
+        var HSCMarksheet = document.getElementById("HSCMarksheet");
+
 
         var diplomapercentage = document.getElementById("diplomapercentage");
         var diplomabranch = document.getElementById("diplomabrnach");
@@ -1167,33 +1321,62 @@
         if (acadamicyear.value === "") { showToast("Please select Academic Year"); acadamicyear.focus(); return; }
 
         // ---------------- SSC ----------------
+
+
         if (sscpercentage.value === "") { showToast("Please enter SSC Percentage"); sscpercentage.focus(); return; }
         if (sscpassingyear.value === "") { showToast("Please select SSC Passing Year"); sscpassingyear.focus(); return; }
         if (SSCMarksheet.files.length === 0) { showToast("Please upload SSC Marksheet"); return; }
 
-        // ---------------- DIPLOMA (if visible) ----------------
-        if (diplomapercentage && diplomapercentage.value === "") {
+             // HSC validation
+    if (selected === "HSC" || selected === "Both") {
+
+        if (HSCpercentage.value === "") {
+            showToast("Please enter HSC Percentage");
+            HSCpercentage.focus();
+            return;
+        }
+
+        if (HSCpassingyear.value === "") {
+            showToast("Please select HSC Passing Year");
+            HSCpassingyear.focus();
+            return;
+        }
+
+        if (HSCMarksheet.files.length === 0) {
+            showToast("Please upload HSC Marksheet");
+            return;
+        }
+    }
+
+
+    // Diploma validation
+    if (selected === "Diploma" || selected === "Both") {
+
+        if (diplomapercentage.value === "") {
             showToast("Please enter Diploma Percentage");
             diplomapercentage.focus();
             return;
         }
 
-        if (diplomabranch && diplomabranch.value === "") {
+        if (diplomabranch.value === "") {
             showToast("Please enter Diploma Branch");
             diplomabranch.focus();
             return;
         }
 
-        if (diplomapssingyear && diplomapssingyear.value === "") {
+        if (diplomapssingyear.value === "") {
             showToast("Please select Diploma Passing Year");
             diplomapssingyear.focus();
             return;
         }
 
-        if (DiplomaMarksheet && DiplomaMarksheet.files.length === 0) {
+        if (DiplomaMarksheet.files.length === 0) {
             showToast("Please upload Diploma Marksheet");
             return;
         }
+    }
+
+
 
         // ---------------- BTECH ----------------
         if (btechpercentage.value === "") { showToast("Please enter BTech Percentage"); btechpercentage.focus(); return; }
@@ -1207,15 +1390,194 @@
 
 
 
-        // ✅ everything ok
-        this.submit();
+
+
+
+
+
     });
 
+    });
+
+
+
+        function toggleEducation() {
+        const selected = document.querySelector('input[name="EduType"]:checked').value;
+
+        const hsc = document.getElementById("hscSection");
+        const diploma = document.getElementById("diplomaSection");
+
+        // HSC inputs
+        const hscInputs = hsc.querySelectorAll("input, select");
+
+        // Diploma inputs
+        const diplomaInputs = diploma.querySelectorAll("input, select");
+
+        // Reset all
+        hsc.style.display = "none";
+        diploma.style.display = "none";
+
+        hscInputs.forEach(i => i.removeAttribute("required"));
+        diplomaInputs.forEach(i => i.removeAttribute("required"));
+
+        if (selected === "HSC") {
+            hsc.style.display = "block";
+            hscInputs.forEach(i => i.setAttribute("required", "required"));
+        }
+        else if (selected === "Diploma") {
+            diploma.style.display = "block";
+            diplomaInputs.forEach(i => i.setAttribute("required", "required"));
+        }
+        else if (selected === "Both") {
+            hsc.style.display = "block";
+            diploma.style.display = "block";
+
+            hscInputs.forEach(i => i.setAttribute("required", "required"));
+            diplomaInputs.forEach(i => i.setAttribute("required", "required"));
+        }
+    }
+</script>
+<script>
+
+    window.onload = function () {
+
+        var success = '@TempData["success"]';
+
+        if (success === "1") {
+
+            var myModal = new bootstrap.Modal(
+                document.getElementById('successModal')
+            );
+
+            myModal.show();
+        }
+
+    }
+
+
+        document.getElementById("skillDropdown").addEventListener("change", function () {
+
+        const skill = this.value;
+        const skillBox = document.getElementById("skills");
+
+        if (skill === "") return;
+
+        let currentSkills = skillBox.value.split(",").map(s => s.trim()).filter(s => s);
+
+        // prevent duplicate skill
+        if (currentSkills.includes(skill)) {
+            showToast("Skill already selected");
+            return;
+        }
+
+        currentSkills.push(skill);
+
+        skillBox.value = currentSkills.join(", ");
+
+        this.value = ""; // reset dropdown
     });
 </script>
 
+<script>
+
+       
+
+    function saveSkill() {
+        debugger;
+
+        var skillName = $("#newSkillName").val();
+
+        if (skillName == "") {
+            showToast("Enter Skill Name");
+            return;
+        }
+
+        $.ajax({
+            url: '@Url.Action("AddSkill", "Student")',
+            type: 'POST',
+            data: { skillName: skillName },
+
+            success: function (res) {
+
+                showToast("Skill Added Successfully");
+
+                $("#addSkillModal").modal('hide');
+
+                $("#skillDropdown").append(
+                    '<option value="' + skillName + '">' + skillName + '</option>'
+                );
+
+                $("#newSkillName").val("");
+
+            },
+            error: function () {
+                showToast("Error while saving skill");
+            }
+        });
+
+          function showToast(message) {
+
+        // Remove existing toast
+        const oldToast = document.getElementById("inlineToast");
+        if (oldToast) oldToast.remove();
+
+        const toast = document.createElement("div");
+        toast.id = "inlineToast";
+        toast.innerHTML = `
+            <span style="font-size:20px;">⚠️</span>
+            <span style="flex:1;">${message}</span>
+        `;
+
+        // Inline styles
+        Object.assign(toast.style, {
+            position: "fixed",
+            top: "20px",
+            right: "-400px",
+            minWidth: "280px",
+            maxWidth: "360px",
+            padding: "14px 18px",
+            background: "linear-gradient(135deg, #dc3545, #b02a37)",
+            color: "#fff",
+            borderRadius: "10px",
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            fontFamily: "Segoe UI, sans-serif",
+            fontSize: "14px",
+            fontWeight: "500",
+            boxShadow: "0 10px 25px rgba(0,0,0,0.25)",
+            zIndex: "99999",
+            transition: "right 0.4s ease"
+        });
+
+        document.body.appendChild(toast);
+
+        // Slide in
+        setTimeout(() => toast.style.right = "20px", 50);
+
+        // Slide out & remove
+        setTimeout(() => {
+            toast.style.right = "-400px";
+            setTimeout(() => toast.remove(), 400);
+        }, 3000);
+    }
+
+    }
 
 
 
+</script>
 
+<script>
 
+    $(document).ready(function () {
+
+        $('#skillDropdown').select2({
+            placeholder: "Search Skill",
+            allowClear: true,
+            width: '100%'
+        });
+
+    });
+
+</script>

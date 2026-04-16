@@ -1,7 +1,7 @@
 ﻿
 @{
     ViewData["Title"] = "Student Enrollment";
-    Layout = "~/Views/Shared/Student_Layout.cshtml";
+    Layout = "~/Views/Shared/Placement_Coordinator_layout.cshtml";
 }
 
 
@@ -34,49 +34,48 @@ transition:0.3s;
                 <h3 style="font-weight:700;">Placement Module – Coordinator Dashboard</h3>
                 <p class="text-muted mb-0">Welcome to your Placement Management Overview</p>
             </div>
-            <button onclick="toggleDark()" class="btn btn-outline-dark mt-2">
-                <i class="bi bi-moon-stars"></i> Dark Mode
-            </button>
+           
         </div>
 
         <!-- TOP STATS -->
         <div class="row g-3 mb-4">
 
-            <div class="col-xl-3 col-md-6">
+            <!-- Students -->
+            <div class="col">
                 <div onclick="location.href='/Trainer/Stud_List'"
-                     style="background:linear-gradient(135deg,#2563eb,#1d4ed8);
-            color:white;
-            padding:18px;
-            border-radius:14px;
-            cursor:pointer;">
+                     style="background:linear-gradient(135deg,#2563eb,#1d4ed8);color:white;padding:18px;border-radius:14px;cursor:pointer;">
                     <i class="bi bi-people fs-2"></i>
-                    <h2 class="fw-bold mt-2">158</h2>
+                    <h2 class="fw-bold mt-2">@ViewBag.StudentCount</h2>
                     <span>Students</span>
                 </div>
-
             </div>
 
-            <div class="col-xl-3 col-md-6">
-                <div onclick="location.href='/Trainer/CompanyList'" style="background:linear-gradient(135deg,#22c55e,#16a34a);color:white;padding:18px;border-radius:14px;">
+            <!-- Companies -->
+            <div class="col">
+                <div onclick="location.href='/Trainer/CompanyList'"
+                     style="background:linear-gradient(135deg,#22c55e,#16a34a);color:white;padding:18px;border-radius:14px;cursor:pointer;">
                     <i class="bi bi-briefcase fs-2"></i>
-                    <h2 class="fw-bold mt-2">32</h2>
+                    <h2 class="fw-bold mt-2">@ViewBag.CompanyCount</h2>
                     <span>Total Company</span>
                 </div>
             </div>
 
-            <div class="col-xl-3 col-md-6">
-                <div onclick="location.href='/Trainer/TestList'" style="background:linear-gradient(135deg,#fb923c,#f97316);color:white;padding:18px;border-radius:14px;">
-                    <i class="bi bi-calendar-event fs-2"></i>
-                    <h2 class="fw-bold mt-2">24</h2>
-                    <span>Test</span>
-                    @* <span>Interviews Scheduled</span> *@
+            <!-- Scheduled Interview -->
+            <div class="col">
+                <div onclick="location.href='/Trainer/ScheduleInterview'"
+                     style="background:linear-gradient(135deg,#a855f7,#7c3aed);color:white;padding:18px;border-radius:14px;cursor:pointer;">
+                    <i class="bi bi-person-video3 fs-2"></i>
+                    <h2 class="fw-bold mt-2">@ViewBag.InterviewCount</h2>
+                    <span>Scheduled Interview</span>
                 </div>
             </div>
 
-            <div class="col-xl-3 col-md-6">
-                <div style="background:linear-gradient(135deg,#8b5cf6,#6d28d9);color:white;padding:18px;border-radius:14px;">
+            <!-- Offers -->
+            <div class="col">
+                <div onclick="location.href='/Trainer/MakeOfferLetter'"
+                     style="background:linear-gradient(135deg,#ec4899,#db2777);color:white;padding:18px;border-radius:14px;cursor:pointer;">
                     <i class="bi bi-award fs-2"></i>
-                    <h2 class="fw-bold mt-2">14</h2>
+                    <h2 class="fw-bold mt-2">@ViewBag.OfferCount</h2>
                     <span>Offers Made</span>
                 </div>
             </div>
@@ -89,98 +88,150 @@ transition:0.3s;
             <!-- STUDENT APPLICATIONS -->
             <div class="col-lg-4">
                 <div class="bg-white p-3 rounded-4 shadow-sm">
-                    <div class="d-flex justify-content-between mb-2">
-                        <b>Student Applications</b>
-                        <a href="#">View All</a>
-                    </div>
 
-                    <div class="d-flex gap-2 mb-2">
-                        <select class="form-select form-select-sm"><option>All Departments</option></select>
-                        <select class="form-select form-select-sm"><option>All Statuses</option></select>
+                    <div class="d-flex justify-content-between mb-2">
+                        <b>Recent Registered Students</b>
+                        <a href="/Trainer/Stud_List">View All</a>
                     </div>
 
                     <div class="list-group list-group-flush">
-                        <div class="list-group-item d-flex justify-content-between">
-                            <span>John Doe<br><small>Computer Science</small></span>
-                            <span class="badge bg-warning">Interview</span>
-                        </div>
-                        <div class="list-group-item d-flex justify-content-between">
-                            <span>Sarah Lee<br><small>Business</small></span>
-                            <span class="badge bg-success">Offer</span>
-                        </div>
-                        <div class="list-group-item d-flex justify-content-between">
-                            <span>Michael Chen<br><small>Engineering</small></span>
-                            <span class="badge bg-primary">Review</span>
-                        </div>
-                        <div class="list-group-item d-flex justify-content-between">
-                            <span>Emily White<br><small>IT</small></span>
-                            <span class="badge bg-secondary">Applied</span>
-                        </div>
+
+                        @foreach (var student in ViewBag.RecentStudents)
+                        {
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+
+                                <span>
+                                    @student.FirstName  @student.LastName  <br>
+                                    <small>@student.Branch</small>
+                                </span>
+
+                                <div style="min-width:120px;">
+                                    @if (student.Status == "Approved")
+                                    {
+                                        <button class="btn btn-success btn-sm w-100" disabled>
+                                            Approved
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-danger btn-sm w-100" disabled>
+                                            Not Approved
+                                        </button>
+                                    }
+                                </div>
+
+                            </div>
+                        }
+
                     </div>
+
                 </div>
             </div>
 
             <!-- UPCOMING INTERVIEWS -->
             <div class="col-lg-4">
                 <div class="bg-white p-3 rounded-4 shadow-sm">
+
                     <div class="d-flex justify-content-between mb-2">
                         <b>Upcoming Interviews</b>
-                        <a href="#">View All</a>
+                        <a href="/Trainer/ScheduleInterview">View All</a>
                     </div>
 
-                    <div class="border rounded p-2 mb-2">
-                        <b>Tech Solutions Inc.</b><br>
-                        <small>May 15, 10:00 AM</small>
-                        <button class="btn btn-sm btn-primary float-end">View Details</button>
-                    </div>
+                    @foreach (var interview in ViewBag.UpcomingInterviews)
+                    {
+                        <div class="border rounded p-2 mb-2 d-flex justify-content-between align-items-center">
 
-                    <div class="border rounded p-2">
-                        <b>BrightMark Solutions</b><br>
-                        <small>May 17, 1:00 PM</small>
-                        <button class="btn btn-sm btn-primary float-end">View Details</button>
-                    </div>
+                            <div>
+                                <b>@interview.Postion</b><br>
+                                <small>@interview.CompanyName</small>
+                            </div>
+
+                            <small class="text-muted text-end">
+                                @interview.InterviewDate.ToString("MMM dd")<br>
+                                @DateTime.Parse(interview.InterviewTime).ToString("hh:mm tt")
+                            </small>
+
+                        </div>
+                    }
+
                 </div>
             </div>
-
             <!-- PLACEMENT ACTIVITY -->
             <div class="col-lg-4">
-                <div class="bg-white p-3 rounded-4 shadow-sm">
-                    <div class="d-flex justify-content-between mb-2">
-                        <b>Placement Activity</b>
-                        <a href="#">View All</a>
+                <div style="background:white;
+                padding:18px;
+                border-radius:16px;
+                box-shadow:0 6px 18px rgba(0,0,0,0.08);">
+
+                    <div style="display:flex;
+                    justify-content:space-between;
+                    margin-bottom:14px;">
+
+                        <b style="font-size:16px;">Placement Reminders</b>
+
                     </div>
 
-                    <div class="mb-3">
+                    <!-- Reminder 1 -->
+                    <div style="border-left:4px solid #3b82f6;
+                    padding-left:10px;
+                    margin-bottom:14px;">
+
                         <b>Review Applications</b>
-                        <p class="small text-muted mb-1">Review pending applications & schedule interviews</p>
+                        <p style="font-size:13px;color:#666;margin:2px 0 0 0;">
+                            Check new student applications and shortlist candidates for interviews.
+                        </p>
+
                     </div>
 
-                    <div>
-                        <b>Follow Up Offers</b>
-                        <p class="small text-muted">Follow up with companies on pending offers</p>
+                    <!-- Reminder 2 -->
+                    <div style="border-left:4px solid #22c55e;
+                    padding-left:10px;
+                    margin-bottom:14px;">
+
+                        <b>Schedule Interviews</b>
+                        <p style="font-size:13px;color:#666;margin:2px 0 0 0;">
+                            Arrange interview slots for shortlisted students with companies.
+                        </p>
+
                     </div>
+
+                    <!-- Reminder 3 -->
+                    <div style="border-left:4px solid #f59e0b;
+                    padding-left:10px;">
+
+                        <b>Follow Up Offers</b>
+                        <p style="font-size:13px;color:#666;margin:2px 0 0 0;">
+                            Track offer letters and confirm student joining status.
+                        </p>
+
+                    </div>
+
                 </div>
             </div>
 
             <!-- LATEST JOBS -->
             <div class="col-lg-4">
                 <div class="bg-white p-3 rounded-4 shadow-sm">
-                    <b>Latest Job Openings</b>
 
-                    <div class="d-flex justify-content-between mt-3">
-                        <span>Innovatech Corp<br><small>Software Developer</small></span>
-                        <button class="btn btn-sm btn-primary">View Job</button>
+                    <div class="d-flex justify-content-between mb-2">
+                        <b>Latest Job Openings</b>
+                        <a href="/Trainer/CompanyList">View All</a>
                     </div>
 
-                    <div class="d-flex justify-content-between mt-3">
-                        <span>FinEdge Ltd.<br><small>Financial Analyst</small></span>
-                        <button class="btn btn-sm btn-primary">View Job</button>
-                    </div>
+                    @foreach (var job in ViewBag.LatestJobs)
+                    {
+                        <div class="border rounded p-2 mt-2 d-flex justify-content-between align-items-center">
 
-                    <div class="d-flex justify-content-between mt-3">
-                        <span>HealthWave Systems<br><small>Healthcare Consultant</small></span>
-                        <button class="btn btn-sm btn-primary">View Job</button>
-                    </div>
+                            <div>
+                                <b>@job.CompanyName</b><br>
+                                <small class="text-primary fw-semibold">@job.Position</small>
+                            </div>
+
+                            <span class="badge bg-success">₹@job.Salary</span>
+
+                        </div>
+                    }
+
                 </div>
             </div>
 
@@ -194,16 +245,74 @@ transition:0.3s;
 
             <!-- TASKS -->
             <div class="col-lg-3">
-                <div class="bg-white p-3 rounded-4 shadow-sm">
-                    <div class="d-flex justify-content-between mb-2">
-                        <b>Tasks & Reminders</b>
-                        <a href="#">View All</a>
+                <div style="background:#ffffff;
+                padding:18px;
+                border-radius:16px;
+                box-shadow:0 6px 18px rgba(0,0,0,0.08);
+                height:100%;
+                display:flex;
+                flex-direction:column;">
+
+                    <!-- Header -->
+                    <div style="display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                    margin-bottom:16px;">
+
+                        <b style="font-size:16px;color:#222;">
+                            Recent Added Tests
+                        </b>
+
+                        <a href="/Trainer/Test"
+                           style="text-decoration:none;
+                      background:linear-gradient(135deg,#4f46e5,#6366f1);
+                      color:white;
+                      padding:6px 12px;
+                      border-radius:8px;
+                      font-size:12px;
+                      font-weight:600;">
+                            + Add Test
+                        </a>
+
                     </div>
 
-                    <p><b>Review Applications</b><br><small>Review pending & set interviews</small></p>
-                    <p><b>Follow Up Offers</b><br><small>Follow up with companies</small></p>
+                    <!-- Test List -->
+                    <div style="flex-grow:1;">
 
-                    <button class="btn btn-warning w-100">View All</button>
+                        @foreach (var test in ViewBag.RecentTests)
+                        {
+                            <div style="background:#f8fafc;
+                                padding:12px;
+                                border-radius:10px;
+                                margin-bottom:12px;
+                                transition:0.2s;">
+
+                                <b style="font-size:14px;color:#111;">
+                                    @test.TestName
+                                </b><br>
+
+                                <span style="font-size:12px;color:#6b7280;">
+                                    @test.Branch
+                                </span>
+
+                            </div>
+                        }
+
+                    </div>
+
+                    <!-- Bottom Button -->
+                    <a href="/Trainer/TestList"
+                       style="text-decoration:none;
+                  text-align:center;
+                  background:linear-gradient(135deg,#0ea5e9,#38bdf8);
+                  color:white;
+                  padding:10px;
+                  border-radius:10px;
+                  font-weight:600;
+                  margin-top:10px;">
+                        View All Tests
+                    </a>
+
                 </div>
             </div>
 
@@ -212,25 +321,44 @@ transition:0.3s;
 
     <!-- GRAPH SCRIPT -->
     <script>
-const ctx=document.getElementById('placementChart');
-new Chart(ctx,{
-type:'bar',
-data:{
-labels:['Applied Jobs','Interviews','Offers Made','Students Placed'],
-datasets:[{
-data:[150,120,60,150],
-backgroundColor:['#2563eb','#fb923c','#22c55e','#8b5cf6']
-}]
-},
-options:{
-animation:{
-duration:2000,
-easing:'easeOutQuart'
-},
-plugins:{legend:{display:false}},
-scales:{y:{beginAtZero:true}}
-}
-});
+        const assignedCount = @ViewBag.AssignedCount;
+        const appliedCount = @ViewBag.AppliedCount;
+        const selectedCount = @ViewBag.SelectedCount;
+
+        // find highest value
+        const maxValue = Math.max(assignedCount, appliedCount, selectedCount);
+
+        const ctx = document.getElementById('placementChart');
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Assigned Jobs', 'Applied Jobs', 'Selected Jobs'],
+                datasets: [{
+                    data: [assignedCount, appliedCount, selectedCount],
+                    backgroundColor: ['#2563eb', '#fb923c', '#22c55e']
+                }]
+            },
+            options: {
+                responsive: true,
+                animation: {
+                    duration: 2000,
+                    easing: 'easeOutQuart'
+                },
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: maxValue + 2, // dynamic height based on highest count
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
     </script>
 
     <!-- DARK MODE -->

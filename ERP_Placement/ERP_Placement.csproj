@@ -17,8 +17,8 @@
     <Folder Include="wwwroot\uploads\HSC\" />
     <Folder Include="wwwroot\uploads\DIPLOMA\" />
     <Folder Include="wwwroot\uploads\BTECH\" />
+    <Folder Include="wwwroot\uploads\OfferLetter\" />
     <Folder Include="wwwroot\uploads\RESUME\" />
-    <Folder Include="wwwroot\uploads\Profile\" />
     <Folder Include="wwwroot\uploads\SSC\" />
   </ItemGroup>
 

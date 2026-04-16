@@ -7,6 +7,7 @@ using System.Data;
 using System.Net;
 using System.Net.Mail;
 
+
 namespace ERP_Placement.Controllers
 {
     public class Login : Controller
@@ -14,10 +15,13 @@ namespace ERP_Placement.Controllers
         // GET: Login
 
         private readonly StudentDAL _dal;
+       
 
         public Login(IConfiguration config)
         {
             _dal = new StudentDAL(config);
+            
+
         }
 
         [HttpGet]
@@ -41,12 +45,14 @@ namespace ERP_Placement.Controllers
         public ActionResult Traineer_Login(login_Properties model)
         {
             //string Username = "placementerp@gmail.com";
+            //string Username = "placementerp@gmail.com";
             string Username = "1";
            
 
 
 
             string Password = "1";
+           // string Password = "Placement@123";
 
            
 
@@ -78,13 +84,17 @@ namespace ERP_Placement.Controllers
             if (dt.Rows.Count == 0)
             {
                 TempData["error"] = "Invalid username or password";
-                return RedirectToAction("Login");
+                return RedirectToAction("Student_LoginPage");
             }
+
+            
 
             // Login success
             HttpContext.Session.SetString("StudentId", dt.Rows[0]["StudentId"].ToString());
             HttpContext.Session.SetString("StudentName", dt.Rows[0]["FirstName"].ToString());
+            string studentId = dt.Rows[0]["StudentId"].ToString();
 
+            
             return RedirectToAction("StudentDB", "Student");
         }
         // GET: Login/Details/5
@@ -99,63 +109,7 @@ namespace ERP_Placement.Controllers
             return View();
         }
 
-        // POST: Login/Create
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Create(IFormCollection collection)
-        //{
-        //    try
-        //    {
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
-
-        //// GET: Login/Edit/5
-        //public ActionResult Edit(int id)
-        //{
-        //    return View();
-        //}
-
-        //// POST: Login/Edit/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Edit(int id, IFormCollection collection)
-        //{
-        //    try
-        //    {
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
-
-        //// GET: Login/Delete/5
-        //public ActionResult Delete(int id)
-        //{
-        //    return View();
-        //}
-
-        //// POST: Login/Delete/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Delete(int id, IFormCollection collection)
-        //{
-        //    try
-        //    {
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
-
+       
         [HttpPost]
         public JsonResult SendOTP(string email)
         {
@@ -269,5 +223,20 @@ Placement Team";
             return Json(new { success = false, message = "Password update failed" });
         }
 
+
+        public IActionResult StudLogout()
+        {
+            HttpContext.Session.Clear(); // remove all session
+            return RedirectToAction("Index", "Home");
+        }
+
+
+        //public void MyUpcommingInterviews()
+        //{
+        //    string studentId = HttpContext.Session.GetString("StudentId");
+            
+
+        //    return (interviews); // Pass the list to view
+        //}
     }
 }

@@ -47,39 +47,92 @@
         .dashboard-card {
             color: white;
         }
+
+        .nav {
+            background-color: #6a11cb;
+        }
+
+        .profile-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .profile-btn {
+            color: white;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .profile-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            background: white;
+            min-width: 150px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+            .profile-menu a {
+                display: block;
+                padding: 10px 15px;
+                text-decoration: none;
+                color: #333;
+            }
+
+                .profile-menu a:hover {
+                    background: #f2f2f2;
+                }
     </style>
 </head>
 
 <body>
 
     <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary px-4">
+    <nav class=" nav navbar navbar-expand-lg navbar-dark  px-4">
         <a class="navbar-brand" href="#">
             <i class="bi bi-mortarboard-fill"></i> EduCatal
         </a>
 
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav ms-4">
-                <li class="nav-item"><a class="nav-link active" href="#">Dashboard</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Courses</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Placements</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Resources</a></li>
+                <li class="nav-item">
+                    <a class="nav-link active" asp-controller="Student" asp-action="StudentDB">
+                        Dashboard
+                    </a>
+
+                </li>
+               
+              
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("About", "Student")">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("FAQ", "Student")">FAQ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("TPO", "Student")">Training & Placement Cell</a>
+                </li>
             </ul>
         </div>
 
-        <div class="dropdown">
-            <a class="text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown">
-                <i class="bi bi-person-circle"></i> John Doe
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#">Profile</a></li>
-                <li><a class="dropdown-item" href="#">Logout</a></li>
-            </ul>
+        <div class="profile-dropdown">
+            <div class="profile-btn" onclick="toggleDropdown()">
+                <i class="bi bi-person-circle"></i>  @Context.Session.GetString("StudentName") ▼
+            </div>
+
+            <div class="profile-menu" id="profileMenu">
+                @* <a href="#">Profile</a> *@
+                <a href="@Url.Action("EditStudent", "Student")">Profile</a>
+                <a href="@Url.Action("StudLogout", "Login")">Logout</a>
+               
+            </div>
         </div>
     </nav>
 
     <!-- CONTENT -->
-    <div class="container-fluid mt-4 px-4">
+    <div >
         @RenderBody()
     </div>
 
@@ -105,6 +158,19 @@
             updateCounter();
         });
     </script>
+    <script>
+        function toggleDropdown() {
+            var menu = document.getElementById("profileMenu");
+            menu.style.display = (menu.style.display === "block") ? "none" : "block";
+        }
 
+        window.onclick = function(event) {
+            if (!event.target.closest('.profile-dropdown')) {
+                document.getElementById("profileMenu").style.display = "none";
+            }
+        }
+
+
+    </script>
 </body>
 </html>

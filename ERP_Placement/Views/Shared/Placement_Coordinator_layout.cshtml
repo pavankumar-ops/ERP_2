@@ -1,0 +1,169 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] - EduCatal ERP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Favicons -->
+    <link href="~/img/favicon.png" rel="icon">
+    <link href="~img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Raleway:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="~/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="~/vendor/aos/aos.css" rel="stylesheet">
+    <link href="~/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+    <!-- Main CSS File -->
+    <link href="~/css/main.css" rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f4f6f9;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .counter {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .dashboard-card {
+            color: white;
+        }
+        /* .nav{
+            background-color: #6a11cb;
+        } */
+
+        .profile-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .profile-btn {
+            color: white;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .profile-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            background: white;
+            min-width: 150px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+            .profile-menu a {
+                display: block;
+                padding: 10px 15px;
+                text-decoration: none;
+                color: #333;
+            }
+
+                .profile-menu a:hover {
+                    background: #f2f2f2;
+                }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class=" nav navbar navbar-expand-lg navbar-dark  px-4" style="background:#375c96;">
+        <a class="navbar-brand" href="#">
+            <i class="bi bi-mortarboard-fill"></i> EduCatal
+        </a>
+
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-4">
+                <li class="nav-item">
+                    <a class="nav-link active" asp-controller="Trainer" asp-action="TraineerDB">
+                        Dashboard
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("About", "Trainer")">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("FAQ", "Trainer")">FAQ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("TPO", "Trainer")">Training & Placement Cell</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="profile-dropdown">
+            <div class="profile-btn" onclick="toggleDropdown()">
+                <i class="bi bi-person-circle"></i> Training Placement Co-ordinator ▼
+            </div>
+
+            <div class="profile-menu" id="profileMenu">
+                @* <a href="#">Profile</a> *@
+                <a href="@Url.Action("StudLogout", "Login")">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTENT -->
+    <div class="container-fluid mt-4 px-4">
+        @RenderBody()
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Counter Animation -->
+    <script>
+        const counters = document.querySelectorAll('.counter');
+        counters.forEach(counter => {
+            counter.innerText = '0';
+            const updateCounter = () => {
+                const target = +counter.getAttribute('data-target');
+                const c = +counter.innerText;
+                const increment = target / 50;
+                if (c < target) {
+                    counter.innerText = `${Math.ceil(c + increment)}`;
+                    setTimeout(updateCounter, 30);
+                } else {
+                    counter.innerText = target;
+                }
+            };
+            updateCounter();
+        });
+    </script>
+    <script>
+        function toggleDropdown() {
+            var menu = document.getElementById("profileMenu");
+            menu.style.display = (menu.style.display === "block") ? "none" : "block";
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.closest('.profile-dropdown')) {
+                document.getElementById("profileMenu").style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>

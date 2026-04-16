@@ -1,131 +1,410 @@
 ﻿@{
-    ViewData["Title"] = "Student Enrollment";
+    ViewData["Title"] = "Placement Assistant";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!-- Bootstrap 5 -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
+
+    .container, .container-fluid {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
+
+    body {
+        margin: 0;
+    }
+
     :root {
-        --bs-primary: #3b245f;
-        --bs-primary-rgb: 59, 36, 95;
+        --main: #3b245f;
+        --light: #f5f6fa;
     }
 
-    html, body {
-        height: 100%;
+    body {
+        margin: 0;
+        overflow: hidden;
     }
 
-    .faq-panel {
-        min-height: 100vh;
+    /* MAIN LAYOUT */
+
+    .chat-app {
+        display: flex;
+        height: calc(100vh - 56px); /* navbar height */
     }
 
-    .chat-body {
+    /* SIDEBAR */
+
+    .sidebar {
+        width: 280px;
+        background: var(--main);
+        color: white;
+        padding: 20px;
         overflow-y: auto;
     }
 
-    .message {
-        max-width: 70%;
-        padding: .75rem 1rem;
-        border-radius: .75rem;
-        font-size: .875rem;
-        margin-bottom: .75rem;
+        .sidebar h5 {
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+    /* SEARCH */
+
+    .search-box {
+        border-radius: 8px;
+        border: none;
+        padding: 8px;
+        margin-bottom: 15px;
     }
+
+    /* FAQ BUTTON */
+
+    .faq-btn {
+        width: 100%;
+        border: none;
+        background: white;
+        color: var(--main);
+        padding: 9px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: .2s;
+    }
+
+        .faq-btn:hover {
+            background: #e9e3f6;
+            transform: translateX(5px);
+        }
+
+    /* CHAT AREA */
+
+    .chat-area {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        background: var(--light);
+    }
+
+    /* HEADER */
+
+    .chat-header {
+        background: white;
+        padding: 15px 20px;
+        border-bottom: 1px solid #ddd;
+        font-weight: 600;
+        font-size: 18px;
+    }
+
+    /* CHAT BODY */
+
+    .chat-body {
+        flex: 1;
+        padding: 25px;
+        overflow-y: auto;
+    }
+
+    /* MESSAGES */
+
+    .message {
+        max-width: 65%;
+        padding: 12px 15px;
+        border-radius: 12px;
+        margin-bottom: 10px;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .user {
+        background: var(--main);
+        color: white;
+        margin-left: auto;
+        border-bottom-right-radius: 3px;
+    }
+
+    .bot {
+        background: white;
+        border: 1px solid #ddd;
+        border-bottom-left-radius: 3px;
+    }
+
+    /* INPUT AREA */
+
+    .chat-input {
+        display: flex;
+        padding: 15px;
+        border-top: 1px solid #ddd;
+        background: white;
+        gap: 10px;
+    }
+
+        .chat-input input {
+            flex: 1;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+    .send-btn {
+        background: var(--main);
+        color: white;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 8px;
+    }
+
+    /* TYPING */
+
+    .typing {
+        font-size: 13px;
+        color: #777;
+        margin-top: 5px;
+    }
+
 </style>
 
-<div class="container-fluid">
-    <div class="row">
 
-        <!-- LEFT FAQ PANEL -->
-        <div class="col-md-3 bg-primary text-white p-4 faq-panel">
-            <h5 class="fw-semibold mb-4">📌 Placement FAQs</h5>
 
-            <button class="btn btn-light text-primary w-100 mb-2"
-                    onclick="sendFAQ(1)">
+<main >
+    <div class="chat-app">
+
+        <!-- SIDEBAR -->
+
+        <div class="sidebar">
+
+            <h5>📌 Placement FAQs</h5>
+
+            <input type="text"
+                   class="form-control search-box"
+                   placeholder="Search FAQ..."
+                   onkeyup="filterFAQ(this.value)">
+
+            <button class="faq-btn" onclick="sendFAQ('Placement Process')">
                 Placement Process
             </button>
 
-            <button class="btn btn-light text-primary w-100 mb-2"
-                    onclick="sendFAQ(2)">
+            <button class="faq-btn" onclick="sendFAQ('Eligible Branches')">
                 Eligible Branches
             </button>
 
-            <button class="btn btn-light text-primary w-100 mb-2"
-                    onclick="sendFAQ(3)">
+            <button class="faq-btn" onclick="sendFAQ('Resume Guidelines')">
                 Resume Guidelines
             </button>
 
-            <button class="btn btn-light text-primary w-100 mb-2"
-                    onclick="sendFAQ(4)">
+            <button class="faq-btn" onclick="sendFAQ('Interview Schedule')">
                 Interview Schedule
             </button>
 
-            <button class="btn btn-light text-primary w-100 mb-2"
-                    onclick="sendFAQ(5)">
+            <button class="faq-btn" onclick="sendFAQ('Company Criteria')">
                 Company Criteria
             </button>
 
-            <button class="btn btn-light text-primary w-100"
-                    onclick="sendFAQ(6)">
+            <button class="faq-btn" onclick="sendFAQ('Placement Contact')">
                 Contact Placement Cell
             </button>
+
         </div>
 
-        <!-- RIGHT CHAT PANEL -->
-        <div class="col-md-9 d-flex flex-column p-0">
 
-            <!-- HEADER -->
-            <div class="bg-primary text-white p-3 fw-semibold fs-5">
+
+        <!-- CHAT AREA -->
+
+        <div class="chat-area">
+
+            <div class="chat-header">
                 🤖 Placement Assistant
             </div>
 
-            <!-- CHAT BODY -->
-            <div class="flex-grow-1 p-4 bg-light chat-body" id="chatBody">
-                <div class="message bg-secondary-subtle text-dark">
-                    Hello 👋 <br />
-                    I’m your Placement Assistant.<br />
-                    Select a question from the left panel.
+
+            <div class="chat-body" id="chatBody">
+
+                <div class="message bot">
+                    Hello 👋 <br>
+                    I'm your <b>Placement Assistant</b>.<br>
+                    Ask anything about placements.
                 </div>
+
+            </div>
+
+
+
+            <div class="chat-input">
+
+                <input type="text"
+                       id="chatInput"
+                       placeholder="Ask something..."
+                       onkeypress="if(event.key==='Enter') sendMessage()">
+
+                <button class="send-btn"
+                        onclick="sendMessage()">
+                    Send
+                </button>
+
             </div>
 
         </div>
 
     </div>
-</div>
+</main>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 
 <script>
-    const chatBody = document.getElementById("chatBody");
 
-    const faqAnswers = {
-        1: "The placement process includes registration, aptitude test, technical interview, HR round, and offer letter.",
-        2: "Eligible branches depend on company criteria. Mostly CSE, IT, ENTC, Mechanical & Electrical.",
-        3: "Resume should be one page, updated, error-free, and approved by the placement coordinator.",
-        4: "Interview schedules are shared via ERP notification and official email.",
-        5: "Each company has different criteria such as CGPA, branch, and passing year.",
-        6: "Placement Cell Contact: placement@college.edu | Office Room No. 12"
+    const chatBody=document.getElementById("chatBody");
+
+
+    /* FAQ ANSWERS */
+
+    const answers={
+
+    "Placement Process":
+    "The placement process includes registration, aptitude test, technical interview, HR round and final offer letter.",
+
+    "Eligible Branches":
+    "Mostly CSE, IT, ENTC, Mechanical and Electrical branches are eligible.",
+
+    "Resume Guidelines":
+    "Resume should be one page, ATS friendly and approved by placement coordinator.",
+
+    "Interview Schedule":
+    "Interview schedules are shared through ERP notifications and email.",
+
+    "Company Criteria":
+    "Each company has eligibility criteria such as CGPA, branch and graduation year.",
+
+    "Placement Contact":
+    "Email: placement@college.edu | Office Room No.12 | Time: 10AM – 5PM"
+
     };
 
-    function sendFAQ(id) {
 
-        const questionText = document.querySelectorAll(".faq-panel button")[id - 1].innerText;
 
-        // User Message
-        const userDiv = document.createElement("div");
-        userDiv.className = "message bg-primary text-white ms-auto text-end";
-        userDiv.innerText = questionText;
-        chatBody.appendChild(userDiv);
+    /* USER MESSAGE */
 
-        // Bot Message
-        setTimeout(() => {
-            const botDiv = document.createElement("div");
-            botDiv.className = "message bg-secondary-subtle text-dark";
-            botDiv.innerText = faqAnswers[id];
-            chatBody.appendChild(botDiv);
+    function userMessage(text){
 
-            chatBody.scrollTop = chatBody.scrollHeight;
-        }, 400);
+    let div=document.createElement("div");
+
+    div.className="message user";
+
+    div.innerText=text;
+
+    chatBody.appendChild(div);
+
+    chatBody.scrollTop=chatBody.scrollHeight;
+
     }
+
+
+
+    /* BOT MESSAGE */
+
+    function botMessage(text){
+
+    let div=document.createElement("div");
+
+    div.className="message bot";
+
+    div.innerText=text;
+
+    chatBody.appendChild(div);
+
+    chatBody.scrollTop=chatBody.scrollHeight;
+
+    }
+
+
+
+    /* TYPING */
+
+    function typing(){
+
+    let t=document.createElement("div");
+
+    t.className="typing";
+
+    t.id="typing";
+
+    t.innerText="Assistant is typing...";
+
+    chatBody.appendChild(t);
+
+    chatBody.scrollTop=chatBody.scrollHeight;
+
+    }
+
+    function removeTyping(){
+
+    let t=document.getElementById("typing");
+
+    if(t) t.remove();
+
+    }
+
+
+
+    /* FAQ CLICK */
+
+    function sendFAQ(q){
+
+    userMessage(q);
+
+    typing();
+
+    setTimeout(()=>{
+
+    removeTyping();
+
+    botMessage(answers[q] || "Please contact placement cell.");
+
+    },900);
+
+    }
+
+
+
+    /* INPUT MESSAGE */
+
+    function sendMessage(){
+
+    let input=document.getElementById("chatInput");
+
+    let text=input.value.trim();
+
+    if(text==="") return;
+
+    userMessage(text);
+
+    input.value="";
+
+    typing();
+
+    setTimeout(()=>{
+
+    removeTyping();
+
+    botMessage("Thank you for your question. Our placement team will assist you soon.");
+
+    },1000);
+
+    }
+
+
+
+    /* SEARCH */
+
+    function filterFAQ(keyword){
+
+    keyword=keyword.toLowerCase();
+
+    document.querySelectorAll(".faq-btn").forEach(btn=>{
+
+    btn.style.display=btn.innerText.toLowerCase().includes(keyword)
+    ? "block"
+    : "none";
+
+    });
+
+    }
+
 </script>

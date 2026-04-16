@@ -11,6 +11,58 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 
 <style>
+
+
+    .branch-header {
+        background: linear-gradient(135deg,#6a11cb,#2575fc,#ff6a00);
+        background-size: 400% 400%;
+        animation: gradientMove 10s ease infinite;
+        color: white;
+        padding: 25px;
+        border-radius: 12px;
+    }
+
+    @@keyframes gradientMove {
+        0%
+
+    {
+        background-position: 0% 50%
+    }
+
+    50% {
+        background-position: 100% 50%
+    }
+
+    100% {
+        background-position: 0% 50%
+    }
+
+    }
+
+    .recruiter-logo {
+        height: 40px;
+        filter: grayscale(100%);
+        transition: 0.3s;
+    }
+
+        .recruiter-logo:hover {
+            filter: none;
+            transform: scale(1.1);
+        }
+
+    .timeline {
+        border-left: 3px solid #0d6efd;
+        padding-left: 20px;
+    }
+
+    .timeline-item {
+        margin-bottom: 20px;
+    }
+
+    .student-card img {
+        height: 160px;
+        object-fit: cover;
+    }
     .hero-image {
         object-fit: cover;
         height: 380px;
@@ -94,7 +146,11 @@
             <div class="p-4 custom-card rounded mb-3">
                 <h3 class="fw-bold">1000+ Placements in 150+ Companies</h3>
                 <p class="mb-2">Top placement record in core companies with highest packages.</p>
-                <a class="btn btn-light btn-sm fw-semibold">LEARN MORE</a>
+                <a class="btn btn-light btn-sm fw-semibold"
+                   data-bs-toggle="modal"
+                   data-bs-target="#placementModal">
+                    LEARN MORE
+                </a>
             </div>
 
             <!-- Purple Card -->
@@ -103,7 +159,12 @@
                 <p class="mb-2">
                     Our students annually avail the most lucrative jobs which offer lucrative packages in the most distinguished industries.
                 </p>
-                <a class="btn btn-outline-secondary btn-sm fw-semibold">KNOW MORE</a>
+
+                <a class="btn btn-outline-secondary btn-sm fw-semibold"
+                   data-bs-toggle="modal"
+                   data-bs-target="#packageModal">
+                    KNOW MORE
+                </a>
             </div>
 
         </div>
@@ -124,28 +185,32 @@
                 </h5>
 
                 <div class="list-group">
+                   
 
-                    <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+
+                  
+                    <a href="#" class="list-group-item list-group-item-action d-flex align-items-center"
+                       data-bs-toggle="modal" data-bs-target="#mechModal" data-branch="Mechanical">
                         <i class="bi bi-gear-fill text-danger fs-4 me-3"></i>
                         <span class="fw-semibold">Mechanical Engineering</span>
                     </a>
 
-                    <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                    <a href="#" class="list-group-item list-group-item-action d-flex align-items-center"
+                       data-bs-toggle="modal" data-bs-target="#cseModal" data-branch="CSE">
                         <i class="bi bi-laptop-fill text-primary fs-4 me-3"></i>
                         <span class="fw-semibold">Computer Science Engineering</span>
                     </a>
 
-                    <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                    <a href="#" class="list-group-item list-group-item-action d-flex align-items-center"
+                       data-bs-toggle="modal" data-bs-target="#electricalModal" data-branch="Electronics">
                         <i class="bi bi-cpu-fill text-success fs-4 me-3"></i>
                         <span class="fw-semibold">Electronics Engineering</span>
                     </a>
 
-                    <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
-                        <i class="bi bi-lightning-fill text-warning fs-4 me-3"></i>
-                        <span class="fw-semibold">Electrical Engineering</span>
-                    </a>
+                   
 
-                    <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                    <a href="#" class="list-group-item list-group-item-action d-flex align-items-center"
+                       data-bs-toggle="modal" data-bs-target="#civilModal" data-branch="Civil">
                         <i class="bi bi-building text-secondary fs-4 me-3"></i>
                         <span class="fw-semibold">Civil Engineering</span>
                     </a>
@@ -233,44 +298,45 @@
 
                             <div class="col-md-3">
                                 <div class="card text-center shadow-sm">
-                                    <img src="~/img/studentphotos/oip (2).webp" class="card-img-top">
+                                    <img src="https://randomuser.me/api/portraits/men/32.jpg" class="card-img-top">
                                     <div class="card-body">
                                         <h6 class="fw-bold">Omkar Shinde</h6>
                                         <p class="small mb-1">CSE</p>
-                                        <p class="text-success fw-bold mb-0">₹12 LPA</p>
+                                        <p class="text-success fw-bold mb-0">Google - ₹12 LPA</p>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-md-3">
                                 <div class="card text-center shadow-sm">
-                                    <img src="~/img/studentphotos/oip (6).webp" class="card-img-top">
+                                    <img src="https://randomuser.me/api/portraits/men/45.jpg" class="card-img-top">
                                     <div class="card-body">
                                         <h6 class="fw-bold">Aarav Patil</h6>
                                         <p class="small mb-1">ME</p>
-                                        <p class="text-success fw-bold mb-0">₹8.5 LPA</p>
+                                        <p class="text-success fw-bold mb-0">Tata Motors - ₹8.5 LPA</p>
                                     </div>
                                 </div>
                             </div>
 
+
                             <div class="col-md-3">
                                 <div class="card text-center shadow-sm">
-                                    <img src="~/img/studentphotos/oip (5).webp" class="card-img-top">
+                                    <img src="https://randomuser.me/api/portraits/women/44.jpg" class="card-img-top">
                                     <div class="card-body">
                                         <h6 class="fw-bold">Pranita Kulkarni</h6>
                                         <p class="small mb-1">ECE</p>
-                                        <p class="text-success fw-bold mb-0">₹10.2 LPA</p>
+                                        <p class="text-success fw-bold mb-0">Intel - ₹10.2 LPA</p>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-md-3">
                                 <div class="card text-center shadow-sm">
-                                    <img src="~/img/studentphotos/passport-photo-portrait-young-man-white-background_1028938-330516.avif" class="card-img-top">
+                                    <img src="https://randomuser.me/api/portraits/women/65.jpg" class="card-img-top">
                                     <div class="card-body">
                                         <h6 class="fw-bold">Sneha More</h6>
                                         <p class="small mb-1">Civil</p>
-                                        <p class="text-success fw-bold mb-0">₹7.4 LPA</p>
+                                        <p class="text-success fw-bold mb-0">L&T - ₹7.4 LPA</p>
                                     </div>
                                 </div>
                             </div>
@@ -284,44 +350,44 @@
 
                             <div class="col-md-3">
                                 <div class="card text-center shadow-sm">
-                                    <img src="~/img/studentphotos/oip (2).webp" class="card-img-top">
+                                    <img src="https://randomuser.me/api/portraits/men/52.jpg" class="card-img-top">
                                     <div class="card-body">
                                         <h6 class="fw-bold">Rahul Deshmukh</h6>
                                         <p class="small mb-1">EE</p>
-                                        <p class="text-success fw-bold mb-0">₹9 LPA</p>
+                                        <p class="text-success fw-bold mb-0">Siemens - ₹9 LPA</p>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-md-3">
                                 <div class="card text-center shadow-sm">
-                                    <img src="~/img/studentphotos/oip (3).webp" class="card-img-top">
+                                    <img src="https://randomuser.me/api/portraits/women/50.jpg" class="card-img-top">
                                     <div class="card-body">
                                         <h6 class="fw-bold">Ananya Patil</h6>
                                         <p class="small mb-1">CSE</p>
-                                        <p class="text-success fw-bold mb-0">₹13.5 LPA</p>
+                                        <p class="text-success fw-bold mb-0">Microsoft - ₹13.5 LPA</p>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-md-3">
                                 <div class="card text-center shadow-sm">
-                                    <img src="~/img/studentphotos/oip (1).webp" class="card-img-top">
+                                    <img src="https://randomuser.me/api/portraits/men/60.jpg" class="card-img-top">
                                     <div class="card-body">
                                         <h6 class="fw-bold">Vikas Gawade</h6>
                                         <p class="small mb-1">Mechanical</p>
-                                        <p class="text-success fw-bold mb-0">₹6.7 LPA</p>
+                                        <p class="text-success fw-bold mb-0">Mahindra - ₹6.7 LPA</p>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-md-3">
                                 <div class="card text-center shadow-sm">
-                                    <img src="~/img/studentphotos/oip (7).webp" class="card-img-top">
+                                    <img src="https://randomuser.me/api/portraits/women/68.jpg" class="card-img-top">
                                     <div class="card-body">
                                         <h6 class="fw-bold">Rutuja Shinde</h6>
                                         <p class="small mb-1">ECE</p>
-                                        <p class="text-success fw-bold mb-0">₹11.2 LPA</p>
+                                        <p class="text-success fw-bold mb-0">Qualcomm - ₹11.2 LPA</p>
                                     </div>
                                 </div>
                             </div>
@@ -331,6 +397,7 @@
 
                 </div>
 
+                
                 <!-- CONTROLS -->
                 <button class="carousel-control-prev" type="button" data-bs-target="#placementCarousel" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon"></span>
@@ -428,10 +495,716 @@
     </section>
 
 
+
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 
 </main>
+
+
+<!-- BOOTSTRAP -->
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
+
+
+<!-- ================= CSE MODAL ================= -->
+
+<div class="modal fade" id="cseModal">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <div class="modal-body" style="padding:30px;">
+
+
+                <h3 style="text-align:center;background:#3b245f;color:white;padding:10px;border-radius:5px;">
+                    Computer Science Engineering
+                </h3>
+
+
+                <div class="row mt-4">
+
+                    <div class="col-md-3 text-center">
+
+                        <img src="https://randomuser.me/api/portraits/men/45.jpg"
+                             style="width:120px;height:120px;border-radius:10px;">
+
+                        <h6 class="mt-2">Dr. Rajesh Sharma</h6>
+                        <p>HOD</p>
+
+
+                        <div style="border:1px solid #ddd;padding:10px;margin-top:10px;">
+                            <b>Department Info</b>
+
+                            <p style="font-size:13px;">
+                                Established : 2008<br>
+                                Faculty : 25<br>
+                                Labs : 6<br>
+                                Students : 480
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-9">
+
+                        <div style="border:1px solid #ddd;padding:20px;height:100%;">
+
+                            <h5>Department Information</h5>
+
+                            <p>
+
+                                The Computer Science Engineering department focuses on advanced
+                                technologies such as Artificial Intelligence, Machine Learning,
+                                Cyber Security, Data Science and Cloud Computing.
+
+                                Students participate in national coding competitions, hackathons
+                                and internships with top IT companies.
+
+                                The department has modern computer laboratories, research
+                                centers and experienced faculty to prepare students for
+                                global technology careers.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <h5 style="text-align:center;margin-top:30px;background:#3b245f;color:white;padding:8px;border-radius:5px;">
+                    Department Toppers
+                </h5>
+
+
+                <div class="row text-center mt-3">
+
+                    <div class="col">
+                        <img src="https://randomuser.me/api/portraits/men/10.jpg" style="width:90px;border-radius:8px;">
+                        <p>Rahul Patil</p>
+                    </div>
+
+                    <div class="col">
+                        <img src="https://randomuser.me/api/portraits/women/12.jpg" style="width:90px;border-radius:8px;">
+                        <p>Sneha Kulkarni</p>
+                    </div>
+
+                    <div class="col">
+                        <img src="https://randomuser.me/api/portraits/men/22.jpg" style="width:90px;border-radius:8px;">
+                        <p>Akash More</p>
+                    </div>
+
+                    <div class="col">
+                        <img src="https://randomuser.me/api/portraits/women/33.jpg" style="width:90px;border-radius:8px;">
+                        <p>Pooja Deshmukh</p>
+                    </div>
+
+                    <div class="col">
+                        <img src="https://randomuser.me/api/portraits/men/40.jpg" style="width:90px;border-radius:8px;">
+                        <p>Vikas Shinde</p>
+                    </div>
+
+                </div>
+
+                <h5 style="text-align:center;margin-top:30px;background:#3b245f;color:white;padding:8px;border-radius:5px;">
+                    Top Recruiters
+                </h5>
+
+                <div class="row text-center mt-4">
+
+                    <div class="col">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg"
+                             style="width:120px;height:60px;object-fit:contain;">
+                        
+                    </div>
+
+                    <div class="col">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg"
+                             style="width:120px;height:60px;object-fit:contain;">
+                       
+                    </div>
+
+                    <div class="col">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg"
+                             style="width:120px;height:60px;object-fit:contain;">
+                       
+                    </div>
+
+                    <div class="col">
+                        <img src="~/img/comapny/tcs.jpg"
+                             style="width:120px;height:60px;object-fit:contain;">
+                        
+                    </div>
+
+                    <div class="col">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Infosys_logo.svg"
+                             style="width:120px;height:60px;object-fit:contain;">
+                       
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ================= MECHANICAL MODAL ================= -->
+
+<div class="modal fade" id="mechModal">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <div class="modal-body" style="padding:30px;">
+
+                <h3 style="text-align:center;background:#3b245f;color:white;padding:10px;border-radius:5px;">
+                    Mechanical Engineering
+                </h3>
+
+                <div class="row mt-4">
+
+                    <div class="col-md-3 text-center">
+
+                        <img src="https://randomuser.me/api/portraits/men/60.jpg"
+                             style="width:120px;height:120px;border-radius:10px;">
+
+                        <h6 class="mt-2">Dr. Ajay Patil</h6>
+                        <p>HOD</p>
+
+                        <div style="border:1px solid #ddd;padding:10px;margin-top:10px;">
+                            <b>Department Info</b>
+
+                            <p style="font-size:13px;">
+                                Established : 2005<br>
+                                Faculty : 30<br>
+                                Labs : 8<br>
+                                Students : 520
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-9">
+
+                        <div style="border:1px solid #ddd;padding:20px;height:100%;">
+
+                            <h5>Department Information</h5>
+
+                            <p>
+
+                                Mechanical Engineering department provides knowledge in
+                                manufacturing technology, robotics, thermodynamics and
+                                industrial automation.
+
+                                Students gain practical experience through workshops,
+                                industrial visits and research projects.
+
+                                Graduates from this department are placed in automobile,
+                                manufacturing and production industries.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <h5 style="text-align:center;margin-top:30px;background:#3b245f;color:white;padding:8px;border-radius:5px;">
+                    Department Toppers
+                </h5>
+
+                <div class="row text-center mt-3">
+
+                    <div class="col">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" style="width:90px;border-radius:8px;">
+                        <p>Rohit Kale</p>
+                    </div>
+
+                    <div class="col">
+                        <img src="https://randomuser.me/api/portraits/women/21.jpg" style="width:90px;border-radius:8px;">
+                        <p>Priya Joshi</p>
+                    </div>
+
+                    <div class="col">
+                        <img src="https://randomuser.me/api/portraits/men/28.jpg" style="width:90px;border-radius:8px;">
+                        <p>Amol More</p>
+                    </div>
+
+                    <div class="col">
+                        <img src="https://randomuser.me/api/portraits/women/50.jpg" style="width:90px;border-radius:8px;">
+                        <p>Neha Patil</p>
+                    </div>
+
+                    <div class="col">
+                        <img src="https://randomuser.me/api/portraits/men/41.jpg" style="width:90px;border-radius:8px;">
+                        <p>Sagar Pawar</p>
+                    </div>
+
+                </div>
+
+                <h5 style="text-align:center;margin-top:30px;background:#3b245f;color:white;padding:8px;border-radius:5px;">
+                    Top Recruiters
+                </h5>
+
+                <div class="row text-center mt-4">
+
+                    <div class="col">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/8/8e/Tata_logo.svg"
+                             style="width:120px;height:60px;object-fit:contain;">
+                      
+                    </div>
+
+                    <div class="col">
+                        <img src="~/img/comapny/copper.jpg"
+                             style="width:120px;height:60px;object-fit:contain;">
+                        
+                    </div>
+
+                    <div class="col">
+                        <img src="~/img/comapny/LnT.jpg"
+                             style="width:120px;height:60px;object-fit:contain;">
+                      
+                    </div>
+
+                    <div class="col">
+                        <img src="~/img/comapny/froce motor.jpg"
+                             style="width:120px;height:60px;object-fit:contain;">
+                       
+                    </div>
+
+                    <div class="col">
+                        <img src="~/img/comapny/ashoka ledand.jpg" 
+                             style="width:120px;height:60px;object-fit:contain;">
+                        
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ================= CIVIL MODAL ================= -->
+
+<div class="modal fade" id="civilModal">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <div class="modal-body" style="padding:30px;">
+
+                <h3 style="text-align:center;background:#3b245f;color:white;padding:10px;border-radius:5px;">
+                    Civil Engineering
+                </h3>
+
+                <div class="row mt-4">
+
+                    <div class="col-md-3 text-center">
+
+                        <img src="https://randomuser.me/api/portraits/men/70.jpg"
+                             style="width:120px;height:120px;border-radius:10px;">
+
+                        <h6 class="mt-2">Dr. Sunil Kulkarni</h6>
+                        <p>HOD</p>
+
+                        <div style="border:1px solid #ddd;padding:10px;margin-top:10px;">
+                            <b>Department Info</b>
+
+                            <p style="font-size:13px;">
+                                Established : 2002<br>
+                                Faculty : 22<br>
+                                Labs : 7<br>
+                                Students : 450
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-9">
+
+                        <div style="border:1px solid #ddd;padding:20px;height:100%;">
+
+                            <h5>Department Information</h5>
+
+                            <p>
+
+                                Civil Engineering department focuses on structural engineering,
+                                transportation engineering, environmental engineering and
+                                construction management.
+
+                                Students work on real world infrastructure projects such as
+                                roads, bridges and buildings.
+
+                                The department encourages research and sustainable construction
+                                technologies.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <h5 style="text-align:center;margin-top:30px;background:#3b245f;color:white;padding:8px;border-radius:5px;">
+                    Department Toppers
+                </h5>
+
+                <div class="row text-center mt-3">
+
+                    <div class="col">
+                        <img src="https://randomuser.me/api/portraits/men/15.jpg" style="width:90px;border-radius:8px;">
+                        <p>Ravi Deshmukh</p>
+                    </div>
+
+                    <div class="col">
+                        <img src="https://randomuser.me/api/portraits/women/23.jpg" style="width:90px;border-radius:8px;">
+                        <p>Anita Patil</p>
+                    </div>
+
+                    <div class="col">
+                        <img src="https://randomuser.me/api/portraits/men/35.jpg" style="width:90px;border-radius:8px;">
+                        <p>Ajinkya Shinde</p>
+                    </div>
+
+                    <div class="col">
+                        <img src="https://randomuser.me/api/portraits/women/36.jpg" style="width:90px;border-radius:8px;">
+                        <p>Komal Jadhav</p>
+                    </div>
+
+                    <div class="col">
+                        <img src="https://randomuser.me/api/portraits/men/38.jpg" style="width:90px;border-radius:8px;">
+                        <p>Mahesh More</p>
+                    </div>
+
+                </div>
+                <h5 style="text-align:center;margin-top:30px;background:#3b245f;color:white;padding:8px;border-radius:5px;">
+                    Top Recruiters
+                </h5>
+
+                <div class="row text-center mt-4">
+
+                    <div class="col">
+                        <img src="~/img/comapny/froce motor.jpg"
+                             style="width:120px;height:60px;object-fit:contain;">
+                       
+                    </div>
+
+                    <div class="col">
+                        <img src="~/img/comapny/Shapoorji_Pallonji_Group_logo.jfif"
+                             style="width:120px;height:60px;object-fit:contain;">
+                       
+                    </div>
+
+                    <div class="col">
+                        <img src="~/img/comapny/DLF.jfif"
+                             style="width:120px;height:60px;object-fit:contain;">
+                      
+                    </div>
+
+                    <div class="col">
+                        <img src="~/img/comapny/Gammon_India_logo.jfif"
+                             style="width:120px;height:60px;object-fit:contain;">
+                      
+                    </div>
+
+                    <div class="col">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/8/8e/Tata_logo.svg"
+                             style="width:120px;height:60px;object-fit:contain;">
+                       
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ================= ELECTRICAL MODAL ================= -->
+
+<div class="modal fade" id="electricalModal">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <div class="modal-body" style="padding:30px;">
+
+                <h3 style="text-align:center;background:#3b245f;color:white;padding:10px;border-radius:5px;">
+                    Electrical Engineering
+
+                   
+                </h3>
+
+                <div class="row mt-4">
+
+                    <div class="col-md-3 text-center">
+
+                        <img src="https://randomuser.me/api/portraits/women/65.jpg"
+                             style="width:120px;height:120px;border-radius:10px;">
+
+                        <h6 class="mt-2">Dr. Kavita Joshi</h6>
+                        <p>HOD</p>
+
+                        <div style="border:1px solid #ddd;padding:10px;margin-top:10px;">
+                            <b>Department Info</b>
+
+                            <p style="font-size:13px;">
+                                Established : 2006<br>
+                                Faculty : 20<br>
+                                Labs : 6<br>
+                                Students : 390
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-9">
+
+                        <div style="border:1px solid #ddd;padding:20px;height:100%;">
+
+                            <h5>Department Information</h5>
+
+                            <p>
+
+                                Electrical Engineering department provides knowledge in
+                                power systems, renewable energy, electrical machines and
+                                industrial automation.
+
+                                Students gain hands-on experience through power system labs,
+                                renewable energy projects and industrial training.
+
+                                Graduates work in power generation, electrical industries
+                                and automation companies.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <h5 style="text-align:center;margin-top:30px;background:#6c757d;color:white;padding:8px;border-radius:5px;">
+                    Department Toppers
+                </h5>
+
+                <div class="row text-center mt-3">
+
+                    <div class="col">
+                        <img src="https://randomuser.me/api/portraits/men/55.jpg" style="width:90px;border-radius:8px;">
+                        <p>Akshay Patil</p>
+                    </div>
+
+                    <div class="col">
+                        <img src="https://randomuser.me/api/portraits/women/52.jpg" style="width:90px;border-radius:8px;">
+                        <p>Pooja More</p>
+                    </div>
+
+                    <div class="col">
+                        <img src="https://randomuser.me/api/portraits/men/54.jpg" style="width:90px;border-radius:8px;">
+                        <p>Nikhil Jadhav</p>
+                    </div>
+
+                    <div class="col">
+                        <img src="https://randomuser.me/api/portraits/women/57.jpg" style="width:90px;border-radius:8px;">
+                        <p>Snehal Patil</p>
+                    </div>
+
+                    <div class="col">
+                        <img src="https://randomuser.me/api/portraits/men/59.jpg" style="width:90px;border-radius:8px;">
+                        <p>Rohan Deshmukh</p>
+                    </div>
+
+                </div>
+
+
+                <h5 style="text-align:center;margin-top:30px;background:#3b245f;color:white;padding:8px;border-radius:5px;">
+                    Top Recruiters
+                </h5>
+
+                <div class="row text-center mt-4">
+
+                    <div class="col">
+                        <img src="~/img/comapny/INTEL.jfif"
+                             style="width:120px;height:60px;object-fit:contain;">
+                       
+                    </div>
+
+                    <div class="col">
+                        <img src="~/img/comapny/hcl.jpg"
+                             style="width:120px;height:60px;object-fit:contain;">
+                      
+                    </div>
+                   
+                    <div class="col">
+                        <img src="~/img/comapny/SAMSUNG.jfif"
+                             style="width:120px;height:60px;object-fit:contain;">
+                       
+                    </div>
+
+                    <div class="col">
+                        <img src="~/img/comapny/Texas_Instruments_logo..jfif"
+                             style="width:120px;height:60px;object-fit:contain;">
+                      
+                    </div>
+
+                    <div class="col">
+                        <img src="https://upload.wikimedia.org/wikipedia/sco/2/21/Nvidia_logo.svg"
+                             style="width:120px;height:60px;object-fit:contain;">
+                      
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="placementModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+
+            <div class="modal-header text-white" style="background:#3b245f;">
+                <h5 class="modal-title">Our Placement Achievements</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <h4 class="mb-3 text-center fw-bold">Why Students Trust Our Placement Portal</h4>
+
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <ul class="list-group list-group-flush">
+
+                            <li class="list-group-item">✔ 1000+ Students Successfully Placed</li>
+                            <li class="list-group-item">✔ 150+ National & International Companies</li>
+                            <li class="list-group-item">✔ Highest Package Up to ₹18 LPA</li>
+                            <li class="list-group-item">✔ Average Package ₹5.5 LPA</li>
+                            <li class="list-group-item">✔ Dedicated Placement Training</li>
+                            <li class="list-group-item">✔ Resume Building Support</li>
+                            <li class="list-group-item">✔ Mock Interviews by Industry Experts</li>
+                            <li class="list-group-item">✔ Technical Skill Development Programs</li>
+                            <li class="list-group-item">✔ Soft Skills & Communication Training</li>
+                            <li class="list-group-item">✔ Internship Opportunities with Top Companies</li>
+
+                        </ul>
+                    </div>
+
+                    <div class="col-md-6">
+                        <ul class="list-group list-group-flush">
+
+                            <li class="list-group-item">✔ Real-Time Job Alerts</li>
+                            <li class="list-group-item">✔ Industry Oriented Certification Programs</li>
+                            <li class="list-group-item">✔ Dedicated Career Guidance</li>
+                            <li class="list-group-item">✔ Campus Drives Every Month</li>
+                            <li class="list-group-item">✔ Strong Alumni Network</li>
+                            <li class="list-group-item">✔ IT, Core & Startup Company Opportunities</li>
+                            <li class="list-group-item">✔ Online Assessment Test Platform</li>
+                            <li class="list-group-item">✔ Interview Preparation Portal</li>
+                            <li class="list-group-item">✔ Personal Mentorship for Students</li>
+                            <li class="list-group-item">✔ 90% Placement Assistance</li>
+
+                        </ul>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                
+                <a href="/Student/Student_Enroll" class="btn text-white" style="background:#3b245f;">
+                    Register Now
+                </a>
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="packageModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+
+            <div class="modal-header text-white" style="background:#3b245f;">
+                <h5 class="modal-title">Top Salary Packages & Career Opportunities</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <h4 class="text-center fw-bold mb-3">High Salary Placement Opportunities</h4>
+
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">💼 Highest Package Offered: ₹7.5+ LPA</li>
+                            <li class="list-group-item">💼 Average Package: ₹4.8 LPA</li>
+                            <li class="list-group-item">💼 Top IT Companies Hiring Every Year</li>
+                            <li class="list-group-item">💼 Opportunities in MNC Companies</li>
+                            <li class="list-group-item">💼 Startup & Product Based Companies</li>
+                            <li class="list-group-item">💼 Work Opportunities in Core Industries</li>
+                            <li class="list-group-item">💼 High Growth Career Roles</li>
+                            <li class="list-group-item">💼 International Placement Opportunities</li>
+                            <li class="list-group-item">💼 Multiple Offer Opportunities</li>
+                            <li class="list-group-item">💼 Internship to Full-Time Conversion</li>
+                        </ul>
+                    </div>
+
+                    <div class="col-md-6">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">🚀 Companies offering ₹5L – ₹7.5L packages</li>
+                            <li class="list-group-item">🚀 Skill-based hiring process</li>
+                            <li class="list-group-item">🚀 Campus hiring drives</li>
+                            <li class="list-group-item">🚀 Technical interview preparation</li>
+                            <li class="list-group-item">🚀 Coding test preparation</li>
+                            <li class="list-group-item">🚀 Resume & LinkedIn optimization</li>
+                            <li class="list-group-item">🚀 Industry mentorship programs</li>
+                            <li class="list-group-item">🚀 Placement focused training</li>
+                            <li class="list-group-item">🚀 Real-time job portal access</li>
+                            <li class="list-group-item">🚀 Dedicated placement support team</li>
+                        </ul>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <a href="/Student/Student_Enroll" class="btn text-white" style="background:#3b245f;">
+                    Apply for Registration
+                </a>
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- BOOTSTRAP SCRIPT -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
     const counters = document.querySelectorAll('.counter');
@@ -454,4 +1227,60 @@
 
         updateCount();
     });
+</script>
+
+
+<script>
+    document.querySelectorAll("[data-branch]").forEach(function(el){
+
+    el.addEventListener("click",function(){
+
+    var branch=this.getAttribute("data-branch");
+
+    document.getElementById("branchTitle").innerText =
+    branch + " Engineering Department";
+
+    });
+
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+    new Chart(document.getElementById("mechChart"),{
+    type:'bar',
+    data:{
+    labels:["2021","2022","2023","2024"],
+    datasets:[{
+    label:"Placed Students",
+    data:[60,72,85,95],
+    backgroundColor:["#6a11cb","#2575fc","#ff6a00","#00c9a7"]
+    }]
+    }
+    });
+
+</script>
+
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        var modals = document.querySelectorAll('.modal');
+
+        modals.forEach(function(modal){
+            modal.addEventListener('shown.bs.modal', function () {
+                console.log("Modal Opened : " + modal.id);
+            });
+
+            modal.addEventListener('hidden.bs.modal', function () {
+                console.log("Modal Closed : " + modal.id);
+            });
+        });
+
+    });
+
 </script>
