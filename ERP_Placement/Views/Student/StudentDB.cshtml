@@ -18,48 +18,188 @@
 
     <style>
 
-        body {
-            background: #f4f6fb;
-            font-family: 'Inter','Segoe UI',sans-serif;
+        .eligibility-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg,#3b245f,#6d4db3);
+            z-index: 99999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn .6s ease;
         }
 
-        .dashboard-box {
-            background: white;
-            padding: 18px;
-            border-radius: 16px;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-        }
-
-        .stat-card {
+        .popup-content {
+            text-align: center;
             color: white;
-            padding: 20px;
-            border-radius: 14px;
-            cursor: pointer;
-            transition: .3s;
+            padding: 40px;
+            animation: zoomIn .8s ease;
         }
 
-            .stat-card:hover {
-                transform: translateY(-4px);
+        .success-circle {
+            font-size: 90px;
+            animation: bounce 1.2s infinite alternate;
+        }
+
+        .popup-title {
+            font-size: 48px;
+            font-weight: 800;
+            margin-top: 10px;
+        }
+
+        .popup-subtitle {
+            margin-top: 15px;
+            font-weight: 700;
+        }
+
+        .popup-text {
+            margin-top: 15px;
+            font-size: 18px;
+            opacity: .95;
+        }
+
+        @@keyframes fadeIn {
+            from {
+                opacity: 0;
             }
 
+            to {
+                opacity: 1;
+            }
+        }
+
+        @@keyframes zoomIn {
+            from {
+                transform: scale(.5);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @@keyframes bounce {
+            from {
+                transform: translateY(0);
+            }
+
+            to {
+                transform: translateY(-15px);
+            }
+        }
+
+        body {
+            background: radial-gradient(circle at top right, rgba(109,77,179,.10), transparent 28%), radial-gradient(circle at bottom left, rgba(59,36,95,.08), transparent 30%), linear-gradient(135deg,#eef2ff,#f8faff,#f4f6fb);
+            font-family: 'Inter','Segoe UI',sans-serif;
+            color: #1e293b;
+        }
+
+        /* MAIN BOX */
+
+        .dashboard-box {
+            background: rgba(255,255,255,0.92);
+            padding: 22px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,.65);
+            box-shadow: 0 10px 30px rgba(15,23,42,.08), 0 2px 8px rgba(15,23,42,.04);
+            backdrop-filter: blur(8px);
+            transition: .3s ease;
+        }
+
+            .dashboard-box:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 18px 40px rgba(15,23,42,.10), 0 6px 12px rgba(15,23,42,.06);
+            }
+
+        /* STAT CARD */
+
+        .stat-card {
+            position: relative;
+            overflow: hidden;
+            color: white;
+            padding: 22px;
+            border-radius: 18px;
+            cursor: pointer;
+            transition: all .35s ease;
+            box-shadow: 0 10px 24px rgba(0,0,0,.14);
+            border: 1px solid rgba(255,255,255,.15);
+        }
+
+            .stat-card::before {
+                content: '';
+                position: absolute;
+                top: -40%;
+                left: -20%;
+                width: 140%;
+                height: 140%;
+                background: linear-gradient( 120deg, rgba(255,255,255,.18), rgba(255,255,255,0), rgba(255,255,255,.12) );
+                transform: rotate(18deg);
+                transition: .6s;
+            }
+
+            .stat-card:hover {
+                transform: translateY(-6px) scale(1.02);
+                box-shadow: 0 18px 34px rgba(0,0,0,.18);
+            }
+
+                .stat-card:hover::before {
+                    left: 100%;
+                }
+
+            .stat-card h3,
+            .stat-card h4,
+            .stat-card h5 {
+                margin: 0;
+                font-weight: 700;
+                letter-spacing: .4px;
+            }
+
+            .stat-card p,
+            .stat-card span,
+            .stat-card small {
+                margin: 0;
+                opacity: .95;
+            }
+
+        /* PREMIUM GRADIENTS */
+
         .gradient-blue {
-            background: linear-gradient(135deg,#2563eb,#1d4ed8);
+            background: linear-gradient(135deg,#2563eb,#1d4ed8,#1e40af);
         }
 
         .gradient-pink {
-            background: linear-gradient(135deg,#ec4899,#db2777);
+            background: linear-gradient(135deg,#ec4899,#db2777,#be185d);
         }
 
         .gradient-purple {
-            background: linear-gradient(135deg,#a855f7,#7c3aed);
+            background: linear-gradient(135deg,#7c3aed,#6d28d9,#4c1d95);
         }
 
         .gradient-green {
-            background: linear-gradient(135deg,#22c55e,#16a34a);
+            background: linear-gradient(135deg,#22c55e,#16a34a,#15803d);
         }
 
         .gradient-orange {
-            background: linear-gradient(135deg,#fb923c,#f97316);
+            background: linear-gradient(135deg,#fb923c,#f97316,#ea580c);
+        }
+
+        /* OPTIONAL NUMBER STYLE */
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .stat-title {
+            font-size: 14px;
+            opacity: .95;
+            letter-spacing: .3px;
         }
 
     </style>
@@ -84,10 +224,12 @@
 
 
         <!-- TOP STATS -->
-        <div class="row g-3 mb-4">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-5 g-4">
 
-            <div class="col">
-                <div class="stat-card gradient-green">
+            <div class="col d-flex">
+                <div class="stat-card gradient-green w-100 h-100 d-flex flex-column justify-content-center"
+                     style="cursor:pointer;"
+                     onclick="showEligibilityPopup()">
 
                     <i class="bi bi-check-circle fs-2"></i>
 
@@ -99,9 +241,9 @@
             </div>
 
 
-            <div class="col">
+            <div class="col d-flex">
                 <div onclick="location.href='@Url.Action("AssignCompany", "Student")'"
-                     class="stat-card gradient-blue">
+                     class="stat-card gradient-blue w-100 h-100 d-flex flex-column justify-content-center">
 
                     <i class="bi bi-building fs-2"></i>
 
@@ -113,9 +255,9 @@
             </div>
 
 
-            <div class="col">
+            <div class="col d-flex">
                 <div onclick="location.href='@Url.Action("AppliedJob", "Student")'"
-                     class="stat-card gradient-orange">
+                     class="stat-card gradient-orange w-100 h-100 d-flex flex-column justify-content-center">
 
                     <i class="bi bi-journal-text fs-2"></i>
 
@@ -127,9 +269,9 @@
             </div>
 
 
-            <div class="col">
+            <div class="col d-flex">
                 <div onclick="location.href='@Url.Action("ScheduledInterviews", "Student")'"
-                     class="stat-card gradient-purple">
+                     class="stat-card gradient-purple w-100 h-100 d-flex flex-column justify-content-center">
 
                     <i class="bi bi-award fs-2"></i>
 
@@ -141,19 +283,32 @@
             </div>
 
 
-            <div class="col">
-                <div onclick="location.href='@Url.Action("TestList", "Student")'"
-                     class="stat-card gradient-pink">
+            <div class="col d-flex">
 
-                    <i class="bi bi-file-earmark-text fs-2"></i>
+                @if (ViewBag.IsPremium == true)
+                {
+                    <div onclick="location.href='@Url.Action("TestList", "Student")'"
+                         class="stat-card gradient-pink w-100 h-100 d-flex flex-column justify-content-center">
 
-                    <h2 class="fw-bold mt-2">@ViewBag.TestCount</h2>
+                        <i class="bi bi-file-earmark-text fs-2"></i>
+                        <h2 class="fw-bold mt-2">@ViewBag.TestCount</h2>
+                        <span>Tests</span>
 
-                    <span>Tests</span>
+                    </div>
+                }
+                else
+                {
+                    <div data-bs-toggle="modal" data-bs-target="#premiumModal"
+                         class="stat-card gradient-pink w-100 h-100 d-flex flex-column justify-content-center">
 
-                </div>
+                        <i class="bi bi-file-earmark-text fs-2"></i>
+                        <h2 class="fw-bold mt-2">@ViewBag.TestCount</h2>
+                        <span>Tests</span>
+
+                    </div>
+                }
+               
             </div>
-
         </div>
 
 
@@ -161,15 +316,33 @@
         <!-- MIDDLE SECTION -->
         <div class="row g-4">
 
-
             <!-- UPCOMING INTERVIEWS -->
             <div class="col-lg-4">
 
-                <div class="dashboard-box">
+                <div style="
+            background:#fff;
+            border-radius:20px;
+            padding:24px;
+            box-shadow:0 10px 30px rgba(59,36,95,.08);
+            height:100%;">
 
-                    <div class="d-flex justify-content-between mb-3">
+                    <!-- Heading -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
 
-                        <b>Upcoming Interviews</b>
+                        <h5 class="mb-0 fw-bold" style="color:#3b245f;">
+                            <i class="bi bi-calendar-event me-2"></i>
+                            Upcoming Interviews
+                        </h5>
+
+                        <span style="
+                    background:#f1ecff;
+                    color:#3b245f;
+                    padding:6px 12px;
+                    border-radius:30px;
+                    font-size:12px;
+                    font-weight:600;">
+                            Schedule
+                        </span>
 
                     </div>
 
@@ -177,25 +350,47 @@
                     {
                         foreach (System.Data.DataRow row in interviews.Rows)
                         {
+                            <div style="
+                                border:1px solid #eee;
+                                border-radius:14px;
+                                padding:14px;
+                                margin-bottom:12px;
+                                transition:.3s;
+                                background:#faf9fd;">
 
-                            <div class="border rounded p-2 mb-2 d-flex justify-content-between align-items-center">
+                                <div class="d-flex justify-content-between align-items-center">
 
-                                <div>
-                                    <b>@row["CompanyName"]</b><br>
-                                    <small>@row["InterviewTime"]</small>
+                                    <div>
+                                        <div class="fw-bold" style="color:#3b245f;">
+                                            @row["CompanyName"]
+                                        </div>
+
+                                        <small class="text-muted">
+                                            <i class="bi bi-clock me-1"></i>
+                                            @Convert.ToDateTime(row["InterviewTime"]).ToString("hh:mm tt")
+                                        </small>
+                                    </div>
+
+                                    <span style="
+                                        background:linear-gradient(135deg,#2d143f,#3b245f,#6d4db3);
+                                        color:white;
+                                        padding:6px 10px;
+                                        border-radius:10px;
+                                        font-size:12px;">
+                                        @Convert.ToDateTime(row["InterviewDate"]).ToString("MMM dd")
+                                    </span>
+
                                 </div>
 
-                                <small class="text-muted">
-                                    @Convert.ToDateTime(row["InterviewDate"]).ToString("MMM dd")
-                                </small>
-
                             </div>
-
                         }
                     }
                     else
                     {
-                        <p>No interviews scheduled</p>
+                        <div class="text-center text-muted py-4">
+                            <i class="bi bi-calendar-x fs-1 d-block mb-2"></i>
+                            No interviews scheduled
+                        </div>
                     }
 
                 </div>
@@ -207,23 +402,56 @@
             <!-- SUCCESS RATE -->
             <div class="col-lg-4">
 
-                <div class="dashboard-box">
+                <div style="
+        background:#fff;
+        border-radius:20px;
+        padding:24px;
+        box-shadow:0 10px 30px rgba(59,36,95,.08);
+        height:100%;">
 
-                    <b>Success Rate</b>
+                    <!-- Heading -->
+                    <h5 class="fw-bold mb-4" style="color:#3b245f;">
+                        <i class="bi bi-bar-chart-line me-2"></i>
+                        Success Rate
+                    </h5>
 
-                    <div class="mt-3">
+                    <!-- Small Number -->
+                    <div class="mb-3">
 
-                        <div class="progress" style="height:22px">
+                        <div style="
+                font-size:20px;
+                font-weight:700;
+                color:#3b245f;">
 
-                            <div class="progress-bar bg-success"
-                                 style="width:@ViewBag.SelectedPercentage%">
-
-                                @ViewBag.SelectedPercentage%
-
-                            </div>
+                            @ViewBag.SelectedPercentage%
 
                         </div>
 
+                        <small class="text-muted">
+                            Students Selected
+                        </small>
+
+                    </div>
+
+                    <!-- Progress -->
+                    <div class="progress"
+                         style="
+             height:12px;
+             border-radius:30px;
+             background:#ede7ff;">
+
+                        <div class="progress-bar"
+                             style="
+                 width:@ViewBag.SelectedPercentage%;
+                 border-radius:30px;
+                 background:linear-gradient(135deg,#2d143f,#3b245f,#6d4db3);">
+                        </div>
+
+                    </div>
+
+                    <!-- Footer Text -->
+                    <div class="mt-3 text-muted small">
+                        Keep improving your placement journey 🚀
                     </div>
 
                 </div>
@@ -235,52 +463,139 @@
             <!-- PLACEMENT TIPS -->
             <div class="col-lg-4">
 
-                <div class="dashboard-box">
+                <div style="
+        background:#fff;
+        border-radius:20px;
+        padding:24px;
+        box-shadow:0 10px 30px rgba(59,36,95,.08);
+        height:100%;">
 
-                    <b>Placement Tips</b>
+                    <!-- Heading -->
+                    <h5 class="fw-bold mb-4" style="color:#3b245f;">
+                        <i class="bi bi-lightbulb me-2"></i>
+                        Placement Tips
+                    </h5>
 
-                    <div class="mt-3">
 
-                        <p>
-                            <i class="bi bi-file-earmark-text text-primary"></i>
-                            Resume Writing Guide
-                            <span class="float-end text-primary"
-                                  data-bs-toggle="modal"
-                                  data-bs-target="#resumeModal">
-                                Read More
-                            </span>
-                        </p>
+                    <!-- Tip 1 -->
+                    <div style="
+            background:#faf9fd;
+            border:1px solid #eee;
+            border-radius:16px;
+            padding:14px;
+            margin-bottom:14px;">
 
-                        <hr>
+                        <div class="d-flex justify-content-between align-items-center">
 
-                        <p>
-                            <i class="bi bi-person-video text-success"></i>
-                            Acing the Interview
-                            <span class="float-end text-primary"
-                                  data-bs-toggle="modal"
-                                  data-bs-target="#interviewModal">
-                                Read More
-                            </span>
-                        </p>
+                            <div>
+                                <div class="fw-semibold" style="color:#3b245f;">
+                                    <i class="bi bi-file-earmark-text me-2 text-primary"></i>
+                                    Resume Writing Guide
+                                </div>
 
-                        <hr>
+                                <small class="text-muted">
+                                    Build ATS friendly professional resume
+                                </small>
+                            </div>
 
-                        <p>
-                            <i class="bi bi-building text-warning"></i>
-                            Company Research
-                            <span class="float-end text-primary"
-                                  data-bs-toggle="modal"
-                                  data-bs-target="#companyModal">
-                                Read More
-                            </span>
-                        </p>
+                            <button class="btn btn-sm text-white px-3"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#resumeModal"
+                                    style="
+                        border:none;
+                        border-radius:10px;
+                        background:linear-gradient(135deg,#2d143f,#3b245f,#6d4db3);
+                        font-weight:600;">
+
+                                View
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- Tip 2 -->
+                    <div style="
+            background:#faf9fd;
+            border:1px solid #eee;
+            border-radius:16px;
+            padding:14px;
+            margin-bottom:14px;">
+
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <div>
+                                <div class="fw-semibold" style="color:#3b245f;">
+                                    <i class="bi bi-person-video me-2 text-success"></i>
+                                    Acing the Interview
+                                </div>
+
+                                <small class="text-muted">
+                                    Crack HR + Technical interviews
+                                </small>
+                            </div>
+
+                            <button class="btn btn-sm text-white px-3"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#interviewModal"
+                                    style="
+                        border:none;
+                        border-radius:10px;
+                        background:linear-gradient(135deg,#2d143f,#3b245f,#6d4db3);
+                        font-weight:600;">
+
+                                View
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- Tip 3 -->
+                    <div style="
+            background:#faf9fd;
+            border:1px solid #eee;
+            border-radius:16px;
+            padding:14px;">
+
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <div>
+                                <div class="fw-semibold" style="color:#3b245f;">
+                                    <i class="bi bi-building me-2 text-warning"></i>
+                                    Company Research
+                                </div>
+
+                                <small class="text-muted">
+                                    Know company before interview
+                                </small>
+                            </div>
+
+                            <button class="btn btn-sm text-white px-3"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#companyModal"
+                                    style="
+                        border:none;
+                        border-radius:10px;
+                        background:linear-gradient(135deg,#2d143f,#3b245f,#6d4db3);
+                        font-weight:600;">
+
+                                View
+
+                            </button>
+
+                        </div>
 
                     </div>
 
                 </div>
 
             </div>
-
 
         </div>
 
@@ -292,32 +607,132 @@
             <!-- RECOMMENDED JOBS -->
             <div class="col-lg-4">
 
-                <div class="dashboard-box">
+                <div style="
+        background:#fff;
+        border-radius:22px;
+        padding:24px;
+        box-shadow:0 12px 32px rgba(59,36,95,.08);
+        height:100%;">
 
-                    <b>Recommended Jobs</b>
+                    <h5 class="fw-bold mb-4" style="color:#3b245f;">
+                        <i class="bi bi-briefcase-fill me-2"></i>
+                        Recommended Jobs
+                    </h5>
 
                     @if (ViewBag.AssignInterviews != null && ((System.Data.DataTable)ViewBag.AssignInterviews).Rows.Count > 0)
                     {
                         foreach (System.Data.DataRow row in ((System.Data.DataTable)ViewBag.AssignInterviews).Rows)
                         {
+                            <div style="
+                            border:1px solid #eee;
+                            border-radius:16px;
+                            padding:16px;
+                            margin-bottom:14px;
+                            transition:.3s;">
 
-                            <div class="border rounded p-2 mt-2 d-flex justify-content-between">
+                                <div class="d-flex justify-content-between align-items-start">
 
-                                <div>
-                                    <b>@row["CompanyName"]</b><br>
-                                    <small>@row["JobTitle"]</small>
+                                    <div>
+                                        <h6 class="fw-bold mb-1" style="color:#3b245f;">
+                                            @row["CompanyName"]
+                                        </h6>
+
+                                        <small class="text-muted d-block mb-2">
+                                            @row["JobTitle"]
+                                        </small>
+
+                                       
+                                    </div>
+
+                                    <i class="bi bi-stars fs-5" style="color:#6d4db3;"></i>
+
                                 </div>
 
-                                <a class="btn btn-sm btn-primary">View Job</a>
-
                             </div>
-
                         }
                     }
                     else
                     {
-                        <p class="mt-2">No jobs assigned</p>
+                        <p class="text-muted mb-0">No jobs assigned</p>
                     }
+
+                </div>
+
+            </div>
+
+
+
+            <!-- EXTRA HARD CODED CARD -->
+            <div class="col-lg-2">
+
+                <div style="
+    background:#fff;
+    border-radius:22px;
+    padding:20px;
+    box-shadow:0 12px 30px rgba(59,36,95,.08);
+    height:100%;
+    border:1px solid #f1eef9;">
+
+                    <div class="text-center">
+
+                        <div style="
+            width:70px;
+            height:70px;
+            margin:auto;
+            border-radius:50%;
+            background:linear-gradient(135deg,#2d143f,#3b245f,#6d4db3);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            color:#fff;">
+
+                            <i class="bi bi-trophy-fill fs-3"></i>
+
+                        </div>
+
+                        <h6 class="fw-bold mt-3 mb-1"
+                            style="color:#3b245f;">
+
+                            Career Score
+
+                        </h6>
+
+                        <div style="
+            font-size:32px;
+            font-weight:800;
+            color:#6d4db3;">
+
+                            92%
+
+                        </div>
+
+                        <small class="text-muted d-block mb-3">
+                            Placement Ready
+                        </small>
+
+                        <div class="progress"
+                             style="
+                 height:10px;
+                 border-radius:30px;
+                 background:#ede7ff;">
+
+                            <div class="progress-bar"
+                                 style="
+                     width:92%;
+                     border-radius:30px;
+                     background:linear-gradient(135deg,#2d143f,#3b245f,#6d4db3);">
+                            </div>
+
+                        </div>
+
+                        <small class="d-block mt-3"
+                               style="color:#6d4db3;font-weight:600;">
+
+                            Excellent Profile
+
+                        </small>
+
+                    </div>
 
                 </div>
 
@@ -326,58 +741,88 @@
 
 
             <!-- OFFER DETAILS -->
-            <div class="col-lg-8">
+            <div class="col-lg-6">
 
-                <div class="dashboard-box">
+                <div style="
+        background:#fff;
+        border-radius:22px;
+        padding:24px;
+        box-shadow:0 12px 32px rgba(59,36,95,.08);
+        height:100%;">
 
-                    <b>Offer Details</b>
+                    <h5 class="fw-bold mb-4" style="color:#3b245f;">
+                        <i class="bi bi-award-fill me-2"></i>
+                        Offer Details
+                    </h5>
 
                     @if (ViewBag.OfferLetters != null && ((System.Data.DataTable)ViewBag.OfferLetters).Rows.Count > 0)
                     {
-
                         foreach (System.Data.DataRow row in ((System.Data.DataTable)ViewBag.OfferLetters).Rows)
                         {
+                            <div style="
+                            border:1px solid #f1eef9;
+                            border-radius:18px;
+                            padding:18px;
+                            margin-bottom:16px;">
 
-                            <div class="border-bottom pb-2 mb-2">
+                                <div class="d-flex justify-content-between align-items-start flex-wrap">
 
-                                <h6>@row["CompanyName"]</h6>
+                                    <div>
+                                        <h6 class="fw-bold mb-2" style="color:#3b245f;">
+                                            @row["CompanyName"]
+                                        </h6>
 
-                                <small>
+                                        <small class="text-muted d-block">
+                                            Position : @row["JobTitle"]
+                                        </small>
 
-                                    Position : @row["JobTitle"] <br>
-                                    Location : @row["JobLocation"] <br>
-                                    Salary : @row["Salary"]
+                                        <small class="text-muted d-block">
+                                            Location : @row["JobLocation"]
+                                        </small>
 
-                                </small>
+                                        <small class="text-muted d-block">
+                                            Salary : @row["Salary"]
+                                        </small>
+                                    </div>
 
-                                <div class="float-end">
+                                    <div class="mt-2">
 
-                                    <button class="btn btn-primary btn-sm"
-                                            onclick="viewOffer(@row["InterviewId"])">
+                                        <button class="btn btn-sm text-white me-2"
+                                                style="
+                                                background:linear-gradient(135deg,#3b245f,#6d4db3);
+                                                border:none;
+                                                border-radius:10px;
+                                                padding:8px 14px;"
+                                                onclick="viewOffer(@row["InterviewId"])">
 
-                                        <i class="bi bi-eye"></i> View
+                                            <i class="bi bi-eye-fill"></i> View
 
-                                    </button>
+                                        </button>
 
-                                    <a asp-controller="Student"
-                                       asp-action="DownloadOfferLetter"
-                                       asp-route-interviewId="@row["InterviewId"]"
-                                       class="btn btn-success btn-sm">
+                                        <a asp-controller="Student"
+                                           asp-action="DownloadOfferLetter"
+                                           asp-route-interviewId="@row["InterviewId"]"
+                                           class="btn btn-sm text-white"
+                                           style="
+                                           background:linear-gradient(135deg,#16a34a,#22c55e);
+                                           border:none;
+                                           border-radius:10px;
+                                           padding:8px 14px;">
 
-                                        <i class="bi bi-download"></i> Download
+                                            <i class="bi bi-download"></i> Download
 
-                                    </a>
+                                        </a>
+
+                                    </div>
 
                                 </div>
 
                             </div>
-
                         }
-
                     }
                     else
                     {
-                        <p>No Offer Letters Available</p>
+                        <p class="text-muted mb-0">No Offer Letters Available</p>
                     }
 
                 </div>
@@ -385,87 +830,750 @@
             </div>
 
         </div>
-
     </div>
 
     <!-- MODALS -->
     <!-- Resume Modal -->
     <div class="modal fade" id="resumeModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title"><i class="bi bi-file-earmark-text"></i> Resume Writing Guide</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+
+                <!-- HEADER -->
+                <div class="modal-header text-white"
+                     style="background:linear-gradient(135deg,#3b245f,#6d4db3);">
+
+                    <h5 class="modal-title fw-bold">
+                        <i class="bi bi-file-earmark-person-fill me-2"></i>
+                        Resume Writing Guide
+                    </h5>
+
+                    <button type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="modal">
+                    </button>
                 </div>
-                <div class="modal-body">
-                    <ul>
-                        <li>Keep your resume concise (1-2 pages).</li>
-                        <li>Highlight your achievements and skills.</li>
-                        <li>Use a clean, modern format.</li>
-                        <li>Tailor it for the job you are applying for.</li>
-                    </ul>
+
+                <!-- BODY -->
+                <div class="modal-body p-4" style="background:#f8f5ff;">
+
+                    <div class="text-center mb-4">
+                        <i class="bi bi-journal-text"
+                           style="font-size:45px;color:#3b245f;"></i>
+
+                        <h4 class="fw-bold mt-2 mb-1"
+                            style="color:#3b245f;">
+                            Professional Resume Tips
+                        </h4>
+
+                        <small class="text-muted">
+                            Build an ATS friendly & premium resume
+                        </small>
+                    </div>
+
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                Keep resume concise (1-2 pages).
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-person-badge-fill text-primary me-2"></i>
+                                Add full name and professional title.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-envelope-fill text-danger me-2"></i>
+                                Use active email address.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-telephone-fill text-success me-2"></i>
+                                Mention mobile number clearly.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-geo-alt-fill text-warning me-2"></i>
+                                Add city/location only.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-linkedin text-primary me-2"></i>
+                                Add LinkedIn / portfolio link.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-stars text-warning me-2"></i>
+                                Write strong career objective.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-mortarboard-fill text-info me-2"></i>
+                                Mention education details properly.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-code-slash text-dark me-2"></i>
+                                Add technical skills clearly.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-laptop-fill text-primary me-2"></i>
+                                Mention projects with technologies.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-award-fill text-warning me-2"></i>
+                                Add certifications if available.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-briefcase-fill text-secondary me-2"></i>
+                                Mention internship experience.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-bar-chart-fill text-success me-2"></i>
+                                Highlight achievements using numbers.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-translate text-danger me-2"></i>
+                                Mention known languages.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-people-fill text-primary me-2"></i>
+                                Include soft skills.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-file-earmark-font-fill text-dark me-2"></i>
+                                Use clean fonts and spacing.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-brush-fill text-info me-2"></i>
+                                Use simple professional design.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-search text-warning me-2"></i>
+                                Check spelling mistakes carefully.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-filetype-pdf text-danger me-2"></i>
+                                Save resume as PDF format.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-send-check-fill text-success me-2"></i>
+                                Tailor resume for each job role.
+                            </div>
+                        </div>
+
+                    </div>
+
                 </div>
+
+                <!-- FOOTER -->
+                <div class="modal-footer bg-white d-flex justify-content-between">
+
+                    <!-- View Resume Format Button -->
+                    <a href="~/img/resume_format.png"
+                       target="_blank"
+                       download="Resume_Format.png"
+                       class="btn text-white px-4"
+                       style="background:linear-gradient(135deg,#0d6efd,#4f8cff);border:none;border-radius:30px;">
+                        <i class="bi bi-image me-1"></i>
+                        View Resume Format
+                    </a>
+
+                    <!-- Got It Button -->
+                    <button class="btn text-white px-4"
+                            data-bs-dismiss="modal"
+                            style="background:linear-gradient(135deg,#3b245f,#6d4db3);border:none;border-radius:30px;">
+                        <i class="bi bi-check-circle me-1"></i>
+                        Got It
+                    </button>
+
+                </div>
+
             </div>
         </div>
     </div>
 
     <!-- Interview Modal -->
     <div class="modal fade" id="interviewModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title"><i class="bi bi-person-video"></i> Acing the Interview</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+
+                <!-- HEADER -->
+                <div class="modal-header text-white"
+                     style="background:linear-gradient(135deg,#3b245f,#6d4db3);">
+
+                    <h5 class="modal-title fw-bold">
+                        <i class="bi bi-person-video3 me-2"></i>
+                        Acing the Interview
+                    </h5>
+
+                    <button type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="modal">
+                    </button>
                 </div>
-                <div class="modal-body">
-                    <ul>
-                        <li>Research the company and the role.</li>
-                        <li>Prepare answers for common interview questions.</li>
-                        <li>Dress professionally and maintain good body language.</li>
-                        <li>Ask insightful questions at the end of the interview.</li>
-                    </ul>
+
+                <!-- BODY -->
+                <div class="modal-body p-4" style="background:#f8f5ff;">
+
+                    <div class="text-center mb-4">
+                        <i class="bi bi-patch-check-fill"
+                           style="font-size:45px;color:#3b245f;"></i>
+
+                        <h4 class="fw-bold mt-2 mb-1"
+                            style="color:#3b245f;">
+                            Interview Success Guide
+                        </h4>
+
+                        <small class="text-muted">
+                            Crack interviews with confidence & preparation
+                        </small>
+                    </div>
+
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-building text-primary me-2"></i>
+                                Research company background.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-briefcase-fill text-dark me-2"></i>
+                                Understand job role clearly.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-question-circle-fill text-warning me-2"></i>
+                                Prepare common HR questions.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-code-slash text-info me-2"></i>
+                                Practice technical questions.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-mic-fill text-danger me-2"></i>
+                                Speak clearly and confidently.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-eye-fill text-success me-2"></i>
+                                Maintain eye contact.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-person-standing text-primary me-2"></i>
+                                Keep positive body language.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-person-badge-fill text-secondary me-2"></i>
+                                Dress professionally.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-clock-fill text-warning me-2"></i>
+                                Arrive on time.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-wifi text-info me-2"></i>
+                                Check internet for online interviews.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-journal-text text-dark me-2"></i>
+                                Carry updated resume copy.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-folder-fill text-primary me-2"></i>
+                                Keep documents ready.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-lightbulb-fill text-warning me-2"></i>
+                                Give examples in answers.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-chat-dots-fill text-success me-2"></i>
+                                Listen carefully before answering.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-emoji-smile-fill text-warning me-2"></i>
+                                Stay calm and smile.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-x-circle-fill text-danger me-2"></i>
+                                Avoid negative talk.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-cash-stack text-success me-2"></i>
+                                Be ready for salary discussion.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-question-square-fill text-primary me-2"></i>
+                                Ask smart questions at end.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-hand-thumbs-up-fill text-success me-2"></i>
+                                Thank interviewer politely.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded-4 shadow-sm">
+                                <i class="bi bi-trophy-fill text-warning me-2"></i>
+                                Confidence is key to success.
+                            </div>
+                        </div>
+
+                    </div>
+
                 </div>
+
+                <!-- FOOTER -->
+                <div class="modal-footer bg-white">
+                    <button class="btn text-white px-4"
+                            data-bs-dismiss="modal"
+                            style="background:linear-gradient(135deg,#3b245f,#6d4db3);border:none;border-radius:30px;">
+
+                        <i class="bi bi-check-circle me-1"></i>
+                        Got It
+
+                    </button>
+                </div>
+
             </div>
         </div>
     </div>
 
     <!-- Company Modal -->
     <div class="modal fade" id="companyModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-header bg-warning text-white">
-                    <h5 class="modal-title"><i class="bi bi-building"></i> Company Research Tips</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow-lg" style="border-radius:18px;overflow:hidden;">
+
+                <!-- HEADER -->
+                <div class="modal-header text-white"
+                     style="background:linear-gradient(135deg,#3b245f,#6d4db3);">
+
+                    <h5 class="modal-title fw-bold">
+                        <i class="bi bi-building-fill-check me-2"></i>
+                        Company Research Tips
+                    </h5>
+
+                    <button type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
-                    <ul>
-                        <li>Understand the company’s products and services.</li>
-                        <li>Follow recent news and achievements.</li>
-                        <li>Check employee reviews and company culture.</li>
-                        <li>Analyze the competitors and market positioning.</li>
-                    </ul>
+
+                <!-- BODY -->
+                <div class="modal-body p-4" style="background:#f8f5ff;">
+
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded shadow-sm h-100">
+                                <i class="bi bi-globe2 text-primary fs-5 me-2"></i>
+                                Understand company website, services, and mission.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded shadow-sm h-100">
+                                <i class="bi bi-newspaper text-primary fs-5 me-2"></i>
+                                Read latest company news and achievements.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded shadow-sm h-100">
+                                <i class="bi bi-people-fill text-primary fs-5 me-2"></i>
+                                Learn company culture and work environment.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded shadow-sm h-100">
+                                <i class="bi bi-bar-chart-fill text-primary fs-5 me-2"></i>
+                                Analyze competitors and market position.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded shadow-sm h-100">
+                                <i class="bi bi-cash-stack text-primary fs-5 me-2"></i>
+                                Check company revenue and growth trends.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded shadow-sm h-100">
+                                <i class="bi bi-award-fill text-primary fs-5 me-2"></i>
+                                Note awards, certifications, and recognitions.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded shadow-sm h-100">
+                                <i class="bi bi-person-workspace text-primary fs-5 me-2"></i>
+                                Understand job roles and responsibilities.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded shadow-sm h-100">
+                                <i class="bi bi-geo-alt-fill text-primary fs-5 me-2"></i>
+                                Learn office locations and branches.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded shadow-sm h-100">
+                                <i class="bi bi-chat-left-text-fill text-primary fs-5 me-2"></i>
+                                Read employee feedback and reviews.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded shadow-sm h-100">
+                                <i class="bi bi-lightbulb-fill text-primary fs-5 me-2"></i>
+                                Understand company innovation and products.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded shadow-sm h-100">
+                                <i class="bi bi-laptop-fill text-primary fs-5 me-2"></i>
+                                Learn technologies they use.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded shadow-sm h-100">
+                                <i class="bi bi-mortarboard-fill text-primary fs-5 me-2"></i>
+                                Know fresher hiring and internship programs.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded shadow-sm h-100">
+                                <i class="bi bi-clock-history text-primary fs-5 me-2"></i>
+                                Study company history and milestones.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded shadow-sm h-100">
+                                <i class="bi bi-diagram-3-fill text-primary fs-5 me-2"></i>
+                                Understand management structure.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded shadow-sm h-100">
+                                <i class="bi bi-shield-check text-primary fs-5 me-2"></i>
+                                Learn values, ethics, and policies.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded shadow-sm h-100">
+                                <i class="bi bi-bank2 text-primary fs-5 me-2"></i>
+                                Check parent company or ownership details.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded shadow-sm h-100">
+                                <i class="bi bi-briefcase-fill text-primary fs-5 me-2"></i>
+                                Review current openings and recruitment style.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded shadow-sm h-100">
+                                <i class="bi bi-star-fill text-primary fs-5 me-2"></i>
+                                Identify what makes company unique.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded shadow-sm h-100">
+                                <i class="bi bi-question-circle-fill text-primary fs-5 me-2"></i>
+                                Prepare questions to ask interviewer.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 bg-white rounded shadow-sm h-100">
+                                <i class="bi bi-check2-circle text-primary fs-5 me-2"></i>
+                                Connect your skills with company needs.
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
+
+                <!-- FOOTER -->
+                <div class="modal-footer bg-white">
+                    <button class="btn text-white px-4"
+                            style="background:#3b245f;border:none;"
+                            data-bs-dismiss="modal">
+                        Close
+                    </button>
+                </div>
+
             </div>
         </div>
     </div>
 
     <!-- Offer Letter Modal -->
     <div class="modal fade" id="offerModal" tabindex="-1">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
+        <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow-lg"
+                 style="border-radius:18px;overflow:hidden;">
 
-                <div class="modal-header bg-info text-white">
-                    <h5 class="modal-title">Offer Letter</h5>
-                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                <!-- HEADER -->
+                <div class="modal-header text-white"
+                     style="background:linear-gradient(135deg,#3b245f,#6d4db3);">
+
+                    <h5 class="modal-title fw-bold">
+                        <i class="bi bi-file-earmark-richtext-fill me-2"></i>
+                        Offer Letter
+                    </h5>
+
+                    <button type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"></button>
                 </div>
 
-                <div class="modal-body p-0">
-                    <iframe id="offerFrame" width="100%" height="600" style="border:none"></iframe>
+                <!-- BODY -->
+                <div class="modal-body p-0"
+                     style="background:#f8f5ff;">
+
+                    <!-- TOP INFO BAR -->
+                    <div class="d-flex justify-content-between align-items-center px-4 py-3 border-bottom bg-white">
+
+                        <div>
+                            <h6 class="mb-0 fw-bold" style="color:#3b245f;">
+                                Candidate Offer Preview
+                            </h6>
+                            <small class="text-muted">
+                                View company generated offer letter document
+                            </small>
+                        </div>
+
+                        <span class="badge px-3 py-2"
+                              style="background:#6d4db3;">
+                            PDF / Letter
+                        </span>
+
+                    </div>
+
+                    <!-- IFRAME -->
+                    <iframe id="offerFrame"
+                            width="100%"
+                            height="620"
+                            style="border:none;background:white;">
+                    </iframe>
+
+                </div>
+
+                <!-- FOOTER -->
+                <div class="modal-footer bg-white">
+
+                    <button class="btn text-white px-4"
+                            style="background:#3b245f;border:none;"
+                            data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle me-1"></i>
+                        Close
+                    </button>
+
                 </div>
 
             </div>
         </div>
     </div>
+
+    <div id="eligibilityPopup" class="eligibility-popup">
+
+        <div class="popup-content">
+
+            <div class="success-circle">
+                <i class="bi bi-check-circle-fill"></i>
+            </div>
+
+            <h1 class="popup-title">🎉 Congratulations @Context.Session.GetString("StudentName")🎉</h1>
+
+            <h3 class="popup-subtitle">You are Eligible for Placement Drive</h3>
+
+            <p class="popup-text">
+                Your profile has successfully met all placement criteria.
+                Get ready for upcoming opportunities.
+            </p>
+
+            <button class="btn btn-light px-4 mt-3 fw-bold"
+                    onclick="closeEligibilityPopup()">
+                Continue
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="modal fade" id="premiumModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius:20px; border:none; background: linear-gradient(135deg,#ff7eb3,#ff758c); color:white;">
+
+                <div class="modal-body text-center p-4">
+
+                    <!-- 🔥 Badge -->
+                    <div style="position:absolute; top:-10px; right:-10px; background:gold; color:black; padding:5px 12px; border-radius:20px; font-size:12px; font-weight:bold;">
+                        🔥 Most Popular
+                    </div>
+
+                    <!-- Icon -->
+                    <div style="font-size:50px; background:white; color:#ff4b7d; width:80px; height:80px; line-height:80px; border-radius:50%; margin:auto;">
+                        🔒
+                    </div>
+
+                    <h3 class="fw-bold mt-3">Premium Access</h3>
+
+                    <p style="opacity:0.9;">
+                        Unlock all aptitude, technical & company-level tests.
+                        Practice like real placement exams.
+                    </p>
+
+                    <!-- 👥 Students -->
+                    <div style="background:rgba(255,255,255,0.2); padding:8px; border-radius:10px; margin-top:10px;">
+                        👥 1,200+ students already enrolled
+                    </div>
+
+                    <!-- 💰 Price -->
+                    <div style="font-size:32px; font-weight:bold; margin-top:15px;">
+                        ₹299 <span style="font-size:14px; opacity:0.8;">/ Lifetime</span>
+                    </div>
+
+                    <!-- ⏳ Countdown -->
+                    <div id="countdown" style="margin-top:10px; font-size:14px; background:black; padding:6px 10px; border-radius:10px; display:inline-block;">
+                        Offer ends in: 05:00
+                    </div>
+
+                    <!-- 🚀 Button -->
+                    <button onclick="startPayment()"
+                            style="margin-top:15px; width:100%; padding:12px; border:none; border-radius:30px; font-weight:bold; background:white; color:#ff4b7d;">
+                        🚀 Upgrade Now
+                    </button>
+
+                    <button class="btn btn-link mt-2 text-white" data-bs-dismiss="modal">
+                        Maybe Later
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="successToast"
+         style="position:fixed; bottom:20px; right:20px; background:#28a745; color:white; padding:15px 20px; border-radius:10px; display:none; z-index:9999;">
+        🎉 Payment Successful! Premium Unlocked
+    </div>
+
 
     <!-- SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -479,5 +1587,101 @@
         }
     </script>
 
+    <script>
+
+        function showEligibilityPopup(){
+            document.getElementById("eligibilityPopup").style.display="flex";
+        }
+
+        function closeEligibilityPopup(){
+            document.getElementById("eligibilityPopup").style.display="none";
+        }
+
+    </script>
+
+
+    <script>
+        var timeLeft = 300; // 5 minutes
+
+        var timer = setInterval(function () {
+
+            var minutes = Math.floor(timeLeft / 60);
+            var seconds = timeLeft % 60;
+
+            document.getElementById("countdown").innerHTML =
+                "Offer ends in: " + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+
+            timeLeft--;
+
+            if (timeLeft < 0) {
+                clearInterval(timer);
+                document.getElementById("countdown").innerHTML = "Offer expired!";
+            }
+
+        }, 1000);
+
+
+                "handler": function (response) {
+
+            document.getElementById("successToast").style.display = "block";
+
+            setTimeout(function () {
+                window.location.href = '/Student/TestList';
+            }, 2000);
+        }
+    </script>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <script>
+        function startPayment() {
+
+            fetch('/Student/CreateOrder', {
+                method: 'POST'
+            })
+            .then(res => res.json())
+            .then(data => {
+                debugger;
+                var options = {
+                    "key": data.key,
+                    "amount": 29900,
+                    "currency": "INR",
+                    "name": "Placement Portal",
+                    "description": "Premium Access",
+                    "order_id": data.orderId,
+
+                    "handler": function (response) {
+                        debugger;
+                        var formData = new FormData();
+                        formData.append("razorpay_payment_id", response.razorpay_payment_id);
+                        formData.append("razorpay_order_id", response.razorpay_order_id);
+                        formData.append("razorpay_signature", response.razorpay_signature);
+
+                        fetch('/Student/VerifyPayment', {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(res => res.json())
+                        .then(result => {
+
+                            if (result.success) {
+                                document.getElementById("successToast").style.display = "block";
+
+                                setTimeout(() => {
+                                    window.location.href = '/Student/TestList';
+                                }, 2000);
+                            } else {
+                                alert("Payment verification failed");
+                            }
+
+                        });
+                    }
+                };
+
+                var rzp = new Razorpay(options);
+                rzp.open();
+            });
+        }
+    </script>
 </body>
 </html>

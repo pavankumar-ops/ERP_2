@@ -9,25 +9,26 @@
 <style>
 
     body {
-        background: #f4f6f9;
+        background: linear-gradient(135deg,#f8f5fc,#f2ecfa);
     }
 
     .page-title {
         font-weight: 700;
-        color: #2c3e50;
+        color: #3b245f;
+        font-size: 28px;
     }
 
     .job-card {
-        border-radius: 16px;
+        border-radius: 18px;
         border: none;
-        background: white;
-        transition: 0.3s;
-        box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+        background: rgba(255,255,255,0.95);
+        box-shadow: 0 12px 28px rgba(59,36,95,0.10);
+        transition: 0.35s;
     }
 
         .job-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 35px rgba(59,36,95,0.18);
         }
 
     .company-logo {
@@ -107,7 +108,7 @@
 
                         <!-- Gradient Header -->
                         <div class="p-3 text-white"
-                             style="background:linear-gradient(135deg,#6a11cb,#8e54e9);">
+                             style="background:linear-gradient(135deg,#3b245f,#6d4db3);" ">
 
                             <div class="d-flex align-items-center">
 
@@ -197,7 +198,7 @@
                             {
 
                                 <button class="btn w-100 text-white"
-                                        style="background:linear-gradient(135deg,#6a11cb,#8e54e9);border:none;font-weight:600;"
+                                        style="background:linear-gradient(135deg,#3b245f,#6d4db3);border:none;font-weight:600;"
                                         onclick="ApplyInterview('@row["InterviewId"]','@row["HREmailId"]','@row["VacancyId"]','@row["StudentId"]')">
 
                                     Apply Now
@@ -208,8 +209,8 @@
                             else if (row["Status"].ToString()=="Applied")
                             {
 
-                                <button class="btn btn-secondary w-100" disabled>
-                                    Applied
+                                <button class="btn text-white w-100" disabled
+style="background:#6d4db3;"> Applied
                                 </button>
 
                             }
@@ -218,7 +219,8 @@
 
                                 <div class="d-grid gap-2">
 
-                                   <button class="btn btn-info viewOfferBtn"
+                                    <button class="btn text-white viewOfferBtn"
+                                            style="background:#3b245f;"
                 data-bs-toggle="modal"
                 data-bs-target="#viewOfferModal"
                 data-interview="@row["InterviewId"]">
@@ -226,7 +228,8 @@
         </button>
 
                                     <a href="@Url.Action("DownloadOfferLetter", "Trainer", new { interviewId = row["InterviewId"] })"
-                                       class="btn btn-primary">
+                                       class="btn text-white"
+                                       style="background:#6d4db3;">
 
                                         Download Offer Letter
 

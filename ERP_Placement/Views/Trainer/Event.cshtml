@@ -1,0 +1,436 @@
+﻿@{
+    ViewBag.Title = "Registered Companies";
+    Layout = "~/Views/Shared/Placement_Coordinator_layout.cshtml";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" rel="stylesheet" />
+
+<style>
+    body {
+        background: #f5f6ff;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    /* TOP HEADER LIKE COLORLIB */
+    .calendar-header {
+        background: linear-gradient(135deg,#3b245f,#6d4db3);
+        padding: 25px;
+        border-radius: 18px;
+        color: white;
+        margin-top: 20px;
+        box-shadow: 0 10px 25px rgba(59,36,95,.25);
+    }
+
+        .calendar-header h2 {
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .calendar-header p {
+            margin: 0;
+            opacity: .8;
+            font-size: 14px;
+        }
+
+    .main-box {
+        background: #fff;
+        margin-top: 20px;
+        border-radius: 18px;
+        padding: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,.08);
+    }
+
+    /* CALENDAR STYLE */
+    #calendar {
+        padding: 10px;
+    }
+
+    .fc-toolbar-title {
+        font-size: 22px !important;
+        font-weight: 800;
+        color: #3b245f;
+    }
+
+    .fc-button {
+        background: linear-gradient(135deg,#3b245f,#6d4db3) !important;
+        border: none !important;
+        border-radius: 8px !important;
+        padding: 6px 12px !important;
+    }
+
+    .fc-daygrid-event {
+        background: linear-gradient(135deg,#3b245f,#6d4db3) !important;
+        border: none !important;
+        border-radius: 8px !important;
+        padding: 3px 6px;
+        font-size: 12px;
+    }
+
+    .fc-day-today {
+        background: #f1edff !important;
+    }
+
+    /* BUTTON */
+    .btn-theme {
+        background: white;
+        color: #3b245f;
+        font-weight: 700;
+        border-radius: 10px;
+        padding: 10px 18px;
+        border: none;
+    }
+
+        .btn-theme:hover {
+            transform: translateY(-2px);
+        }
+
+    /* MODAL */
+    .modal-header {
+        background: linear-gradient(135deg,#3b245f,#6d4db3);
+        color: white;
+    }
+
+    label {
+        font-weight: 600;
+        color: #3b245f;
+    }
+
+    .form-control, .form-select {
+        border-radius: 10px;
+    }
+
+    .required {
+        color: red;
+    }
+</style>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="calendar-header d-flex justify-content-between align-items-center">
+        <div>
+            <h2>Placement Event Calendar</h2>
+            <p>Manage placement drives, seminars & training sessions</p>
+        </div>
+
+        <button class="btn btn-theme" onclick="openAddModal()">
+            + Schedule Event
+        </button>
+    </div>
+
+    <!-- CALENDAR BOX -->
+    <div class="main-box">
+        <div id="calendar"></div>
+    </div>
+
+</div>
+
+<!-- EVENT MODAL -->
+<div class="modal fade" id="eventModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+           @*  <div class="modal-header">
+                <h5>Schedule Event</h5>
+                <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div> *@
+
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label>Event Name <span class="required">*</span></label>
+                        <input type="text" id="EventName" class="form-control">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Branch</label>
+                        <select id="Branch" class="form-select">
+                            <option>CSE</option>
+                            <option>IT</option>
+                            <option>ENTC</option>
+                            <option>MECH</option>
+                            <option>CIVIL</option>
+                            <option>ALL</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Speaker</label>
+                        <input type="text" id="SpeakerName" class="form-control">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Mode</label>
+                        <select id="EventMode" class="form-select" onchange="toggleMode()">
+                            <option>Online</option>
+                            <option>Offline</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 mb-3" id="onlineBox" style="display:none;">
+                        <label>Meeting Link</label>
+                        <input type="text" id="MeetingLink" class="form-control">
+                    </div>
+
+                    <div class="col-md-6 mb-3" id="offlineBox" style="display:none;">
+                        <label>Venue</label>
+                        <input type="text" id="Venue" class="form-control">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Date</label>
+                        <input type="date" id="EventDate" class="form-control">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Time (10 AM - 5 PM)</label>
+                        <input type="time" id="EventTime" class="form-control" min="10:00" max="17:00">
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-success" onclick="saveEvent()">Save</button>
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal fade" id="detailModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5>Event Details</h5>
+                <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body" id="detailBody"></div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+    let calendar;
+
+    $(document).ready(function () {
+        loadCalendar();
+    });
+
+         function loadCalendar() {
+
+        calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
+
+            initialView: 'dayGridMonth',
+            height: 750,
+            events: '/Trainer/GetEvents',
+
+            // =========================
+            // CLICK EVENT (UNCHANGED)
+            // =========================
+            eventClick: function (info) {
+                getEventDetails(info.event.id);
+            },
+
+            // =========================
+            // PREMIUM INLINE UI STYLING
+            // =========================
+            eventDidMount: function (info) {
+
+                let mode = info.event.extendedProps.eventMode
+                    || info.event.extendedProps.EventMode;
+
+                // 🔥 BASE CARD STYLE (PREMIUM SAAS LOOK)
+                Object.assign(info.el.style, {
+                    border: "none",
+                    borderRadius: "12px",
+                    padding: "6px 8px",
+                    fontSize: "12px",
+                    fontWeight: "600",
+                    color: "#fff",
+                    boxShadow: "0 8px 20px rgba(0,0,0,0.18)",
+                    transition: "all 0.25s ease",
+                    cursor: "pointer",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                });
+
+                // 🌟 HOVER EFFECT (INLINE JS)
+                info.el.onmouseenter = function () {
+                    info.el.style.transform = "scale(1.05)";
+                    info.el.style.boxShadow = "0 12px 30px rgba(0,0,0,0.25)";
+                    info.el.style.zIndex = "999";
+                };
+
+                info.el.onmouseleave = function () {
+                    info.el.style.transform = "scale(1)";
+                    info.el.style.boxShadow = "0 8px 20px rgba(0,0,0,0.18)";
+                    info.el.style.zIndex = "1";
+                };
+
+                // =========================
+                // 🎨 MODERN GRADIENT THEMES
+                // =========================
+
+                if (mode === "Online") {
+
+                    info.el.style.background = "linear-gradient(135deg,#11998e,#38ef7d)";
+                    info.el.style.borderLeft = "4px solid #00ff9d";
+
+                } else if (mode === "Offline") {
+
+                    info.el.style.background = "linear-gradient(135deg,#fc4a1a,#f7b733)";
+                    info.el.style.borderLeft = "4px solid #ff6a00";
+
+                } else {
+
+                    info.el.style.background = "linear-gradient(135deg,#667eea,#764ba2)";
+                    info.el.style.borderLeft = "4px solid #a78bfa";
+                }
+
+                // =========================
+                // 🏷 BADGE (PREMIUM CHIP UI)
+                // =========================
+
+                let badge = document.createElement("span");
+
+                badge.innerText = mode ? mode.toUpperCase() : "EVENT";
+
+                Object.assign(badge.style, {
+                    float: "right",
+                    fontSize: "9px",
+                    fontWeight: "700",
+                    padding: "2px 6px",
+                    borderRadius: "20px",
+                    background: "rgba(255,255,255,0.25)",
+                    color: "#fff",
+                    marginLeft: "6px"
+                });
+
+                let titleEl = info.el.querySelector(".fc-event-title");
+
+                if (titleEl) {
+                    titleEl.style.display = "flex";
+                    titleEl.style.justifyContent = "space-between";
+                    titleEl.style.alignItems = "center";
+                    titleEl.appendChild(badge);
+                }
+            }
+        });
+
+        calendar.render();
+    }
+    function openAddModal() {
+        $("#eventModal").modal('show');
+    }
+
+    function toggleMode() {
+        let mode = $("#EventMode").val();
+
+        $("#onlineBox").toggle(mode === "Online");
+        $("#offlineBox").toggle(mode === "Offline");
+    }
+
+    function saveEvent() {
+
+        let obj = {
+            EventName: $("#EventName").val(),
+            Branch: $("#Branch").val(),
+            SpeakerName: $("#SpeakerName").val(),
+            EventMode: $("#EventMode").val(),
+            MeetingLink: $("#MeetingLink").val(),
+            Venue: $("#Venue").val(),
+            EventDate: $("#EventDate").val(),
+            EventTime: $("#EventTime").val()
+        };
+
+        $.post('/Trainer/SaveEvent', obj, function (res) {
+            alert(res.message);
+            if (res.success) {
+                $("#eventModal").modal('hide');
+                calendar.refetchEvents();
+            }
+        });
+    }
+
+       function getEventDetails(id) {
+
+        if (!id) {
+            alert("Invalid Event ID");
+            return;
+        }
+
+        $.get('/Trainer/GetEventById', { id: id }, function (d) {
+
+            if (!d) {
+                alert("No event data found");
+                return;
+            }
+
+            $("#detailBody").html(`
+                <table class="table table-bordered">
+
+                    <tr>
+                        <th>Event</th>
+                        <td>${d.eventName || d.EventName || '-'}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Branch</th>
+                        <td>${d.branch || d.Branch || '-'}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Speaker</th>
+                        <td>${d.speakerName || d.SpeakerName || '-'}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Mode</th>
+                        <td>${d.eventMode || d.EventMode || '-'}</td>
+                    </tr>
+
+                        <tr>
+        <th>Meeting Link</th>
+        <td>${d.meetingLink || d.MeetingLink || '-'}</td>
+    </tr>
+
+    <tr>
+        <th>Venue</th>
+        <td>${d.venue || d.Venue || '-'}</td>
+    </tr>
+
+                    <tr>
+                        <th>Date</th>
+                        <td>${d.eventDate || d.EventDate || '-'}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Time</th>
+                        <td>${d.eventTime || d.EventTime || '-'}</td>
+                    </tr>
+
+                </table>
+            `);
+
+            $("#detailModal").modal('show');
+        })
+        .fail(function () {
+            alert("Error loading event details");
+        });
+    }
+
+</script>

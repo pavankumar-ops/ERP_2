@@ -13,15 +13,197 @@
 
 
 
-    <!-- HEADER -->
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4 class="fw-bold">Company Vacancy List</h4>
+    
+<style>
+    /* ===== PREMIUM CSS FOR ADD VACANCY PAGE ===== */
+    /* Paste this CSS after bootstrap links or inside <style> */
 
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#vacancyModal">
-            + Add New Vacancy
-        </button>
-    </div>
+    /* BODY */
+    body {
+        background: linear-gradient(135deg,#f8f6fc,#f5f7ff,#ffffff);
+        font-family: 'Segoe UI',sans-serif;
+    }
 
+    /* TITLES */
+    h4.fw-bold,
+    .page-header h4 {
+        font-weight: 700 !important;
+        letter-spacing: .3px;
+    }
+
+    /* TOP BUTTON */
+    .btn-primary {
+        background: linear-gradient(135deg,#3b245f,#6d4db3) !important;
+        border: none !important;
+        border-radius: 12px !important;
+        padding: 10px 18px !important;
+        font-weight: 600;
+        box-shadow: 0 10px 20px rgba(59,36,95,.18);
+    }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 28px rgba(59,36,95,.25);
+        }
+
+    /* PAGE HEADER */
+    .page-header {
+        background: linear-gradient(135deg,#3b245f,#6d4db3) !important;
+        border-radius: 18px !important;
+        padding: 18px 24px !important;
+        box-shadow: 0 14px 30px rgba(59,36,95,.14) !important;
+    }
+
+    /* VACANCY CARD */
+    .card {
+        border: none !important;
+        border-radius: 22px !important;
+        overflow: hidden;
+        box-shadow: 0 14px 32px rgba(59,36,95,.08) !important;
+        transition: .35s ease;
+    }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 22px 40px rgba(59,36,95,.15) !important;
+        }
+
+        /* CARD HEADER */
+        .card div[style*="linear-gradient(135deg,#6a11cb,#8e54e9)"] {
+            background: linear-gradient(135deg,#3b245f,#6d4db3,#8c6ad8) !important;
+        }
+
+    /* JOB TITLE */
+    .card-body h5 {
+        color: #3b245f !important;
+        font-weight: 700;
+    }
+
+    /* CARD BODY */
+    .card-body {
+        padding: 22px !important;
+    }
+
+    /* BADGES */
+    .badge.bg-danger {
+        background: #ef4444 !important;
+        border-radius: 20px;
+        padding: 7px 12px !important;
+    }
+
+    .badge.bg-light {
+        background: #ffffff !important;
+        color: #3b245f !important;
+        font-weight: 600;
+        border-radius: 20px;
+    }
+
+    /* VIEW BUTTON */
+    .viewBtn {
+        background: #ede9fe !important;
+        color: #3b245f !important;
+        border: none !important;
+        border-radius: 25px !important;
+        font-weight: 600;
+    }
+
+    /* DELETE BUTTON */
+    .btn-danger {
+        border-radius: 25px !important;
+        font-weight: 600;
+    }
+
+    /* MODALS */
+    .modal-content {
+        border: none !important;
+        border-radius: 22px !important;
+        overflow: hidden;
+        box-shadow: 0 22px 45px rgba(0,0,0,.12);
+    }
+
+    .modal-header {
+        background: linear-gradient(135deg,#3b245f,#6d4db3) !important;
+        border: none !important;
+    }
+
+    .modal-title {
+        font-weight: 700;
+    }
+
+    .btn-close {
+        filter: brightness(0) invert(1);
+    }
+
+    /* MODAL BODY */
+    .modal-body {
+        background: #f8f6fc !important;
+        padding: 24px !important;
+    }
+
+    /* INPUTS */
+    .form-control,
+    select,
+    textarea {
+        border-radius: 12px !important;
+        min-height: 46px;
+        border: 1px solid #e5e7eb !important;
+        box-shadow: none !important;
+    }
+
+    textarea {
+        min-height: 100px;
+    }
+
+        .form-control:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #3b245f !important;
+            box-shadow: 0 0 0 .18rem rgba(59,36,95,.12) !important;
+        }
+
+    /* LABEL */
+    label {
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 6px;
+    }
+
+    /* FOOTER BUTTONS */
+    .modal-footer .btn {
+        border-radius: 25px !important;
+        padding: 8px 22px !important;
+        font-weight: 600;
+    }
+
+    .modal-footer .btn-secondary {
+        background: #e5e7eb;
+        color: #111827;
+        border: none;
+    }
+
+    /* ACTIVE CHECK BOX BOX */
+    div[style*="border:1px solid #ddd"] {
+        border: 1px solid #ede9fe !important;
+        border-radius: 14px !important;
+        background: #ffffff !important;
+        padding: 14px !important;
+    }
+
+    /* SUCCESS MODAL ICON */
+    .text-success {
+        color: #16a34a !important;
+    }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #c4b5fd;
+        border-radius: 10px;
+    }
+</style>
 
 
     @if (TempData["success"] != null)
@@ -45,12 +227,53 @@
         </div>
     }
 
-    <div class="page-header"
-         style="background:linear-gradient(135deg,#6a11cb,#8e54e9);padding:15px 25px;border-radius:12px;color:white;margin-bottom:25px;box-shadow:0 8px 20px rgba(0,0,0,0.15);">
+<!-- HEADER COMBINED -->
+<div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-2"
+     style="background:linear-gradient(135deg,#3b245f,#6d4db3);
+            padding:18px 25px;
+            border-radius:14px;
+            color:white;
+            margin-bottom:25px;
+            box-shadow:0 8px 20px rgba(0,0,0,0.15);">
 
-        <h4 class="mb-0">Job Vacancy List</h4>
+    <!-- LEFT SIDE -->
+    <div>
+        <h4 class="mb-1 fw-bold">Company Vacancy List</h4>
+        <small style="opacity:0.85;">Manage company job openings & vacancies</small>
+    </div>
+
+    <!-- RIGHT SIDE BUTTONS -->
+    <div class="d-flex gap-2 flex-wrap">
+
+        <!-- BACK BUTTON -->
+        <a href="/Trainer/CompanyList"
+           class="btn btn-light"
+           style="border-radius:10px;
+                  font-weight:600;
+                  color:#3b245f;
+                  padding:8px 16px;">
+
+            <i class="bi bi-arrow-left-circle me-1"></i>
+            Back Company List
+        </a>
+
+        <!-- ADD BUTTON -->
+        <button class="btn text-white"
+                style="background:#2a1845;
+                       border:none;
+                       border-radius:10px;
+                       font-weight:600;
+                       padding:8px 16px;"
+                data-bs-toggle="modal"
+                data-bs-target="#vacancyModal">
+
+            <i class="bi bi-plus-circle me-1"></i>
+            Add New Vacancy
+        </button>
 
     </div>
+
+</div>
 
     <div class="row">
 
@@ -71,7 +294,7 @@
 
                         <!-- CARD HEADER -->
 
-                        <div style="background:linear-gradient(135deg,#6a11cb,#8e54e9);
+                    <div style="background:linear-gradient(135deg,#3b245f,#6d4db3);
                         padding:12px 15px;
                         color:white;
                         font-weight:600;
@@ -95,7 +318,7 @@
 
                         <div class="card-body text-center p-4">
 
-                            <h5 style="color:#6a11cb;font-weight:700;">
+                        <h5 style="color:#3b245f;font-weight:700;">
                                 @row["JobTitle"]
                             </h5>
 
@@ -133,7 +356,7 @@
                                 <!-- VIEW BUTTON -->
 
                                 <button class="btn btn-sm viewBtn"
-                                        style="background:#6a11cb;color:white;border-radius:20px;padding:6px 16px;"
+                                    style="background:#ede9fe;color:#3b245f;border:none;border-radius:20px;padding:6px 16px;"
                                         data-title="@row["JobTitle"]"
                                         data-desc="@row["JobDescription"]"
                                         data-open="@row["NoOfOpenings"]"
@@ -208,12 +431,12 @@
 <div class="modal fade" id="jobModal">
     <div class="modal-dialog modal-md">
         <div class="modal-content"
-             style="border-radius:12px;overflow:hidden;">
+             style=" background:#f8f6fc; border-radius:12px;overflow:hidden;">
 
             <!-- HEADER -->
 
             <div class="modal-header text-white py-2"
-                 style="background:linear-gradient(135deg,#6a11cb,#8e54e9);">
+                 style="background:linear-gradient(135deg,#3b245f,#6d4db3);">
 
                 <h6 class="modal-title fw-bold">
                     Job Details
@@ -233,7 +456,7 @@
                 <!-- TITLE -->
 
                 <h5 id="m_title"
-                    style="color:#6a11cb;font-weight:700;"></h5>
+                    style="color:#3b245f;font-weight:700;"></h5>
 
                 <p id="m_desc"
                    style="font-size:13px;color:#555;margin-bottom:10px;"></p>
@@ -280,7 +503,7 @@
 
                 <div class="mt-2">
 
-                    <b style="font-size:13px;color:#6a11cb;">
+                    <b style="font-size:13px;color:#3b245f;">
                         Skills
                     </b>
 
@@ -311,7 +534,8 @@
             <div class="modal-footer py-2">
 
                 <button class="btn btn-sm"
-                        style="background:#6a11cb;color:white;border-radius:20px;"
+                        style="background:#3b245f;color:white;"
+                       
                         data-bs-dismiss="modal">
 
                     Close
@@ -328,12 +552,12 @@
 <div class="modal fade" id="jobModal">
     <div class="modal-dialog modal-lg">
         <div class="modal-content"
-             style="border-radius:15px;overflow:hidden;">
+             style=" background:#f8f6fc;border-radius:15px;overflow:hidden;">
 
             <!-- HEADER -->
 
             <div class="modal-header text-white"
-                 style="background:linear-gradient(135deg,#6a11cb,#8e54e9);">
+                 style="background:linear-gradient(135deg,#3b245f,#6d4db3);">
 
                 <h5 class="modal-title fw-bold">
                     💼 Job Vacancy Details
@@ -356,7 +580,7 @@
                 <div class="text-center mb-3">
 
                     <h3 id="m_title"
-                        style="color:#6a11cb;font-weight:700;"></h3>
+                        style="color:#3b245f;font-weight:700;"></h3>
 
                     <span class="badge bg-primary"
                           style="padding:6px 14px;font-size:13px;"
@@ -371,7 +595,7 @@
 
                 <div class="mb-4">
 
-                    <h6 style="font-weight:700;color:#6a11cb;">
+                    <h6 style="color:#3b245f;font-weight:700;">
                         📄 Job Description
                     </h6>
 
@@ -475,7 +699,7 @@
 
                 <hr>
 
-                <h6 style="font-weight:700;color:#6a11cb;">
+                <h6 style="color:#3b245f;font-weight:700;">
                     🧠 Required Skills
                 </h6>
 
@@ -490,9 +714,8 @@
             <div class="modal-footer"
                  style="background:#f7f3ff;">
 
-                <button class="btn"
-                        style="background:#6a11cb;color:white;
-                               border-radius:25px;padding:8px 25px;"
+                <button class="btn btn-sm"
+                        style="background:#3b245f;color:white;"
                         data-bs-dismiss="modal">
 
                     Close
@@ -508,12 +731,12 @@
 
 <div class="modal fade" id="vacancyModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content" style="border-radius:12px;overflow:hidden;">
+        <div class="modal-content" style=" background:#f8f6fc; border-radius:12px;overflow:hidden;">
 
             <!-- HEADER -->
 
             <div class="modal-header text-white"
-                 style="background:linear-gradient(135deg,#6a11cb,#8e54e9);">
+                 style="background:linear-gradient(135deg,#3b245f,#6d4db3);">
 
                 <h5 class="modal-title fw-bold">
                     Add Job Vacancy
@@ -682,7 +905,7 @@
 
                 <button class="btn"
                         onclick="SaveVacancy()"
-                        style="background:#6a11cb;color:white;border-radius:25px;padding:8px 25px;">
+                        style=" background:#3b245f; color:white; border-radius:25px;padding:8px 25px;">
 
                     Save Vacancy
 

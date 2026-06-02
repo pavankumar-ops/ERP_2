@@ -217,4 +217,20 @@
         public string TestName { get; set; }
         public string Branch { get; set; }
     }
+
+
+    public class TopicNotes
+    {
+        public int Id { get; set; }
+
+        public string TopicName { get; set; }
+
+        public string SubjectName { get; set; }
+
+        public string PdfPath { get; set; }
+
+        public string Description { get; set; }
+
+        public string QRCodePath { get; set; }
+    }
 }

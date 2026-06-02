@@ -1516,12 +1516,13 @@ ORDER BY RegistrationDate DESC;";
         }
 
 
-        public (int students, int companies, int interviews, int offers) GetDashboardCounts()
+        public (int students, int companies, int interviews, int offers, int premium) GetDashboardCounts()
         {
             int students = 0;
             int companies = 0;
             int interviews = 0;
             int offers = 0;
+            int premium = 0;
 
             using (SqlConnection con = new SqlConnection(_conn))
             {
@@ -1529,7 +1530,8 @@ ORDER BY RegistrationDate DESC;";
             SELECT (SELECT COUNT(*) FROM StudentDetails) AS Students,
        (SELECT COUNT(*) FROM CompanyMaster) AS Companies,
        (SELECT COUNT(*) FROM InterviewSchedule WHERE  Status = 'Applied' or  Status = 'Assign'  ) AS Interviews,
-       (SELECT COUNT(*) FROM InterviewSchedule WHERE  Status = 'Selected') AS Offers";
+       (SELECT COUNT(*) FROM InterviewSchedule WHERE  Status = 'Selected') AS Offers,
+(SELECT COUNT(*) FROM Payments ) AS premium";
 
                 SqlCommand cmd = new SqlCommand(query, con);
                 con.Open();
@@ -1542,10 +1544,11 @@ ORDER BY RegistrationDate DESC;";
                     companies = Convert.ToInt32(dr["Companies"]);
                     interviews = Convert.ToInt32(dr["Interviews"]);
                     offers = Convert.ToInt32(dr["Offers"]);
+                    premium = Convert.ToInt32(dr["premium"]);
                 }
             }
 
-            return (students, companies, interviews, offers);
+            return (students, companies, interviews, offers, premium);
         }
 
 
@@ -1797,22 +1800,374 @@ Personal_Photo = @Personal_Photo
 
 
 
+        // GET ALL EVENTS
+        public List<PlacementEvents> GetAllEvents()
+        {
+            List<PlacementEvents> list = new List<PlacementEvents>();
+
+            using (SqlConnection con = new SqlConnection(_conn))
+            {
+                SqlCommand cmd = new SqlCommand("SELECT * FROM PlacementEvents ORDER BY EventDate ASC", con);
+
+                con.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+
+                while (dr.Read())
+                {
+                    list.Add(new PlacementEvents
+                    {
+                        EventId = Convert.ToInt32(dr["EventId"]),
+                        EventName = dr["EventName"].ToString(),
+                        Branch = dr["Branch"].ToString(),
+                        SpeakerName = dr["SpeakerName"].ToString(),
+                        EventMode = dr["EventMode"].ToString(),
+                        MeetingLink = dr["MeetingLink"].ToString(),
+                        Venue = dr["Venue"].ToString(),
+                        EventDate = Convert.ToDateTime(dr["EventDate"]),
+                        EventTime = (TimeSpan)dr["EventTime"],
+                        CreatedDate = Convert.ToDateTime(dr["CreatedDate"])
+                    });
+                }
+            }
+
+            return list;
+        }
+
+        // SAVE EVENT
+        public void SaveEvent(PlacementEvents model)
+        {
+            using (SqlConnection con = new SqlConnection(_conn))
+            {
+                string query = @"INSERT INTO PlacementEvents
+                        (EventName, Branch, SpeakerName, EventMode, MeetingLink, Venue, EventDate, EventTime)
+                        VALUES
+                        (@EventName, @Branch, @SpeakerName, @EventMode, @MeetingLink, @Venue, @EventDate, @EventTime)";
+
+                SqlCommand cmd = new SqlCommand(query, con);
+
+                cmd.Parameters.AddWithValue("@EventName", model.EventName);
+                cmd.Parameters.AddWithValue("@Branch", model.Branch);
+                cmd.Parameters.AddWithValue("@SpeakerName", model.SpeakerName);
+                cmd.Parameters.AddWithValue("@EventMode", model.EventMode);
+                cmd.Parameters.AddWithValue("@MeetingLink", (object)model.MeetingLink ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Venue", (object)model.Venue ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@EventDate", model.EventDate);
+                cmd.Parameters.AddWithValue("@EventTime", model.EventTime);
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        // GET EVENT BY ID
+        public PlacementEvents GetEventById(int id)
+        {
+            PlacementEvents model = new PlacementEvents();
+
+            using (SqlConnection con = new SqlConnection(_conn))
+            {
+                SqlCommand cmd = new SqlCommand("SELECT * FROM PlacementEvents WHERE EventId=@EventId", con);
+                cmd.Parameters.AddWithValue("@EventId", id);
+
+                con.Open();
+                SqlDataReader dr = cmd.ExecuteReader();
+
+                if (dr.Read())
+                {
+                    model.EventId = Convert.ToInt32(dr["EventId"]);
+                    model.EventName = dr["EventName"].ToString();
+                    model.Branch = dr["Branch"].ToString();
+                    model.SpeakerName = dr["SpeakerName"].ToString();
+                    model.EventMode = dr["EventMode"].ToString();
+                    model.MeetingLink = dr["MeetingLink"].ToString();
+                    model.Venue = dr["Venue"].ToString();
+                    model.EventDate = Convert.ToDateTime(dr["EventDate"]);
+                    model.EventTime = (TimeSpan)dr["EventTime"];
+                    model.CreatedDate = Convert.ToDateTime(dr["CreatedDate"]);
+                }
+            }
+
+            return model;
+        }
+
+
+
+        public void SavePayment(int studentId, string paymentId, decimal price)
+        {
+           
+            using (SqlConnection con = new SqlConnection(_conn))
+            {
+                string query = "INSERT INTO Payments (StudentId, Amount, PaymentId, Status, PaymentDate) VALUES (@StudentId, @Amount, @PaymentId, @Status, GETDATE())";
+
+                SqlCommand cmd = new SqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@StudentId", studentId);
+                cmd.Parameters.AddWithValue("@Amount", price);
+                cmd.Parameters.AddWithValue("@PaymentId", paymentId);
+               // cmd.Parameters.AddWithValue("@Receipt", folderPath);
+                cmd.Parameters.AddWithValue("@Status", "Success");
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
+        //public void SavePayment(string studentId, string paymentId, string folderPath)
+        //{
+           
+        //    using (SqlConnection con = new SqlConnection(_conn))
+        //    {
+        //        string query = "INSERT INTO Payments (StudentId, Amount, PaymentId, Receipt,Status, PaymentDate) VALUES (@StudentId, @Amount, @PaymentId,Receipt, @Status, GETDATE())";
+
+        //        SqlCommand cmd = new SqlCommand(query, con);
+        //        cmd.Parameters.AddWithValue("@StudentId", studentId);
+        //        cmd.Parameters.AddWithValue("@Amount", 299);
+        //        cmd.Parameters.AddWithValue("@PaymentId", paymentId);
+        //        cmd.Parameters.AddWithValue("@Receipt", folderPath);
+        //        cmd.Parameters.AddWithValue("@Status", "Success");
+
+        //        con.Open();
+        //        cmd.ExecuteNonQuery();
+        //    }
+        //}
+
+        // ✅ Make User Premium
+        public void MakeUserPremium(int studentId)
+        {
+            using (SqlConnection con = new SqlConnection(_conn))
+            {
+                string query = "UPDATE StudentDetails SET IsPremium = 1 WHERE StudentId = @StudentId";
+
+                SqlCommand cmd = new SqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@StudentId", studentId);
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        // ✅ Check Premium
+        //public bool IsUserPremium(string studentId)
+        //{
+        //    using (SqlConnection con = new SqlConnection(_conn))
+        //    {
+        //        string query = "SELECT IsPremium FROM StudentDetails WHERE StudentId = @StudentId";
+
+        //        SqlCommand cmd = new SqlCommand(query, con);
+        //        cmd.Parameters.AddWithValue("@StudentId", studentId);
+
+        //        con.Open();
+
+        //        var result = cmd.ExecuteScalar();
+
+        //        if (result != null && result != DBNull.Value)
+        //        {
+        //            return result.ToString() == "1";
+        //        }
+
+        //        return false;
+        //    }
+        //}
+        public bool IsUserPremium(string studentId)
+        {
+            using (SqlConnection con = new SqlConnection(_conn))
+            {
+                string query = "SELECT IsPremium FROM StudentDetails WHERE StudentId = @StudentId";
+
+                SqlCommand cmd = new SqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@StudentId", studentId);
+
+                con.Open();
+
+                var result = cmd.ExecuteScalar();
+
+                if (result != null && result != DBNull.Value)
+                {
+                    return result.ToString() == "1";
+                }
+
+                return false;
+            }
+        }
+
+
+        public DataTable GetPaymentList()
+        {
+            SqlConnection con = new SqlConnection(_conn);
+
+            SqlCommand cmd = new SqlCommand(@"
+        SELECT 
+            p.Id,
+            p.StudentId,
+            p.Amount,
+            p.PaymentId,
+            p.Status,
+            p.PaymentDate,
+            p.Receipt,
+
+            s.FirstName + ' ' + s.MiddleName + ' ' + s.LastName AS StudentName,
+            s.Personal_Photo
+
+        FROM Payments p
+        INNER JOIN StudentDetails s
+            ON p.StudentId = s.StudentId
+
+
+        ORDER BY p.Id DESC
+    ", con);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+
+            DataTable dt = new DataTable();
+
+            da.Fill(dt);
+
+            return dt;
+        }
 
 
 
 
+        public DataTable GetLatestPaymentStudentDetails(string studentId)
+        {
+            DataTable dt = new DataTable();
+
+            using (SqlConnection con = new SqlConnection(_conn))
+            {
+                string query = @"
+        SELECT TOP 1
+            p.Id,
+            p.StudentId,
+            p.Amount,
+            p.PaymentId,
+            p.Status,
+            p.PaymentDate,
+
+            s.FirstName + ' ' + 
+            ISNULL(s.MiddleName,'') + ' ' + 
+            s.LastName AS StudentName,
+
+            s.Email
+
+        FROM Payments p
+
+        INNER JOIN StudentDetails s
+            ON p.StudentId = s.StudentId
+
+        WHERE p.StudentId = @StudentId
+
+        ORDER BY p.Id DESC";
+
+                SqlCommand cmd = new SqlCommand(query, con);
+
+                cmd.Parameters.AddWithValue("@StudentId", studentId);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+
+                da.Fill(dt);
+            }
+
+            return dt;
+        }
 
 
+        public DataTable GetReceiptById(int Id)
+        {
+            DataTable dt = new DataTable();
+
+            using (SqlConnection con = new SqlConnection(_conn))
+            {
+                string query = @"
+     SELECT TOP 1
+    Id,
+    Receipt
+FROM Payments
+ORDER BY Id DESC";
+
+                SqlCommand cmd = new SqlCommand(query, con);
+
+                cmd.Parameters.AddWithValue("@Id", Id);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+
+                da.Fill(dt);
+            }
+
+            return dt;
+        }
+        public void UpdateReceiptPath(int studentId,string paymentId,string receiptPath)
+        {
+            using (SqlConnection con = new SqlConnection(_conn))
+            {
+                string query = @"
+
+        UPDATE Payments
+
+        SET Receipt = @Receipt
+
+        WHERE StudentId = @StudentId
+        AND PaymentId = @PaymentId
+
+        ";
+
+                SqlCommand cmd = new SqlCommand(query, con);
+
+                cmd.Parameters.AddWithValue("@StudentId", studentId);
+
+                cmd.Parameters.AddWithValue("@PaymentId", paymentId);
+
+                cmd.Parameters.AddWithValue("@Receipt", receiptPath);
+
+                con.Open();
+
+                cmd.ExecuteNonQuery();
+            }
+        }
 
 
+        public DataTable GetStudentDetailsById(string studentId)
+        {
+            SqlConnection con = new SqlConnection(_conn);
 
+            string query = @"SELECT 
+                        FirstName + ' ' + LastName AS FullName,
+                       Email
+                     FROM StudentDetails
+                     WHERE StudentId = @StudentId";
 
+            SqlCommand cmd = new SqlCommand(query, con);
+            cmd.Parameters.AddWithValue("@StudentId", studentId);
 
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
 
+            DataTable dt = new DataTable();
+            da.Fill(dt);
 
+            return dt;
+        }
 
+        public DataTable GetInterviewDetails(string studentId)
+        {
+            SqlConnection con = new SqlConnection(_conn);
 
+            string query = @"SELECT TOP 1
+                        Branch,
+                        InterviewType,
+                        InterviewDate,
+                        InterviewTime,
+                        Status
+                     FROM InterviewSchedule
+                     WHERE StudentId = @StudentId
+                     ORDER BY InterviewId DESC";
 
+            SqlCommand cmd = new SqlCommand(query, con);
+            cmd.Parameters.AddWithValue("@StudentId", studentId);
+
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+
+            return dt;
+        }
     }
 }
 

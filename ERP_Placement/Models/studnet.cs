@@ -139,4 +139,27 @@
     }
 
 
+    public class PlacementEvents
+    {
+        public int EventId { get; set; }
+
+        public string EventName { get; set; }
+
+        public string Branch { get; set; }
+
+        public string SpeakerName { get; set; }
+
+        public string EventMode { get; set; }     // Online / Offline
+
+        public string MeetingLink { get; set; }
+
+        public string Venue { get; set; }
+
+        public DateTime EventDate { get; set; }
+
+        public TimeSpan EventTime { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+    }
+
 }

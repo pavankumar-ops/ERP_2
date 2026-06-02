@@ -643,6 +643,7 @@
 
 
                         <input type="hidden" id="OldBTechPath" value="@Model.BTech_Document_Path" />
+                        <input type="hidden" id="OldProfilePhoto" value="@Model.Personal_Photo" />
                         <input type="hidden" id="OldResumePath" value="@Model.ResumePath" />
                         <input type="hidden" id="StudentId" value="@Model.StudentId" />
 
@@ -1795,7 +1796,10 @@
 
             debugger;
 
+
             e.preventDefault();
+             var confimemailid = document.getElementById("confimemailid");
+              if (confimemailid.value === "") { showToast("Please confirm Email ID"); confimemailid.focus(); return; }
 
             var formData = new FormData();
 

@@ -10,21 +10,20 @@
 <style>
 
     body {
-        background: #f5f7fa;
+        background: #f6f2fa;
         font-family: 'Segoe UI',sans-serif;
     }
 
     .page-title {
         font-weight: 700;
-        color: #2c3e50;
+        color: #3b245f;
     }
 
     .job-card {
         border: none;
-        border-radius: 12px;
+        border-radius: 14px;
         background: white;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        transition: 0.3s;
+        box-shadow: 0 6px 18px rgba(59,36,95,0.12);
     }
 
         .job-card:hover {
@@ -137,7 +136,7 @@
 
                         <!-- Gradient Header -->
                         <div class="p-3 text-white"
-                             style="background:linear-gradient(135deg,#6a11cb,#8e54e9);">
+                             style="background:linear-gradient(135deg,#3b245f,#6d4db3);">
 
                             <div class="d-flex align-items-center">
 
@@ -175,19 +174,19 @@
                             <!-- Job Tags -->
                             <div class="mb-3">
 
-                                <span class="badge bg-light text-dark me-1 mb-1">
+                                <span class="badge text-white mb-1" style="background:#6d4db3;">
                                     📍 @row["JobLocation"]
                                 </span>
 
-                                <span class="badge bg-light text-dark me-1 mb-1">
+                                <span class="badge text-white mb-1" style="background:#6d4db3;">
                                     💰 @row["Salary"]
                                 </span>
 
-                                <span class="badge bg-light text-dark me-1 mb-1">
+                                <span class="badge text-white mb-1" style="background:#6d4db3;">
                                     💼 @row["JobType"]
                                 </span>
 
-                                <span class="badge bg-info text-dark mb-1">
+                                <span class="badge text-white mb-1" style="background:#6d4db3;">
                                     💻 @row["InterviewType"]
                                 </span>
 
@@ -227,7 +226,7 @@
                             {
 
                                 <button class="btn w-100 text-white"
-                                        style="background:linear-gradient(135deg,#6a11cb,#8e54e9);border:none;font-weight:600;"
+                                        style="background:linear-gradient(135deg,#3b245f,#6d4db3);border:none;font-weight:600;"
                                         onclick="ApplyInterview('@row["InterviewId"]','@row["HREmailId"]','@row["VacancyId"]','@row["StudentId"]')">
 
                                     Apply Now

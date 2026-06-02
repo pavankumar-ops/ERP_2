@@ -89,7 +89,7 @@
 <body>
 
     <!-- NAVBAR -->
-    <nav class=" nav navbar navbar-expand-lg navbar-dark  px-4" style="background:#375c96;">
+    <nav class=" nav navbar navbar-expand-lg navbar-dark  px-4" style="background:#3b245f;">
         <a class="navbar-brand" href="#">
             <i class="bi bi-mortarboard-fill"></i> EduCatal
         </a>
@@ -106,7 +106,7 @@
                     <a class="nav-link" href="@Url.Action("About", "Trainer")">About</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="@Url.Action("FAQ", "Trainer")">FAQ</a>
+                    <a class="nav-link" href="@Url.Action("Event", "Trainer")">Event</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="@Url.Action("TPO", "Trainer")">Training & Placement Cell</a>
@@ -164,6 +164,17 @@
                 document.getElementById("profileMenu").style.display = "none";
             }
         }
+    </script>
+
+
+    <script>
+        // Push current page into history
+        window.history.pushState(null, null, window.location.href);
+
+        // Prevent back
+        window.onpopstate = function () {
+            window.history.pushState(null, null, window.location.href);
+        };
     </script>
 </body>
 </html>

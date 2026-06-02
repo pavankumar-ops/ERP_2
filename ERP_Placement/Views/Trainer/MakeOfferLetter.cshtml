@@ -9,7 +9,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<style>
+@* <style>
 
     .interview-card {
         border: none;
@@ -24,7 +24,7 @@
 
     .card-strip {
         height: 40px;
-        background: linear-gradient(135deg,#6a11cb,#8e54e9);
+        background: linear-gradient(135deg,#3b245f,#6d4db3);
     }
 
     .student-img {
@@ -38,7 +38,193 @@
 
     .student-name {
         font-weight: 700;
-        color: #6a11cb;
+        color: #3b245f;
+    }
+
+</style> *@
+
+
+<style>
+
+    body {
+        background: #f4f6fb;
+    }
+
+    /* MAIN CARD */
+    .interview-card {
+        border: none;
+        border-radius: 18px;
+        overflow: hidden;
+        background: #ffffff;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        transition: all .35s ease;
+    }
+
+        .interview-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 18px 35px rgba(59,36,95,0.18);
+        }
+
+    /* TOP STRIP */
+    .card-strip {
+        height: 45px;
+        background: linear-gradient(135deg,#3b245f,#6d4db3);
+    }
+
+    /* IMAGE */
+    .student-img {
+        width: 85px;
+        height: 85px;
+        border-radius: 50%;
+        border: 4px solid #fff;
+        margin-top: -42px;
+        object-fit: cover;
+        box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+    }
+
+    /* NAME */
+    .student-name {
+        font-weight: 700;
+        font-size: 17px;
+        color: #3b245f;
+        margin-top: 10px;
+    }
+
+    /* TOP HEADER ICON */
+    .title-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background: linear-gradient(135deg,#3b245f,#6d4db3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 20px;
+        box-shadow: 0 8px 20px rgba(59,36,95,.25);
+    }
+
+    /* FILTER BOX */
+    .filter-box {
+        background: #fff;
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 8px 25px rgba(0,0,0,.06);
+        padding: 20px;
+    }
+
+        .filter-box label {
+            font-weight: 600;
+            color: #3b245f;
+            margin-bottom: 6px;
+        }
+
+    .form-control,
+    .form-select {
+        border-radius: 10px;
+        border: 1px solid #ddd;
+        height: 44px;
+        box-shadow: none !important;
+    }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #6d4db3;
+            box-shadow: 0 0 0 0.18rem rgba(109,77,179,.15) !important;
+        }
+
+    /* BUTTONS */
+    .btn-view {
+        background: #3b245f;
+        color: #fff;
+        border: none;
+        border-radius: 25px;
+        padding: 6px 14px;
+        font-size: 13px;
+    }
+
+        .btn-view:hover {
+            background: #2d1b49;
+            color: #fff;
+        }
+
+    .btn-offer {
+        background: #6d4db3;
+        color: #fff;
+        border: none;
+        border-radius: 25px;
+        padding: 6px 14px;
+        font-size: 13px;
+    }
+
+        .btn-offer:hover {
+            background: #5a3ea0;
+            color: #fff;
+        }
+
+    .btn-download {
+        background: #3b245f;
+        color: #fff;
+        border: none;
+        border-radius: 25px;
+        padding: 6px 14px;
+        font-size: 13px;
+    }
+
+        .btn-download:hover {
+            background: #2d1b49;
+            color: #fff;
+        }
+
+    .btn-danger {
+       
+        padding: 6px 14px !important;
+    }
+
+    /* BADGE */
+    .badge-branch {
+        background: #ede7ff;
+        color: #3b245f;
+        font-weight: 600;
+        padding: 7px 12px;
+        border-radius: 20px;
+    }
+
+    /* MODALS */
+    .modal-content {
+        border: none;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 20px 45px rgba(0,0,0,.18);
+    }
+
+    .modal-header {
+        background: linear-gradient(135deg,#3b245f,#6d4db3);
+        color: #fff;
+        border: none;
+    }
+
+    .modal-body {
+        background: #faf9fd;
+    }
+
+    .btn-close {
+        filter: brightness(0) invert(1);
+    }
+
+    /* DETAILS IMAGE */
+    #m_photo {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 5px solid #3b245f !important;
+        object-fit: cover;
+        box-shadow: 0 8px 20px rgba(0,0,0,.15);
+    }
+
+    /* SMALL TEXT */
+    .text-muted {
+        color: #7d7d7d !important;
     }
 
 </style>
@@ -48,7 +234,7 @@
 
 <div class="d-flex align-items-center mb-4">
 
-    <div style="width:45px;height:45px;background:linear-gradient(135deg,#6a11cb,#8e54e9);border-radius:10px;display:flex;align-items:center;justify-content:center;color:white;font-size:20px;margin-right:12px;">
+    <div style="width:45px;height:45px;background:linear-gradient(135deg,#3b245f,#6d4db3);border-radius:10px;display:flex;align-items:center;justify-content:center;color:white;font-size:20px;margin-right:12px;">
         <i class="bi bi-people-fill"></i>
     </div>
 
@@ -57,7 +243,7 @@
             Make Offer Letters
         </h3>
 
-        <div style="width:60px;height:3px;background:#6a11cb;margin-top:5px;border-radius:5px;"></div>
+        <div style="width:60px;height:3px;background:#3b245f;margin-top:5px;border-radius:5px;"></div>
 
         <span style="font-size:13px;color:#6c757d;">
             Manage and track student interview applications
@@ -124,7 +310,7 @@
                             <b>@row["JobTitle"]</b>
                         </p>
 
-                        <span class="badge bg-primary">
+                        <span class="badge text-white" style="background:#3b245f;">
                             @row["Branch"]
                         </span>
 
@@ -139,7 +325,8 @@
 
                         <div class="d-flex justify-content-center flex-wrap gap-1 mt-2">
 
-                            <button class="btn btn-info btn-sm viewBtn"
+                            <button class="btn btn-info btn-sm text-white viewBtn"
+                                    style="background:#3b245f;border:none;"
                                     data-photo="@row["Personal_Photo"]"
                                     data-name="@row["FirstName"] @row["LastName"]"
                                     data-company="@row["CompanyName"]"
@@ -182,7 +369,9 @@
                             else if (row["Status"].ToString() == "Selected")
                             {
 
-                                <button class="btn btn-warning btn-sm viewOfferBtn"
+                                <button class="btn btn-warning btn-sm text-white viewOfferBtn" 
+                                        
+                                        style="background:#6d4db3;border:none;"
                                         data-interview="@row["InterviewId"]"
                                         data-bs-toggle="modal"
                                         data-bs-target="#viewOfferModal">
@@ -191,7 +380,8 @@
                                 </button>
 
                                 <a href="@Url.Action("DownloadOfferLetter", "Trainer", new { interviewId = row["InterviewId"] })"
-                                   class="btn btn-primary btn-sm">
+                                   class="btn btn-sm text-white"
+                                   style="background:#3b245f;border:none;">
 
                                     Download
                                 </a>
@@ -222,7 +412,7 @@
         <div class="modal-content">
 
             <div class="modal-header text-white"
-                 style="background:linear-gradient(135deg,#6a11cb,#8e54e9);">
+                 style="background:linear-gradient(135deg,#3b245f,#6d4db3);">
 
                 <h5 class="modal-title">Interview Details</h5>
 
@@ -238,7 +428,7 @@
                     <div class="col-md-4 text-center">
 
                         <img id="m_photo"
-                             style="width:120px;height:120px;border-radius:50%;border:5px solid #6a11cb;" />
+                             style="width:120px;height:120px;border-radius:50%;border:5px solid  #3b245f;" />
 
                         <h5 id="m_name" class="mt-2"></h5>
 

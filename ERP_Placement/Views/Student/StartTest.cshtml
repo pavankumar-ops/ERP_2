@@ -6,61 +6,114 @@
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
 
+
 <style>
 
     body {
-        background: #f4f7fb;
+        background: #f4f6fb;
+        font-family: 'Segoe UI',sans-serif;
     }
 
+    /* TEST HEADER */
     .test-header {
-        background: linear-gradient(135deg,#4e73df,#224abe);
-        color: white;
-        border-radius: 12px;
+        background: linear-gradient(135deg,#3b245f,#6d4db3);
+        color: #fff;
+        border: none;
+        border-radius: 18px;
+        box-shadow: 0 12px 30px rgba(59,36,95,.15);
     }
 
+    /* TIMER CARD */
+    .timer-card {
+        border: none;
+        border-radius: 18px;
+        background: #fff;
+        box-shadow: 0 10px 25px rgba(59,36,95,.08);
+    }
+
+    .timer {
+        font-size: 28px;
+        font-weight: 700;
+        color: #3b245f;
+    }
+
+    /* PROGRESS */
+    .progress {
+        height: 10px;
+        border-radius: 20px;
+        background: #ede7ff;
+    }
+
+    .progress-bar {
+        background: linear-gradient(135deg,#3b245f,#6d4db3);
+        border-radius: 20px;
+    }
+
+    /* QUESTION CARD */
     .question-card {
         border: none;
-        border-radius: 12px;
+        border-radius: 18px;
+        background: #fff;
+        box-shadow: 0 10px 28px rgba(59,36,95,.08);
         transition: .3s;
     }
 
         .question-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 20px rgba(0,0,0,.1);
+            transform: translateY(-5px);
+            box-shadow: 0 18px 35px rgba(59,36,95,.14);
         }
 
+        /* QUESTION BADGE */
+        .question-card .badge {
+            background: #ede7ff !important;
+            color: #3b245f !important;
+            border-radius: 30px;
+            padding: 8px 14px;
+            font-size: 13px;
+        }
+
+    /* OPTION BUTTON */
     .option-btn {
         width: 100%;
         text-align: left;
-        border: 1px solid #e2e6ea;
-        border-radius: 8px;
-        padding: 10px;
-        background: white;
+        padding: 12px 15px;
+        border: 1px solid #e5dcff;
+        border-radius: 14px;
+        background: #fff;
+        color: #3b245f;
+        font-weight: 500;
         transition: .25s;
     }
 
         .option-btn:hover {
-            background: #eef3ff;
-            border-color: #4e73df;
+            background: #f6f2ff;
+            border-color: #6d4db3;
+            transform: translateY(-2px);
         }
 
         .option-btn.selected {
-            background: #4e73df;
-            color: white;
-            border-color: #4e73df;
+            background: linear-gradient(135deg,#3b245f,#6d4db3);
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 10px 22px rgba(59,36,95,.18);
         }
 
-    .timer {
-        font-size: 22px;
-        font-weight: bold;
-        color: #dc3545;
+    /* SUBMIT BUTTON */
+    .submit-btn {
+        padding: 14px 55px;
+        border: none;
+        border-radius: 40px;
+        background: linear-gradient(135deg,#3b245f,#6d4db3);
+        color: #fff;
+        font-size: 18px;
+        font-weight: 700;
+        transition: .3s;
     }
 
-    .submit-btn {
-        padding: 12px 50px;
-        font-size: 18px;
-        border-radius: 30px;
-    }
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(59,36,95,.20);
+        }
 
 </style>
 

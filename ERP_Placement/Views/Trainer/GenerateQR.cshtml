@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "Generate QR";
+}
+
+<div class="container mt-5 text-center">
+
+    <h2 class="mb-4">
+        Notes QR Code
+    </h2>
+
+    <img src="@ViewBag.QRCode"
+         width="300" />
+
+    <br /><br />
+
+    <a class="btn btn-primary"
+       href="@ViewBag.QRCode"
+       download>
+        Download QR
+    </a>
+
+</div>

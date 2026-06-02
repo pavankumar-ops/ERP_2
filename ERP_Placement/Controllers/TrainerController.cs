@@ -3,20 +3,23 @@ using ERP_Placement.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+//using QRCoder;
+using System.Collections.Generic;
 using System.Data;
 using System.Net;
 using System.Net.Mail;
-
 namespace ERP_Placement.Controllers
 {
     public class TrainerController : Controller
     {
 
         private readonly StudentDAL _dal;
+        private readonly IWebHostEnvironment _env;
 
-        public TrainerController(IConfiguration config)
+        public TrainerController(IConfiguration config, IWebHostEnvironment env)
         {
             _dal = new StudentDAL(config);
+            _env=env;
         }
 
         // GET: TrainerController1
@@ -46,6 +49,7 @@ namespace ERP_Placement.Controllers
             ViewBag.CompanyCount = counts.companies;
             ViewBag.InterviewCount = counts.interviews;
             ViewBag.OfferCount = counts.offers;
+            ViewBag.PremiumUserCount = counts.premium;
             return View();
         }
         // GET: TrainerController1/Details/5
@@ -139,13 +143,217 @@ namespace ERP_Placement.Controllers
 
 
         // SAVE INTERVIEW
+
         [HttpPost]
         public JsonResult SaveInterview(InterviewScheduleModel model)
         {
             int result = _dal.SaveInterview(model);
-
+            string StudentId = model.StudentId.ToString();
             if (result > 0)
             {
+                // Student Details
+                DataTable studentDt = _dal.GetStudentDetailsById(StudentId);
+
+                // Interview Details
+                DataTable interviewDt = _dal.GetInterviewDetails(StudentId);
+
+                if (studentDt.Rows.Count > 0 && interviewDt.Rows.Count > 0)
+                {
+                    string fullName = studentDt.Rows[0]["FullName"].ToString();
+                    //string email = studentDt.Rows[0]["EmailId"].ToString();
+                    string email = "yogitapatil7219@gmail.com";
+
+                    string branch = interviewDt.Rows[0]["Branch"].ToString();
+                    string interviewType = interviewDt.Rows[0]["InterviewType"].ToString();
+                    string interviewDate = Convert.ToDateTime(interviewDt.Rows[0]["InterviewDate"]).ToString("dd-MM-yyyy");
+                    string interviewTime = interviewDt.Rows[0]["InterviewTime"].ToString();
+                    string status = interviewDt.Rows[0]["Status"].ToString();
+
+                    MailMessage mail = new MailMessage();
+                    mail.From = new MailAddress("placementerp@gmail.com");
+                    mail.To.Add(email);
+
+                    mail.Subject = "Interview Schedule Notification";
+
+                    mail.IsBodyHtml = true;
+
+                    mail.Body = $@"
+<html>
+<head>
+</head>
+<body style='margin:0;padding:0;background-color:#f4f6f9;font-family:Arial,sans-serif;'>
+
+    <table width='100%' cellpadding='0' cellspacing='0' style='padding:40px 0;background-color:#f4f6f9;'>
+        <tr>
+            <td align='center'>
+
+                <table width='650' cellpadding='0' cellspacing='0' 
+                       style='background:#ffffff;border-radius:18px;overflow:hidden;
+                       box-shadow:0 4px 18px rgba(0,0,0,0.08);'>
+
+                    <!-- Header -->
+                    <tr>
+                        <td style='background:linear-gradient(135deg,#0f172a,#2563eb);
+                                   padding:35px;text-align:center;color:white;'>
+
+                            <h1 style='margin:0;font-size:30px;font-weight:bold;'>
+                                Interview Opportunity
+                            </h1>
+
+                            <p style='margin-top:10px;font-size:15px;opacity:0.9;'>
+                                Placement Portal Notification
+                            </p>
+
+                        </td>
+                    </tr>
+
+                    <!-- Body -->
+                    <tr>
+                        <td style='padding:40px;'>
+
+                            <p style='font-size:18px;color:#111827;margin-bottom:10px;'>
+                                Dear <b>{fullName}</b>,
+                            </p>
+
+                            <p style='font-size:16px;color:#4b5563;line-height:1.8;'>
+                                Greetings from the Placement Team!
+                            </p>
+
+                            <p style='font-size:16px;color:#4b5563;line-height:1.8;'>
+                                We are pleased to inform you that an 
+                                <b>interview opportunity</b> has been assigned to you.
+                                Kindly login to the <b>Placement Portal</b> and apply for the interview.
+                            </p>
+
+                            <!-- Interview Details Card -->
+                            <table width='100%' cellpadding='12' cellspacing='0'
+                                   style='margin-top:25px;border:1px solid #e5e7eb;
+                                   border-radius:12px;background:#f9fafb;'>
+
+                                <tr>
+                                    <td colspan='2'
+                                        style='font-size:18px;font-weight:bold;
+                                        color:#1e3a8a;padding-bottom:15px;'>
+                                        Interview Details
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td style='font-weight:bold;color:#374151;width:40%;'>
+                                        Branch
+                                    </td>
+                                    <td style='color:#111827;'>
+                                        {branch}
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td style='font-weight:bold;color:#374151;'>
+                                        Interview Type
+                                    </td>
+                                    <td style='color:#111827;'>
+                                        {interviewType}
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td style='font-weight:bold;color:#374151;'>
+                                        Interview Date
+                                    </td>
+                                    <td style='color:#111827;'>
+                                        {interviewDate}
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td style='font-weight:bold;color:#374151;'>
+                                        Interview Time
+                                    </td>
+                                    <td style='color:#111827;'>
+                                        {interviewTime}
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td style='font-weight:bold;color:#374151;'>
+                                        Status
+                                    </td>
+                                    <td>
+                                        <span style='background:#dcfce7;
+                                                     color:#166534;
+                                                     padding:6px 14px;
+                                                     border-radius:20px;
+                                                     font-size:13px;
+                                                     font-weight:bold;'>
+                                            {status}
+                                        </span>
+                                    </td>
+                                </tr>
+
+                            </table>
+
+                            <!-- Note -->
+                            <p style='margin-top:30px;
+                                      font-size:15px;
+                                      color:#6b7280;
+                                      line-height:1.8;'>
+
+                                Please complete your application before the deadline
+                                and ensure your availability for the interview process.
+
+                            </p>
+
+                            <!-- Footer Message -->
+                            <div style='margin-top:35px;
+                                        padding:20px;
+                                        background:#eff6ff;
+                                        border-left:5px solid #2563eb;
+                                        border-radius:10px;'>
+
+                                <p style='margin:0;
+                                          color:#1e3a8a;
+                                          font-size:15px;
+                                          line-height:1.8;'>
+
+                                    We wish you the very best for your interview and future career opportunities.
+
+                                </p>
+
+                            </div>
+
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td style='background:#111827;
+                                   padding:22px;
+                                   text-align:center;
+                                   color:#d1d5db;
+                                   font-size:14px;'>
+
+                            © 2026 Placement Portal | Placement Team
+
+                        </td>
+                    </tr>
+
+                </table>
+
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>
+";
+
+                    SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
+                    smtp.Credentials = new NetworkCredential("placementerp@gmail.com", "erkkhoqzdiiuigyj");
+                    smtp.EnableSsl = true;
+
+                    smtp.Send(mail);
+                }
+
                 return Json(new { success = true, message = "Interview Scheduled Successfully" });
             }
             else
@@ -153,6 +361,21 @@ namespace ERP_Placement.Controllers
                 return Json(new { success = false, message = "Failed to Schedule Interview" });
             }
         }
+        //[HttpPost]
+        //public JsonResult SaveInterview(InterviewScheduleModel model)
+        //{
+        //    int result = _dal.SaveInterview(model);
+        //    string StudentId = model.StudentId.ToString();
+
+        //    if (result > 0)
+        //    {
+        //        return Json(new { success = true, message = "Interview Scheduled Successfully" });
+        //    }
+        //    else
+        //    {
+        //        return Json(new { success = false, message = "Failed to Schedule Interview" });
+        //    }
+        //}
 
         [HttpPost]
         public async Task<IActionResult> CompanySave(
@@ -413,20 +636,191 @@ namespace ERP_Placement.Controllers
                     mail.From = new MailAddress("placementerp@gmail.com", "Placement Team");
                     mail.To.Add(email);
 
-                    mail.Subject = "Congratulations! You Are Selected";
+                    mail.Subject = "🎉 Congratulations! You Are Selected";
 
                     mail.Body = $@"
-Dear {firstName} {lastName},
 
-Congratulations!
+<div style='background:#f4f6fb;
+            padding:40px;
+            font-family:Segoe UI,Arial,sans-serif;'>
 
-You have been selected in {companyName}.
+    <div style='max-width:650px;
+                margin:auto;
+                background:white;
+                border-radius:22px;
+                overflow:hidden;
+                box-shadow:0 10px 30px rgba(0,0,0,0.12);'>
 
-Please find your Offer Letter attached.
+        <!-- HEADER -->
 
-Regards,
-Placement Team
+        <div style='background:linear-gradient(135deg,#3b245f,#6d4db3);
+                    padding:40px;
+                    text-align:center;
+                    color:white;'>
+
+            <h1 style='margin:0;
+                       font-size:34px;
+                       font-weight:700;'>
+
+                🎉 Congratulations!
+
+            </h1>
+
+            <p style='margin-top:12px;
+                      font-size:16px;
+                      opacity:0.9;'>
+
+                Your hard work has paid off 🚀
+
+            </p>
+
+        </div>
+
+        <!-- BODY -->
+
+        <div style='padding:40px;
+                    color:#333;'>
+
+            <h2 style='margin-top:0;
+                       color:#3b245f;
+                       font-size:26px;'>
+
+                Dear {firstName} {lastName},
+
+            </h2>
+
+            <p style='font-size:16px;
+                      line-height:30px;
+                      margin-top:20px;'>
+
+                We are delighted to inform you that you have been
+                <b style='color:#28a745;'>successfully selected</b>
+                in
+
+                <span style='color:#6d4db3;
+                             font-weight:700;
+                             font-size:18px;'>
+
+                    {companyName}
+
+                </span>
+
+                🎯
+
+            </p>
+
+            <!-- SUCCESS CARD -->
+
+            <div style='background:#f7f3ff;
+                        border-left:6px solid #6d4db3;
+                        padding:25px;
+                        margin-top:30px;
+                        border-radius:14px;'>
+
+                <h3 style='margin-top:0;
+                           color:#3b245f;'>
+
+                    Selection Details
+
+                </h3>
+
+                <table style='width:100%;
+                              font-size:15px;
+                              margin-top:15px;'>
+
+                    <tr>
+                        <td style='padding:10px 0;'>
+                            <b>Company</b>
+                        </td>
+
+                        <td>
+                            {companyName}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style='padding:10px 0;'>
+                            <b>Status</b>
+                        </td>
+
+                        <td style='color:#28a745;
+                                   font-weight:700;'>
+
+                            SELECTED ✅
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style='padding:10px 0;'>
+                            <b>Offer Letter</b>
+                        </td>
+
+                        <td>
+                            Attached with this email 📄
+                        </td>
+                    </tr>
+
+                </table>
+
+            </div>
+
+            <!-- MESSAGE -->
+
+            <p style='font-size:15px;
+                      line-height:28px;
+                      margin-top:35px;'>
+
+                This achievement reflects your dedication,
+                preparation, and consistent efforts.
+
+                We wish you a successful and bright future ahead 🌟
+
+            </p>
+
+            <!-- BUTTON -->
+
+            <div style='text-align:center;
+                        margin-top:40px;'>
+
+                <a href='#'
+                   style='background:linear-gradient(135deg,#3b245f,#6d4db3);
+                          color:white;
+                          text-decoration:none;
+                          padding:14px 34px;
+                          border-radius:12px;
+                          font-weight:600;
+                          display:inline-block;
+                          box-shadow:0 6px 18px rgba(59,36,95,0.3);'>
+
+                    Best Wishes From Placement Team 🚀
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <!-- FOOTER -->
+
+        <div style='background:#f1f3f8;
+                    padding:20px;
+                    text-align:center;
+                    color:#666;
+                    font-size:13px;'>
+
+            © Educatal Placement Portal <br/>
+            Empowering Student Careers 💜
+
+        </div>
+
+    </div>
+
+</div>
+
 ";
+
+                    mail.IsBodyHtml = true;
 
                     string fullPath = Path.Combine(
                         Directory.GetCurrentDirectory(),
@@ -700,5 +1094,197 @@ Placement Team
         {
             return View("FAQ's");
         }
+
+
+
+        // LOAD PAGE
+        public ActionResult Event()
+        {
+            return View();
+        }
+
+        // GET ALL EVENTS FOR CALENDAR
+        [HttpGet]
+        public JsonResult GetEvents()
+        {
+            var data = _dal.GetAllEvents();
+
+            var events = data.Select(item => new
+            {
+                id = item.EventId,
+                title = item.EventName,
+                start = item.EventDate.ToString("yyyy-MM-dd") + "T" +
+                        item.EventTime.ToString(@"hh\:mm"),
+                color = "#0d6efd"
+            }).ToList();
+
+            return Json(events);
+        }
+
+        // SAVE EVENT
+        [HttpPost]
+        public JsonResult SaveEvent(PlacementEvents model)
+        {
+            try
+            {
+                if (model.EventDate < DateTime.Today)
+                {
+                    return Json(new { success = false, message = "Past date not allowed." });
+                }
+
+                if (model.EventTime < new TimeSpan(10, 0, 0) ||
+                    model.EventTime > new TimeSpan(17, 0, 0))
+                {
+                    return Json(new { success = false, message = "Time allowed only 10 AM to 5 PM." });
+                }
+
+                _dal.SaveEvent(model);
+
+                return Json(new { success = true, message = "Event Saved Successfully." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+        // GET EVENT DETAILS BY ID
+        [HttpGet]
+        public JsonResult GetEventById(int id)
+        {
+            var item = _dal.GetEventById(id);
+
+            return Json(new
+            {
+                EventId = item.EventId,
+                EventName = item.EventName,
+                Branch = item.Branch,
+                SpeakerName = item.SpeakerName,
+                EventMode = item.EventMode,
+                MeetingLink = item.MeetingLink,
+                Venue = item.Venue,
+                EventDate = item.EventDate.ToString("dd-MM-yyyy"),
+                EventTime = item.EventTime.ToString(@"hh\:mm")
+            });
+        }
+
+
+        public ActionResult PremiumUsers()
+        {
+            DataTable dt = _dal.GetPaymentList();
+
+            return View(dt);
+        }
+
+
+
+        public IActionResult DownloadReceipt(int id)
+        {
+            try
+            {
+                DataTable dt = _dal.GetReceiptById(id);
+
+                // ✅ Check Data Exists
+                if (dt.Rows.Count == 0)
+                {
+                    return Content("Receipt Not Found");
+                }
+
+                // ✅ Get Relative Path From DB
+                string receiptPath = dt.Rows[0]["Receipt"].ToString();
+
+                // Example:
+                // /Receipt/file.pdf
+
+                // ✅ Convert To Physical Path
+                string fullPath = Path.Combine(
+                    Directory.GetCurrentDirectory(),
+                    "wwwroot",
+                    receiptPath.TrimStart('/')
+                );
+
+                // ✅ File Exists Check
+                if (!System.IO.File.Exists(fullPath))
+                {
+                    return Content("PDF File Not Found");
+                }
+
+                // ✅ Read File
+                byte[] fileBytes = System.IO.File.ReadAllBytes(fullPath);
+
+                // ✅ Get File Name
+                string fileName = Path.GetFileName(fullPath);
+
+                // ✅ Download PDF
+                return File(
+                    fileBytes,
+                    "application/pdf",
+                    fileName
+                );
+            }
+            catch (Exception ex)
+            {
+                return Content("Error : " + ex.Message);
+            }
+        }
+
+        // OPEN NOTES PAGE
+        //public IActionResult ViewNotes(int id)
+        //{
+        //    // DEMO DATA
+        //    TopicNotes note = new TopicNotes()
+        //    {
+        //        Id = id,
+        //        TopicName = "Process Scheduling",
+        //        SubjectName = "Operating System",
+        //        PdfPath = "/notes/os.pdf",
+        //        Description = "OS Unit 3 Notes"
+        //    };
+
+        //    return View(note);
+        //}
+
+        //public IActionResult ViewNotes(int id)
+        //{
+        //    return Content("QR Working Successfully");
+        //}
+
+        //// GENERATE QR
+        //public IActionResult GenerateQR()
+        //{
+        //    string url = "http://192.168.0.102:5000/Notes/ViewNotes/1";
+
+        //    QRCodeGenerator qrGenerator = new QRCodeGenerator();
+
+        //    QRCodeData qrCodeData =
+        //        qrGenerator.CreateQrCode(url, QRCodeGenerator.ECCLevel.Q);
+
+        //    PngByteQRCode qrCode =
+        //        new PngByteQRCode(qrCodeData);
+
+        //    byte[] qrCodeImage = qrCode.GetGraphic(20);
+
+        //    string folder =
+        //        Path.Combine(_env.WebRootPath, "qrcodes");
+
+        //    if (!Directory.Exists(folder))
+        //    {
+        //        Directory.CreateDirectory(folder);
+        //    }
+
+        //    string fileName = "note1.png";
+
+        //    string filePath =
+        //        Path.Combine(folder, fileName);
+
+        //    System.IO.File.WriteAllBytes(filePath, qrCodeImage);
+
+        //    ViewBag.QRCode = "/qrcodes/" + fileName;
+
+        //    return View();
+        //}
+
+
+
     }
 }

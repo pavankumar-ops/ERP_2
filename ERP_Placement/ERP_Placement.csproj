@@ -7,13 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="iTextSharp.LGPLv2.Core" Version="3.7.12" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.3" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.23" />
+    <PackageReference Include="QRCoder" Version="1.8.0" />
+    <PackageReference Include="Razorpay" Version="3.3.2" />
     <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="wwwroot\img\NewFolder1\" />
+    <Folder Include="wwwroot\Notes\" />
     <Folder Include="wwwroot\uploads\HSC\" />
     <Folder Include="wwwroot\uploads\DIPLOMA\" />
     <Folder Include="wwwroot\uploads\BTECH\" />

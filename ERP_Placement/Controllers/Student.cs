@@ -7,8 +7,12 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Net;
-
+using Razorpay.Api;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 using System.Net.Mail;
+
+
 
 namespace ERP_Placement.Controllers
 {
@@ -187,7 +191,12 @@ namespace ERP_Placement.Controllers
 
             // --- Applied Interviews ---
             var interviews = _dal.AppliedJobStudDB(studentId);
+            bool studisPremium = _dal.IsUserPremium(studentId);
 
+            if (studisPremium == true)
+            {
+                ViewBag.IsPremium = true;
+            }
             DataTable dt = new DataTable();
             dt.Columns.Add("CompanyName");
             dt.Columns.Add("JobTitle");
@@ -358,6 +367,7 @@ namespace ERP_Placement.Controllers
                 string fullResumePath = Path.Combine(_env.WebRootPath, resumePath);
 
                 MailMessage mail = new MailMessage();
+
                 mail.From = new MailAddress("placementerp@gmail.com");
                 mail.To.Add(hrEmail);
 
@@ -479,7 +489,7 @@ namespace ERP_Placement.Controllers
         public IActionResult EditStudent()
         {
             //string studentId = "1019";
-             string studentId = HttpContext.Session.GetString("StudentId");
+            string studentId = HttpContext.Session.GetString("StudentId");
             var skills = _dal.GetSkills();   // get skills from database
             ViewBag.Skills = skills;
             var data = _dal.GetStudent(studentId);
@@ -594,5 +604,477 @@ namespace ERP_Placement.Controllers
 
             return Json(new { success = true });
         }
+        public ActionResult StudEvent()
+        {
+            return View();
+        }
+
+        string key = "rzp_test_Swok65AlTsoaVf";
+        string secret = "tLccKFZhnv0oJmvpX5pHX3Ga";
+
+
+
+        [HttpPost]
+        public JsonResult CreateOrder()
+        {
+            try
+            {
+                RazorpayClient client = new RazorpayClient(key, secret);
+
+                Dictionary<string, object> options = new Dictionary<string, object>();
+                options.Add("amount", 29900);
+                options.Add("currency", "INR");
+                options.Add("receipt", "receipt_" + DateTime.Now.Ticks);
+
+                Order order = client.Order.Create(options);
+
+                string orderId = order["id"].ToString(); // 👈 debug here
+
+                return Json(new
+                {
+                    orderId = orderId,
+                    key = key
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = ex.Message });
+            }
+        }
+        [HttpPost]
+        public ActionResult VerifyPayment(string razorpay_payment_id,
+                                          string razorpay_order_id,
+                                          string razorpay_signature)
+        {
+            try
+            {
+                Dictionary<string, string> attributes = new Dictionary<string, string>();
+
+                attributes.Add("razorpay_payment_id", razorpay_payment_id);
+                attributes.Add("razorpay_order_id", razorpay_order_id);
+                attributes.Add("razorpay_signature", razorpay_signature);
+
+                Utils.verifyPaymentSignature(attributes);
+
+                int studentId = Convert.ToInt32(HttpContext.Session.GetString("StudentId"));
+               SendPaymentReceipt(razorpay_payment_id);
+
+                _dal.SavePayment(studentId, razorpay_payment_id, 299);
+                _dal.MakeUserPremium(studentId);
+                string receiptPath = HttpContext.Session.GetString("ReceiptPath");
+                _dal.UpdateReceiptPath(studentId, razorpay_payment_id, receiptPath);
+
+
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+
+
+
+        public byte[] GenerateReceiptPDF( string razorpay_payment_id)
+        {
+            string studentId = HttpContext.Session.GetString("StudentId");
+
+            DataTable dt = _dal.GetLatestPaymentStudentDetails(studentId);
+
+            if (dt.Rows.Count == 0)
+                return null;
+
+            string studentName = dt.Rows[0]["StudentName"].ToString();
+            string studentEmail = dt.Rows[0]["Email"].ToString();
+            string paymentId = dt.Rows[0]["PaymentId"].ToString();
+            string amount = dt.Rows[0]["Amount"].ToString();
+            string paymentDate = Convert.ToDateTime(dt.Rows[0]["PaymentDate"])
+                                    .ToString("dd MMM yyyy hh:mm tt");
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                Document doc = new Document(PageSize.A4, 25, 25, 30, 30);
+
+                PdfWriter.GetInstance(doc, ms);
+
+                doc.Open();
+
+                // ================= HEADER =================
+
+                Font headerFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 24,BaseColor.White);
+
+                PdfPTable headerTable = new PdfPTable(1);
+                headerTable.WidthPercentage = 100;
+
+                PdfPCell headerCell = new PdfPCell(
+                    new Phrase("EDUCATAL PLACEMENT PORTAL", headerFont)
+                );
+
+                headerCell.BackgroundColor = new BaseColor(63, 81, 181);
+                headerCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                headerCell.Padding = 15;
+                headerCell.Border = 0;
+
+                headerTable.AddCell(headerCell);
+
+                doc.Add(headerTable);
+
+                // ================= TITLE =================
+
+                doc.Add(new Paragraph(" "));
+
+                Font titleFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 18);
+
+                Paragraph title = new Paragraph("PAYMENT RECEIPT", titleFont);
+
+                title.Alignment = Element.ALIGN_CENTER;
+
+                doc.Add(title);
+
+                doc.Add(new Paragraph(" "));
+
+                // ================= RECEIPT TABLE =================
+
+                PdfPTable table = new PdfPTable(2);
+
+                table.WidthPercentage = 100;
+                table.SetWidths(new float[] { 35, 65 });
+
+                Font labelFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 12, BaseColor.White);
+
+                Font valueFont = FontFactory.GetFont(FontFactory.HELVETICA, 12);
+
+                BaseColor themeColor = new BaseColor(63, 81, 181);
+
+                // Method for adding rows
+                void AddRow(string label, string value)
+                {
+                    PdfPCell cell1 = new PdfPCell(new Phrase(label, labelFont));
+                    cell1.BackgroundColor = themeColor;
+                    cell1.Padding = 10;
+
+                    PdfPCell cell2 = new PdfPCell(new Phrase(value, valueFont));
+                    cell2.Padding = 10;
+
+                    table.AddCell(cell1);
+                    table.AddCell(cell2);
+                }
+
+                AddRow("Student Name", studentName);
+                AddRow("Student Email", studentEmail);
+                AddRow("Payment ID", paymentId);
+                AddRow("Amount", "₹ " + amount);
+                AddRow("Plan", "Premium Lifetime");
+                AddRow("Payment Status", "SUCCESS");
+                AddRow("Payment Date", paymentDate);
+
+                doc.Add(table);
+
+                // ================= FOOTER =================
+
+                doc.Add(new Paragraph(" "));
+
+                Font footerFont = FontFactory.GetFont(FontFactory.HELVETICA_OBLIQUE, 11);
+
+                Paragraph footer = new Paragraph(
+                    "Thank you for purchasing premium access from Educatal Placement Portal 🎉",
+                    footerFont
+                );
+
+                footer.Alignment = Element.ALIGN_CENTER;
+
+                doc.Add(footer);
+
+                doc.Close();
+
+                // ================= SAVE PDF =================
+
+                string folderPath = Path.Combine(
+                    Directory.GetCurrentDirectory(),
+                    "wwwroot",
+                    "Receipt"
+                );
+
+                // Create folder automatically
+                if (!Directory.Exists(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
+
+                // File name
+                string safeName = studentName.Replace(" ", "_");
+
+                string fileName = safeName + "_" + paymentId + ".pdf";
+
+                string fullPath = Path.Combine(folderPath, fileName);
+                string dbPath = "/Receipt/" + fileName;
+                HttpContext.Session.SetString("ReceiptPath", dbPath);
+                //string studentId = HttpContext.Session.GetString("StudentId");
+
+                System.IO.File.WriteAllBytes(fullPath, ms.ToArray());
+
+                return ms.ToArray();
+            }
+        }
+
+
+        public void SendPaymentReceipt( string razorpay_payment_id)
+        {
+            string studentId = HttpContext.Session.GetString("StudentId");
+            DataTable dt = _dal.GetLatestPaymentStudentDetails(studentId);
+            string studentName = dt.Rows[0]["StudentName"].ToString();
+            string toEmail = dt.Rows[0]["Email"].ToString();
+            string paymentId = dt.Rows[0]["PaymentId"].ToString();
+            string amount = dt.Rows[0]["Amount"].ToString();
+            string paymentDate = Convert.ToDateTime(dt.Rows[0]["PaymentDate"])
+                                    .ToString("dd MMM yyyy hh:mm tt");
+            MailMessage mail = new MailMessage();
+
+            mail.From = new MailAddress("placementerp@gmail.com");
+
+            mail.To.Add(toEmail);
+
+            mail.Subject = "Premium Membership Activated";
+
+            mail.Body = $@"
+
+<div style='font-family:Arial,Helvetica,sans-serif;
+            background:#f4f6fb;
+            padding:30px;'>
+
+    <div style='max-width:600px;
+                margin:auto;
+                background:white;
+                border-radius:18px;
+                overflow:hidden;
+                box-shadow:0 8px 25px rgba(0,0,0,0.1);'>
+
+        <!-- Header -->
+        <div style='background:linear-gradient(135deg,#3f51b5,#5c6bc0);
+                    color:white;
+                    padding:30px;
+                    text-align:center;'>
+
+            <h1 style='margin:0;
+                       font-size:28px;'>
+                EDUCATAL PLACEMENT PORTAL
+            </h1>
+
+            <p style='margin-top:10px;
+                      font-size:15px;
+                      opacity:0.9;'>
+                Premium Membership Activated
+            </p>
+        </div>
+
+        <!-- Body -->
+        <div style='padding:35px; color:#333;'>
+
+            <h2 style='margin-top:0;
+                       color:#3f51b5;'>
+                Hi {studentName} 👋
+            </h2>
+
+            <p style='font-size:16px;
+                      line-height:28px;'>
+
+                Your payment has been received successfully and your
+                <b>Premium Membership</b> is now activated 🎉
+            </p>
+
+            <!-- Success Box -->
+            <div style='background:#f5f7ff;
+                        border-left:5px solid #3f51b5;
+                        padding:18px;
+                        margin-top:25px;
+                        border-radius:10px;'>
+
+                <h3 style='margin-top:0;
+                           color:#3f51b5;'>
+                    Payment Details
+                </h3>
+
+                <table style='width:100%;
+                              font-size:15px;'>
+
+                    <tr>
+                        <td style='padding:8px 0;'>
+                            <b>Status</b>
+                        </td>
+
+                        <td style='color:green;'>
+                            SUCCESS ✅
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style='padding:8px 0;'>
+                            <b>Plan</b>
+                        </td>
+
+                        <td>
+                            Premium Lifetime
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style='padding:8px 0;'>
+                            <b>Amount</b>
+                        </td>
+
+                        <td>
+                            ₹299
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+
+            <p style='margin-top:30px;
+                      font-size:15px;
+                      line-height:26px;'>
+
+                Your payment receipt PDF has been attached with this email.
+            </p>
+
+            <div style='text-align:center;
+                        margin-top:35px;'>
+
+                <a href='#'
+                   style='background:#3f51b5;
+                          color:white;
+                          text-decoration:none;
+                          padding:14px 30px;
+                          border-radius:10px;
+                          display:inline-block;
+                          font-weight:bold;'>
+
+                    Explore Premium Tests 🚀
+                </a>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div style='background:#f1f3f8;
+                    text-align:center;
+                    padding:20px;
+                    font-size:13px;
+                    color:#666;'>
+
+            Thank you for choosing
+            <b>Educatal Placement Portal</b> ❤️
+        </div>
+
+    </div>
+
+</div>
+
+";
+
+            mail.IsBodyHtml = true;
+
+
+
+
+            // ✅ Generate PDF
+            byte[] pdfBytes = GenerateReceiptPDF(razorpay_payment_id);
+
+            Attachment attachment = new Attachment(
+                new MemoryStream(pdfBytes),
+                "PaymentReceipt.pdf",
+                "application/pdf"
+            );
+
+            mail.Attachments.Add(attachment);
+
+            SmtpClient smtp = new SmtpClient();
+
+            smtp.Host = "smtp.gmail.com";
+            smtp.Port = 587;
+
+            smtp.Credentials = new NetworkCredential(
+                "placementerp@gmail.com",
+                "erkkhoqzdiiuigyj"
+            );
+
+            smtp.EnableSsl = true;
+
+            smtp.Send(mail);
+        }
+
+        //public ActionResult SendPaymentReceipt()
+        //{
+
+
+        //        string hrEmail = "tanmaysshinde09@gmail.com";
+        //        // Sample Student Name
+        //        string studentName = "Tanmay Shinde";
+
+        //        // ✅ Dynamic PDF Path
+        //        string fileName = "tanmay_rrtttrttt_shinde_pay_SoM7mM0Hvb15NC.pdf";
+
+        //        string fullResumePath = Path.Combine(
+        //            Directory.GetCurrentDirectory(),
+        //            "wwwroot",
+        //            "Receipt",
+        //            fileName
+        //        );
+
+        //        // ================= MAIL =================
+
+        //        MailMessage mail = new MailMessage();
+
+        //        mail.From = new MailAddress("placementerp@gmail.com");
+
+        //        mail.To.Add(hrEmail);
+
+        //        mail.Subject = "Interview Scheduled - Student Receipt";
+
+        //        mail.Body = $@"
+        //    Dear HR,<br/><br/>
+
+        //    Interview has been scheduled for the following student:<br/><br/>
+
+        //    <b>Student Name :</b> {studentName}<br/><br/>
+
+        //    Please find the attached receipt PDF.<br/><br/>
+
+        //    Regards,<br/>
+        //    Placement Cell
+        //";
+
+        //        mail.IsBodyHtml = true;
+
+        //        // ================= ATTACHMENT =================
+
+        //        if (System.IO.File.Exists(fullResumePath))
+        //        {
+        //            mail.Attachments.Add(
+        //                new Attachment(fullResumePath)
+        //            );
+        //        }
+
+        //        // ================= SMTP =================
+
+        //        SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
+
+        //        smtp.UseDefaultCredentials = false;
+
+        //        smtp.Credentials = new NetworkCredential(
+        //            "placementerp@gmail.com",
+        //            "erkkhoqzdiiuigyj"
+        //        );
+
+        //        smtp.EnableSsl = true;
+
+        //        smtp.Send(mail);
+
+        //        return Content("Mail Sent Successfully");
+        //    }
+
+
+
     }
  }
