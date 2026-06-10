@@ -160,8 +160,8 @@ namespace ERP_Placement.Controllers
                 if (studentDt.Rows.Count > 0 && interviewDt.Rows.Count > 0)
                 {
                     string fullName = studentDt.Rows[0]["FullName"].ToString();
-                    //string email = studentDt.Rows[0]["EmailId"].ToString();
-                    string email = "yogitapatil7219@gmail.com";
+                    string email = studentDt.Rows[0]["Email"].ToString();
+                  //  string email = "yogitapatil7219@gmail.com"; 
 
                     string branch = interviewDt.Rows[0]["Branch"].ToString();
                     string interviewType = interviewDt.Rows[0]["InterviewType"].ToString();

@@ -641,6 +641,8 @@ namespace ERP_Placement.Controllers
                 return Json(new { error = ex.Message });
             }
         }
+        
+        
         [HttpPost]
         public ActionResult VerifyPayment(string razorpay_payment_id,
                                           string razorpay_order_id,
@@ -657,9 +659,9 @@ namespace ERP_Placement.Controllers
                 Utils.verifyPaymentSignature(attributes);
 
                 int studentId = Convert.ToInt32(HttpContext.Session.GetString("StudentId"));
-               SendPaymentReceipt(razorpay_payment_id);
 
                 _dal.SavePayment(studentId, razorpay_payment_id, 299);
+                SendPaymentReceipt(razorpay_payment_id);
                 _dal.MakeUserPremium(studentId);
                 string receiptPath = HttpContext.Session.GetString("ReceiptPath");
                 _dal.UpdateReceiptPath(studentId, razorpay_payment_id, receiptPath);

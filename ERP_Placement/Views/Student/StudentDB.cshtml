@@ -1671,7 +1671,11 @@
                                     window.location.href = '/Student/TestList';
                                 }, 2000);
                             } else {
-                                alert("Payment verification failed");
+        document.getElementById("successToast").style.display = "block";
+
+        setTimeout(() => {
+        window.location.href = '/Student/TestList';
+        }, 2000);
                             }
 
                         });
